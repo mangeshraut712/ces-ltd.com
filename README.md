@@ -2,6 +2,10 @@
 
 A cutting-edge Next.js application showcasing CES Ltd.'s innovative energy solutions platform, featuring AI-driven personalization, IoT integration, Web3 capabilities, and immersive VR experiences.
 
+## 🌐 Live Demo
+
+**Production Deployment**: [https://ces-ltd-com.vercel.app/](https://ces-ltd-com.vercel.app/)
+
 ## 🚀 Features
 
 - **AI-Powered Personalization**: Adaptive experiences using OpenAI integration
