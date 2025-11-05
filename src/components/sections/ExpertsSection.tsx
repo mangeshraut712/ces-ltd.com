@@ -47,13 +47,11 @@ export default function ExpertsSection() {
       <div className="mt-10">
         <div className="rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-8 shadow-lg">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-white text-2xl font-bold shadow-lg">
-              {presidentProfile.name
-                .split(' ')
-                .map(part => part[0])
-                .join('')
-                .toUpperCase()}
-            </div>
+            <img
+              src="/images/Stephen Fernands.png"
+              alt={presidentProfile.name}
+              className="h-20 w-20 rounded-full object-cover shadow-lg"
+            />
             <div className="flex-1">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
