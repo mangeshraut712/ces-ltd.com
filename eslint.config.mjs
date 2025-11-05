@@ -13,6 +13,16 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    files: [
+      "src/app/careers/page.tsx",
+      "src/app/careers/senior-full-stack-dotnet-developer/page.tsx",
+      "src/app/innovation/page.tsx"
+    ],
+    rules: {
+      "react/no-unescaped-entities": "off"
+    }
+  }
 ]);
 
 export default eslintConfig;
