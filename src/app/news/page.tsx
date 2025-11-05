@@ -401,6 +401,20 @@ export default function NewsPage() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Innovation Stories CTA */}
+        <section className="mb-12 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg p-8 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">Explore Innovation Stories</h2>
+          <p className="text-lg text-purple-100 mb-6 max-w-2xl mx-auto">
+            Discover how CES is driving innovation in energy markets through cutting-edge technology and strategic partnerships.
+          </p>
+          <Link
+            href="#innovation"
+            className="inline-flex items-center px-6 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+          >
+            Explore Innovation Stories →
+          </Link>
+        </section>
+
         {/* Filters and Search */}
         <div className="mb-8 flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
           <div className="flex flex-wrap gap-2">

@@ -90,6 +90,186 @@ const positionHierarchy = [
   'Assistant'
 ];
 
+interface Expert {
+  name: string;
+  role: string;
+  focus: string;
+}
+
+interface PresidentCardProps {
+  profile: typeof presidentProfile;
+}
+
+function PresidentCard({ profile }: PresidentCardProps) {
+  return (
+    <div className="mt-10">
+      <div className="rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-8 shadow-lg">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+          <img
+            src="/images/Stephen Fernands.png"
+            alt={profile.name}
+            className="h-20 w-20 rounded-full object-cover shadow-lg"
+          />
+          <div className="flex-1">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900">{profile.name}</h3>
+                <p className="text-lg font-semibold text-blue-600">{profile.role}</p>
+              </div>
+              <div className="flex gap-3">
+                <a
+                  href={profile.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                >
+                  Email
+                </a>
+              </div>
+            </div>
+            <div className="mt-6 space-y-4">
+              <p className="text-slate-700 leading-relaxed">{profile.bio}</p>
+              <p className="text-slate-700 leading-relaxed">{profile.achievements}</p>
+              <p className="text-slate-600 italic">{profile.education}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface ExpertCardProps {
+  expert: Expert;
+}
+
+function ExpertCard({ expert }: ExpertCardProps) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md">
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+          {expert.name
+            .split(' ')
+            .map(part => part[0])
+            .join('')
+            .toUpperCase()}
+        </div>
+        <div>
+          <p className="text-base font-semibold text-slate-900">{expert.name}</p>
+          <p className="text-sm text-slate-600">{expert.role}</p>
+        </div>
+      </div>
+      <p className="mt-4 text-sm text-slate-600">{expert.focus}</p>
+    </div>
+  );
+}
+
+interface FilterControlsProps {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  filterPosition: string;
+  setFilterPosition: (position: string) => void;
+  sortBy: 'name' | 'position';
+  setSortBy: (sort: 'name' | 'position') => void;
+  positionHierarchy: string[];
+}
+
+function FilterControls({
+  searchTerm,
+  setSearchTerm,
+  filterPosition,
+  setFilterPosition,
+  sortBy,
+  setSortBy,
+  positionHierarchy
+}: FilterControlsProps) {
+  return (
+    <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        />
+        <select
+          value={filterPosition}
+          onChange={(e) => setFilterPosition(e.target.value)}
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        >
+          <option value="">All positions</option>
+          {positionHierarchy.map(position => (
+            <option key={position} value={position.toLowerCase()}>
+              {position}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="flex gap-2">
+        <button
+          onClick={() => setSortBy('name')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            sortBy === 'name'
+              ? 'bg-blue-600 text-white'
+              : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+          }`}
+        >
+          Sort alphabetically
+        </button>
+        <button
+          onClick={() => setSortBy('position')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            sortBy === 'position'
+              ? 'bg-blue-600 text-white'
+              : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+          }`}
+        >
+          Sort by position
+        </button>
+      </div>
+    </div>
+  );
+}
+
+interface ExpertsGridProps {
+  experts: Expert[];
+  searchTerm: string;
+  filterPosition: string;
+  onClearFilters: () => void;
+}
+
+function ExpertsGrid({ experts, searchTerm, filterPosition, onClearFilters }: ExpertsGridProps) {
+  return (
+    <div className="mt-10">
+      <div className="mb-6 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-slate-900">
+          {experts.length} Expert{experts.length !== 1 ? 's' : ''} Found
+        </h3>
+        {(searchTerm || filterPosition) && (
+          <button
+            onClick={onClearFilters}
+            className="text-sm font-medium text-blue-600 hover:text-blue-700"
+          >
+            View All
+          </button>
+        )}
+      </div>
+      <div className="grid gap-6 md:grid-cols-3">
+        {experts.map(expert => (
+          <ExpertCard key={expert.name} expert={expert} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ExpertsSection() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'position'>('name');
@@ -116,6 +296,11 @@ export default function ExpertsSection() {
     return filtered;
   }, [searchTerm, sortBy, filterPosition]);
 
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setFilterPosition('');
+  };
+
   return (
     <section id="experts" className="mt-24">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -130,134 +315,24 @@ export default function ExpertsSection() {
         </a>
       </div>
 
-      {/* Filter and Sort Controls */}
-      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <input
-            type="text"
-            placeholder="Search by name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
-          <select
-            value={filterPosition}
-            onChange={(e) => setFilterPosition(e.target.value)}
-            className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          >
-            <option value="">All positions</option>
-            {positionHierarchy.map(position => (
-              <option key={position} value={position.toLowerCase()}>
-                {position}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setSortBy('name')}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              sortBy === 'name'
-                ? 'bg-blue-600 text-white'
-                : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            Sort alphabetically
-          </button>
-          <button
-            onClick={() => setSortBy('position')}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              sortBy === 'position'
-                ? 'bg-blue-600 text-white'
-                : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            Sort by position
-          </button>
-        </div>
-      </div>
+      <FilterControls
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        filterPosition={filterPosition}
+        setFilterPosition={setFilterPosition}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        positionHierarchy={positionHierarchy}
+      />
 
-      {/* President Card - Special Design */}
-      <div className="mt-10">
-        <div className="rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-8 shadow-lg">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-            <img
-              src="/images/Stephen Fernands.png"
-              alt={presidentProfile.name}
-              className="h-20 w-20 rounded-full object-cover shadow-lg"
-            />
-            <div className="flex-1">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-900">{presidentProfile.name}</h3>
-                  <p className="text-lg font-semibold text-blue-600">{presidentProfile.role}</p>
-                </div>
-                <div className="flex gap-3">
-                  <a
-                    href={presidentProfile.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                  <a
-                    href={`mailto:${presidentProfile.email}`}
-                    className="inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-                  >
-                    Email
-                  </a>
-                </div>
-              </div>
-              <div className="mt-6 space-y-4">
-                <p className="text-slate-700 leading-relaxed">{presidentProfile.bio}</p>
-                <p className="text-slate-700 leading-relaxed">{presidentProfile.achievements}</p>
-                <p className="text-slate-600 italic">{presidentProfile.education}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PresidentCard profile={presidentProfile} />
 
-      {/* Other Experts */}
-      <div className="mt-10">
-        <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-slate-900">
-            {filteredAndSortedExperts.length} Expert{filteredAndSortedExperts.length !== 1 ? 's' : ''} Found
-          </h3>
-          {(searchTerm || filterPosition) && (
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setFilterPosition('');
-              }}
-              className="text-sm font-medium text-blue-600 hover:text-blue-700"
-            >
-              View All
-            </button>
-          )}
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {filteredAndSortedExperts.map(expert => (
-            <div key={expert.name} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                  {expert.name
-                    .split(' ')
-                    .map(part => part[0])
-                    .join('')
-                    .toUpperCase()}
-                </div>
-                <div>
-                  <p className="text-base font-semibold text-slate-900">{expert.name}</p>
-                  <p className="text-sm text-slate-600">{expert.role}</p>
-                </div>
-              </div>
-              <p className="mt-4 text-sm text-slate-600">{expert.focus}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ExpertsGrid
+        experts={filteredAndSortedExperts}
+        searchTerm={searchTerm}
+        filterPosition={filterPosition}
+        onClearFilters={handleClearFilters}
+      />
     </section>
   );
 }
