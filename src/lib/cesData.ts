@@ -43,67 +43,88 @@ export const companyInfo = {
 export const globalOffices = [
   {
     country: "USA",
-    location: "Philadelphia, PA (Headquarters)",
+    location: "CORPORATE HEADQUARTERS\n1528 Walnut Street, 22nd Floor\nPhiladelphia, PA 19102",
     phone: "215.875.9440",
     email: "info@ces-ltd.com",
     focus: ["Generation Owners", "Retail Providers", "Demand Response"],
-    address: "USA Headquarters",
-    regions: ["Pennsylvania", "California", "Indiana", "Massachusetts", "Washington D.C.", "Texas"]
+    address: "Corporate Headquarters"
   },
   {
     country: "India",
-    location: "Pune, Maharashtra",
+    location: "HEADQUARTERS\nA-501, G-O Square\nAundh-Hinjewadi Link Road\nWakad, Pune 411057, India",
     phone: "+91-020-27714000",
     email: "indiainfo@ces-ltd.com",
     focus: ["Emerging Technologies", "E-Mobility", "Energy Storage", "ET Subscriptions"],
-    address: "India Office - Pune"
+    address: "India Headquarters"
   },
   {
     country: "Japan",
-    location: "Tokyo",
+    location: "HEADQUARTERS\n6F. Daiwa Shibuya Square,\n16-28, Nanpeidai-cho,\nShibuya-ku, Tokyo 150-0036",
     phone: "03-4360-5051",
     email: "info@ces-ltd.com",
     focus: ["Generation Solutions", "Comprehensive Solutions"],
     localizedName: "包括的ソリューション",
-    address: "Japan Office - Tokyo"
-  },
-  {
-    country: "Canada",
-    location: "Toronto, Ontario",
-    phone: "+1-647-477-9050",
-    email: "canadainfo@ces-ltd.com",
-    focus: ["Wholesale Market Operations", "Asset Management", "Regulatory Advisory"],
-    address: "Canada Office - Toronto"
-  },
-  {
-    country: "Mexico",
-    location: "Mexico City",
-    phone: "+52-55-8421-3601",
-    email: "mexicoinfo@ces-ltd.com",
-    focus: ["Microgrid Design", "C&I Market Strategy", "DER Integration"],
-    address: "Mexico Operations Hub"
+    address: "Japan Headquarters"
   },
   {
     country: "Vietnam",
-    location: "Ho Chi Minh City",
+    location: "HEADQUARTERS\nWeWork ETown Central, No.11\nDoan Van Bo Street,\nWard 13, District 4, HCMC",
     focus: ["Software Development", "Data Operations"],
-    address: "Vietnam Office - HCMC"
+    address: "Vietnam Headquarters"
   },
   {
-    country: "Guam",
-    location: "Hagåtña",
-    focus: ["Remote Microgrid Management", "Island Grid Resilience"],
-    address: "Guam Asset Management Center"
+    country: "USA",
+    location: "REGIONAL OFFICE\nBoston, Massachusetts",
+    focus: ["Market Operations", "Consulting Services"],
+    address: "Boston Regional Office"
+  },
+  {
+    country: "USA",
+    location: "REGIONAL OFFICE\n101 Parkshore Drive\nFolsom, CA 95630",
+    focus: ["Western Market Operations", "Renewable Integration"],
+    address: "California Regional Office"
+  },
+  {
+    country: "USA",
+    location: "REGIONAL OFFICE\nHouston, Texas",
+    focus: ["Energy Trading", "Market Intelligence"],
+    address: "Texas Regional Office"
+  },
+  {
+    country: "USA",
+    location: "REGIONAL OFFICE\nCarmel, Indiana",
+    focus: ["Midwest Operations", "Grid Services"],
+    address: "Indiana Regional Office"
+  },
+  {
+    country: "Canada",
+    location: "REGIONAL OFFICE\nToronto, Ontario",
+    phone: "+1-647-477-9050",
+    email: "canadainfo@ces-ltd.com",
+    focus: ["Wholesale Market Operations", "Asset Management", "Regulatory Advisory"],
+    address: "Canada Regional Office"
+  },
+  {
+    country: "UAE",
+    location: "Middle East – MENA FZ LLC\nHeadquarters\nSD2-141\nSecond Floor Lab Complex\nDubai Science Park, UAE 500767",
+    focus: ["Middle East Operations", "GCC Market Intelligence", "Energy Transition"],
+    address: "Middle East Headquarters"
+  },
+  {
+    country: "Netherlands",
+    location: "Europe\nHeadquarters\nParkstraat 83\n2514 JG Den Haag, Netherlands",
+    focus: ["European Energy Markets", "Regulatory Compliance", "Cross-border Trading"],
+    address: "Europe Headquarters"
   }
 ];
 
 export const solutions = [
   {
     id: "gold",
-    name: "GOLD - Generation Solutions",
+    name: "Generation Solutions",
     color: "#FFD700",
     icon: "⚡",
-    description: "Comprehensive hosted generation market operations platforms for generation owners",
+    description: "Comprehensive hosted software and generation service solutions, CES | GOLD.",
     target: "Generation Owners",
     features: [
       "Hosted market operations",
@@ -111,14 +132,23 @@ export const solutions = [
       "Settlement & billing",
       "Regulatory compliance"
     ],
-    link: "/solutions/generation"
+    link: "/solutions/generation",
+    subtitle: "Explore solution details → page Power Generation Solution",
+    content: "A portfolio of hosted software and service solutions is offered with CES | Gold. Advancing the growth of efficient power generation with hosted software solutions, expertise, and service has been a CES mission since 1998. Our exclusive hosted software solutions allow you instant access to all of your data and customized reports. CES|GOLD CES's 24-hour Market Operations Center is fully staffed with regional grid operator-certified personnel who perform forward market offers, real-time generation offers, scheduling and monitoring, curtailment management, and reserve and regulation offers and monitoring.",
+    image: "/images/General.png",
+    keyCapabilities: [
+      "Hosted market operations",
+      "Real-time monitoring",
+      "Settlement & billing",
+      "Regulatory compliance"
+    ]
   },
   {
     id: "blue",
-    name: "BLUE - Retail Solutions",
+    name: "Retail Solutions",
     color: "#2196F3",
     icon: "🏪",
-    description: "Complete retail energy provider solutions for deregulated markets",
+    description: "Comprehensive end-to-end hosted solutions, CES | BLUE.",
     target: "Retail Providers",
     features: [
       "Customer management",
@@ -126,14 +156,16 @@ export const solutions = [
       "Risk management",
       "Billing & settlements"
     ],
-    link: "/solutions/retail"
+    link: "/solutions/retail",
+    subtitle: "Click here to learn more Retail Energy Services: Solutions for Power & Gas",
+    content: "CES advances the growth of energy retailers by providing an end-to-end comprehensive offering of hosted solutions, expertise, and unparalleled service via our CES | BLUE, CES | GREEN, CES | MarketIQ services. CES|BLUE CES|GREEN CES offers a series of hosted platforms developed and serviced by a team of industry experts specializing in competitive energy market entry and operations, state and regional grid registration, renewable compliance and market intelligence. We combine efforts to make your day-to-day operations run more smoothly and your business grow more quickly. Learn more about retail energy management."
   },
   {
     id: "green",
-    name: "GREEN - Distributed Energy",
+    name: "Distributed Energy",
     color: "#4CAF50",
     icon: "🌱",
-    description: "Distributed energy resources with real-time notifications and management",
+    description: "Hosted solutions with notifications to end-use customers.",
     target: "DER Participants",
     features: [
       "DER management",
@@ -141,14 +173,16 @@ export const solutions = [
       "Real-time notifications",
       "Aggregation services"
     ],
-    link: "/solutions/distributed"
+    link: "/solutions/distributed",
+    subtitle: "Click here to learn more Distributed Energy",
+    content: "CES serves clients across global deregulated markets by empowering them to capture the value of their resources. CES can help maximize the value of your distributed energy resources project across the various phases of project development. CES provides guidance based on years of experience navigating rule changes in ISO/RTOs restructured markets on behalf of DERs, as well as providing generation management services to a wide variety of clients. CES serves customers in a variety of areas in the DER space including demand response, EV charging, peak load management, and management of bidding for energy and capacity in major ISOs/RTOs in North America. CES offers these specific services to DER's as indicated in each of the following three general phases of DER project development: CES Announces GridBOOST CES now provides a new service that takes optimization of in front of the meter and distributed storage and storage plus solar assets to the next level!"
   },
   {
     id: "comets",
-    name: "CoMETS - Emerging Technologies",
+    name: "Emerging Technologies",
     color: "#9C27B0",
     icon: "🚀",
-    description: "Comprehensive Market & Emerging Technology Services platform",
+    description: "Proactive, forward thinking that can help you for the future.",
     target: "Emerging Tech Participants",
     features: [
       "Energy storage",
@@ -156,7 +190,9 @@ export const solutions = [
       "Hydrogen",
       "Market intelligence"
     ],
-    link: "/solutions/emerging"
+    link: "/solutions/emerging",
+    subtitle: "Click here to learn more Emerging Technologies",
+    content: "CES's Emerging Technologies group provides a range of products and consulting services to help project developers, investors, technology companies and other clients understand the value proposition of new energy storage based technologies. Consulting Services We provide a wide spectrum to consulting services to help clients understand and navigate complex energy market rules, identify key drivers and opportunities for energy storage, forecast project revenues and optimize investments. Market Advisory Services Financial Modeling Due Diligence, Risk and Investment Advisory CES MARKET OVERVIEW REPORTS Market OverviewInformative reports focusing on energy storage in regional energy markets that provide insights on market characteristics, participation opportunities, key drivers, revenue opportunities, price trends, policy developments. Learn more here. CoMETS Market OperationsOur proprietary modeling suite CoMETS enable performance evaluation of advanced storage technologies, optimizes dispatch and provides financial model useful to project developers, financiers and investors. Learn more here. Featured Publications download pdfContracted ESS Co-Located with Solar PV in CAISO download pdfESS Deployed with Solar PV in US Mountain West download pdfOptimal Sizing of ESS Co-Located with Solar PV download pdfProject Development Analytics download pdfStrategic Consulting for Fleet Management and DER Services download pdfTechnical and Commercial Due Diligence"
   }
 ];
 
@@ -219,25 +255,25 @@ export const businessLines = [
 export const serviceCategories = [
   {
     name: "Generation Owners",
-    description: "Comprehensive solutions in a dynamic energy environment",
+    description: "Comprehensive Solutions in a dynamic energy environment",
     icon: "⚡",
     link: "/emerging-technologies/"
   },
   {
     name: "Retail Providers",
-    description: "Comprehensive solutions in a dynamic energy environment",
+    description: "Comprehensive Solutions in a dynamic energy environment",
     icon: "🏪",
     link: "/power-generation-solutions/"
   },
   {
     name: "Demand Response Providers",
-    description: "Comprehensive solutions in a dynamic energy environment",
+    description: "Comprehensive Solutions in a dynamic energy environment",
     icon: "📊",
     link: "/retail-energy-solutions/"
   },
   {
     name: "Emerging Technology Participants",
-    description: "Comprehensive solutions in a dynamic energy environment",
+    description: "Comprehensive Solutions in a dynamic energy environment",
     icon: "🚀",
     link: "/load-management-solutions-old/"
   }
@@ -249,7 +285,7 @@ export const keyExperts = [
     id: "stephen-fernands",
     name: "Stephen Fernands",
     position: "President",
-    image: "/experts/stephen-fernands.jpg",
+    image: "/images/stephen-fernands.png",
     bio: "Leading CES Ltd. with vision for global energy market transformation"
   },
   {

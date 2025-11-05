@@ -1,277 +1,80 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
-const presidentProfile = {
-  name: 'Stephen Fernands',
-  role: 'President',
-  bio: 'Stephen Fernands is Founder and President of Customized Energy Solutions. Since Customized Energy Solutions founding in 1998 it has helped thousands of companies understand wholesale and retail electric and natural gas market and implement solutions through its hosted software platforms. INC magazine ranked Customized Energy Solutions as one of the fastest growing companies in the United States from 2005 through 2015 and in 2008 it was the 15th fastest growing private company in the energy industry. Stephen has led the expansion of Customized Energy Solutions from a Mid-Atlantic based energy services firm to one that provides comprehensive solutions throughout the US, Canada, Mexico, India and Japan.',
-  achievements: 'As President, Stephen has focused on developing competitive wholesale and retail energy markets and development of software that enables innovation in the areas of retail competition, demand response program development, supply procurement, generation development, and transmission congestion analysis.',
-  education: 'Stephen has a BS in economics from Pennsylvania State University and an MBA in Finance from Drexel University.',
-  linkedin: 'http://www.linkedin.com/pub/stephen-fernands/9/a15/1a6',
-  email: 'sfernands@ces-ltd.com'
-};
-
-const expertProfiles: Expert[] = []; // eslint-disable-line @typescript-eslint/no-unused-vars
-
-// const positionHierarchy = [
-//   'President',
-//   'Vice President',
-//   'Director',
-//   'Manager',
-//   'Senior Analyst',
-//   'Analyst',
-//   'Software Engineer',
-//   'System Operator',
-//   'Technology',
-//   'Consultant',
-//   'Controller',
-//   'Assistant'
-// ];
-
-interface Expert {
-  name: string;
-  role: string;
-  focus: string;
-}
-
-interface PresidentCardProps {
-  profile: typeof presidentProfile;
-}
-
-function PresidentCard({ profile }: PresidentCardProps) {
-  return (
-    <div className="mt-10">
-      <PresidentCardContainer profile={profile} />
-    </div>
-  );
-}
-
-function PresidentCardContainer({ profile }: PresidentCardProps) {
-  return (
-    <div className="rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-8 shadow-lg">
-      <PresidentCardContent profile={profile} />
-    </div>
-  );
-}
-
-function PresidentCardContent({ profile }: PresidentCardProps) {
-  return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-      <PresidentCardImage profile={profile} />
-      <PresidentCardDetails profile={profile} />
-    </div>
-  );
-}
-
-function PresidentCardImage({ profile }: PresidentCardProps) {
-  return (
-    <Image
-      src="/images/Stephen Fernands.png"
-      alt={profile.name}
-      width={80}
-      height={80}
-      className="h-20 w-20 rounded-full object-cover shadow-lg"
-    />
-  );
-}
-
-function PresidentCardDetails({ profile }: PresidentCardProps) {
-  return (
-    <div className="flex-1">
-      <PresidentCardHeader profile={profile} />
-      <PresidentCardBio profile={profile} />
-    </div>
-  );
-}
-
-function PresidentCardHeader({ profile }: PresidentCardProps) {
-  return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h3 className="text-2xl font-bold text-slate-900">{profile.name}</h3>
-        <p className="text-lg font-semibold text-blue-600">{profile.role}</p>
-      </div>
-      <PresidentCardActions profile={profile} />
-    </div>
-  );
-}
-
-function PresidentCardActions({ profile }: PresidentCardProps) {
-  return (
-    <div className="flex gap-3">
-      <a
-        href={profile.linkedin}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-      >
-        LinkedIn
-      </a>
-      <a
-        href={`mailto:${profile.email}`}
-        className="inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-      >
-        Email
-      </a>
-    </div>
-  );
-}
-
-function PresidentCardBio({ profile }: PresidentCardProps) {
-  return (
-    <div className="mt-6 space-y-4">
-      <p className="text-slate-700 leading-relaxed">{profile.bio}</p>
-      <p className="text-slate-700 leading-relaxed">{profile.achievements}</p>
-      <p className="text-slate-600 italic">{profile.education}</p>
-    </div>
-  );
-}
-
-// interface ExpertCardProps {
-//   expert: Expert;
-// }
-
-// function ExpertCard({ expert }: ExpertCardProps) {
-//   return (
-//     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md">
-//       <div className="flex items-center gap-3">
-//         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-//           {expert.name
-//             .split(' ')
-//             .map(part => part[0])
-//             .join('')
-//             .toUpperCase()}
-//         </div>
-//         <div>
-//           <p className="text-base font-semibold text-slate-900">{expert.name}</p>
-//           <p className="text-sm text-slate-600">{expert.role}</p>
-//         </div>
-//       </div>
-//       <p className="mt-4 text-sm text-slate-600">{expert.focus}</p>
-//     </div>
-//   );
-// }
-
-// interface FilterControlsProps {
-//   searchTerm: string;
-//   setSearchTerm: (term: string) => void;
-//   filterPosition: string;
-//   setFilterPosition: (position: string) => void;
-//   sortBy: 'name' | 'position';
-//   setSortBy: (sort: 'name' | 'position') => void;
-//   positionHierarchy: string[];
-// }
-
-// function FilterControls({
-//   searchTerm,
-//   setSearchTerm,
-//   filterPosition,
-//   setFilterPosition,
-//   sortBy,
-//   setSortBy,
-//   positionHierarchy
-// }: FilterControlsProps) {
-//   return (
-//     <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-//       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-//         <input
-//           type="text"
-//           placeholder="Search by name..."
-//           value={searchTerm}
-//           onChange={(e) => setSearchTerm(e.target.value)}
-//           className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-//         />
-//         <select
-//           value={filterPosition}
-//           onChange={(e) => setFilterPosition(e.target.value)}
-//           className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-//         >
-//           <option value="">All positions</option>
-//           {positionHierarchy.map(position => (
-//             <option key={position} value={position.toLowerCase()}>
-//               {position}
-//             </option>
-//           ))}
-//         </select>
-//       </div>
-//       <div className="flex gap-2">
-//         <button
-//           onClick={() => setSortBy('name')}
-//           className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-//             sortBy === 'name'
-//               ? 'bg-blue-600 text-white'
-//               : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-//           }`}
-//         >
-//           Sort alphabetically
-//         </button>
-//         <button
-//           onClick={() => setSortBy('position')}
-//           className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-//             sortBy === 'position'
-//               ? 'bg-blue-600 text-white'
-//               : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-//           }`}
-//         >
-//           Sort by position
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-// interface ExpertsGridProps {
-//   experts: Expert[];
-//   searchTerm: string;
-//   filterPosition: string;
-//   onClearFilters: () => void;
-// }
-
-// function ExpertsGrid({ experts, searchTerm, filterPosition, onClearFilters }: ExpertsGridProps) {
-//   return (
-//     <div className="mt-10">
-//       <div className="mb-6 flex items-center justify-between">
-//         <h3 className="text-xl font-semibold text-slate-900">
-//           {experts.length} Expert{experts.length !== 1 ? 's' : ''} Found
-//         </h3>
-//         {(searchTerm || filterPosition) && (
-//           <button
-//             onClick={onClearFilters}
-//             className="text-sm font-medium text-blue-600 hover:text-blue-700"
-//           >
-//             View All
-//           </button>
-//         )}
-//       </div>
-//       <div className="grid gap-6 md:grid-cols-3">
-//         {experts.map(expert => (
-//           <ExpertCard key={expert.name} expert={expert} />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-function ExpertsSectionHeader() {
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h2 className="text-3xl font-bold text-slate-900">Industry Experts</h2>
-        <p className="mt-2 max-w-2xl text-slate-600">
-          Cross-disciplinary leaders who bring market operations, regulatory insight, and emerging technology expertise to every engagement.
-        </p>
-      </div>
-    </div>
-  );
-}
+import { presidentProfile } from '@/lib/expertProfiles';
 
 export default function ExpertsSection() {
+  const presidentDetails = [presidentProfile.bio, presidentProfile.achievements, presidentProfile.education].filter(
+    Boolean,
+  ) as string[];
+
   return (
     <section id="experts" className="mt-24">
-      <ExpertsSectionHeader />
-      <PresidentCard profile={presidentProfile} />
+      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-lg">
+        <header className="flex flex-col items-center gap-2 text-center">
+          <h2 className="text-3xl font-bold text-slate-900">CES Leadership</h2>
+          <p className="text-sm text-slate-600">
+            Cross-disciplinary leaders who bring market operations, regulatory insight, and emerging technology expertise to every engagement.
+          </p>
+        </header>
+
+        <article className="mt-8 flex w-full flex-col gap-6 rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-white via-blue-50 to-white p-10 text-center shadow-xl lg:flex-row lg:items-center lg:gap-12 lg:text-left">
+          <Image
+            src="/images/stephen-fernands.png"
+            alt={presidentProfile.name}
+            width={240}
+            height={240}
+            className="mx-auto h-70 w-60 rounded-[32px] border-4 border-blue-200 object-cover shadow-2xl lg:mx-0"
+            priority
+          />
+          <div className="flex flex-1 flex-col items-center gap-4 lg:items-start">
+            <h3 className="text-2xl font-semibold text-slate-900">{presidentProfile.name}</h3>
+            {presidentProfile.role && (
+              <p className="text-sm font-medium uppercase tracking-[0.25em] text-blue-700">
+                {presidentProfile.role}
+              </p>
+            )}
+            {presidentDetails.length > 0 && (
+              <div className="max-w-3xl space-y-4 rounded-2xl border border-blue-100 bg-white/80 p-6 text-sm leading-relaxed text-slate-700 shadow-sm">
+                {presidentDetails.map((detail, index) => (
+                  <p key={index} className="text-justify">{detail}</p>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
+              {presidentProfile.linkedin && (
+                <a
+                  href={presidentProfile.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700"
+                >
+                  LinkedIn
+                </a>
+              )}
+              {presidentProfile.email && (
+                <a
+                  href={`mailto:${presidentProfile.email}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-5 py-2 text-sm font-semibold text-blue-700 shadow hover:bg-blue-50"
+                >
+                  Email Stephen
+                </a>
+              )}
+            </div>
+          </div>
+        </article>
+
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/experts"
+            className="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+          >
+            Meet the full team →
+          </Link>
+        </div>
+      </div>
     </section>
   );
 }

@@ -81,10 +81,10 @@ export default function SeniorFullStackDeveloperPage() {
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Job Description</h2>
               <div className="prose prose-slate max-w-none">
                 <p className="text-slate-700 leading-relaxed mb-4">
-                  We have an immediate need for a Senior Full Stack Software Developer specializing in Microsoft stack technologies (.NET, .NET Core, C#, SQL Server). This role will help drive the design and build of systems in support of CES's Retail Services business line, which is the largest and fastest growing in the company.
+                  We have an immediate need for a Senior Full Stack Software Developer specializing in Microsoft stack technologies (".NET, .NET Core, C#, SQL Server"). This role will help drive the design and build of systems in support of CES's Retail Services business line, which is the largest and fastest growing in the company.
                 </p>
                 <p className="text-slate-700 leading-relaxed mb-4">
-                  Success in this role requires a candidate with a large-scale enterprise software engineering mindset and ability to write elegant, scalable, and reliable code following architectural best practices. You have a curiosity and enthusiasm for the Energy industry, an eagerness to investigate and resolve issues, and a passion to refactor code and build systems the right way. You are a creative thinker and strong problem solver with an aptitude for picking up new technologies. You will be excited to mentor junior developers, and willing to collaborate and learn from other senior technologists in the company.
+                  Success in this role requires a candidate with a large-scale enterprise software engineering mindset and ability to write elegant, scalable, and reliable code following architectural best practices. You have a curiosity and enthusiasm for the Energy industry, an eagerness to investigate and resolve issues, and a passion to refactor code and build systems the right way. You are a creative thinker and strong problem solver with an aptitude for picking up new technologies. You will be excited to mentor junior developers, and willing to collaborate and learn from other senior technologists in the company."
                 </p>
               </div>
             </section>
@@ -278,7 +278,7 @@ export default function SeniorFullStackDeveloperPage() {
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Additional Information</h2>
               <div className="prose prose-slate max-w-none">
                 <p className="text-slate-700 leading-relaxed mb-4">
-                  At Customized Energy Solutions, we offer a competitive salary based on experience, along with performance-based bonuses, health coverage, and tuition reimbursement to support your growth.
+                  At Customized Energy Solutions, we offer a competitive salary based on experience, along with performance-based bonuses, health coverage, and tuition reimbursement to support your growth."
                 </p>
                 <p className="text-slate-700 leading-relaxed mb-4">
                   We look for colleagues who can work independently, collaborate effectively, and embrace continuous learning and knowledge-sharing. Together, we foster a supportive environment where teams grow, innovate, and build sustainable solutions for the future.

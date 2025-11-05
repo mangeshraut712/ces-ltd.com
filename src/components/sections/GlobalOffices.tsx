@@ -10,8 +10,8 @@ export default function GlobalOffices() {
         </p>
       </div>
       <ul className="mt-3 space-y-2">
-        {globalOffices.map(office => (
-          <li key={office.country} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+        {globalOffices.map((office, index) => (
+          <li key={`${office.country}-${index}`} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-500">{office.country}</p>
             <p className="text-sm text-slate-900">{office.location}</p>
             {office.phone && <p className="mt-1 text-xs text-slate-600">{office.phone}</p>}

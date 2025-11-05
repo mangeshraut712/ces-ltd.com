@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "about": "Over ons",
+    "solutions": "Oplossingen",
+    "industries": "Industrieën",
+    "innovation": "Innovatie",
+    "experts": "Experts",
+    "news": "Nieuws",
+    "careers": "Carrières",
+    "contact": "Contact",
+    "consultation": "Advies aanvragen"
+  },
+  "hero": {
+    "title": "Aangepaste Energieoplossingen voor een Transparante en Efficiënte Toekomst",
+    "subtitle": "Sinds 1998 werkt CES Ltd. samen met marktoperatoren, retailers en innovators om complexe energielandschappen te analyseren, besluitvorming te vereenvoudigen en schaalbare oplossingen wereldwijd te implementeren.",
+    "viewSolutions": "Bekijk Oplossingen",
+    "talkToExpert": "Praat met een Expert",
+    "innovationPillars": "Innovatiepijlers",
+    "innovationDescription": "CES levert uitgebreide energieoplossingen door marktintelligentie, regelgevende expertise en opkomende technologieën."
+  },
+  "solutions": {
+    "heading": "Ontdek oplossingen",
+    "description": "Selecteer een domein om te zien hoe CES marktoperaties, retailprogramma's, opkomende technologieën en gedistribueerde energie-ecosystemen transformeert.",
+    "localizedFrameworks": "Gelokaliseerde leveringskaders voor de Verenigde Staten, Japan en India.",
+    "generation": {
+      "title": "Generatie Oplossingen",
+      "description": "Een portfolio van gehoste software- en serviceoplossingen wordt aangeboden met CES | Gold. Het bevorderen van de groei van efficiënte energieopwekking met gehoste softwareoplossingen, expertise en service is sinds 1998 de missie van CES."
+    },
+    "retail": {
+      "title": "Detailhandels Energie Diensten: Oplossingen voor Elektriciteit en Gas",
+      "description": "CES bevordert de groei van energiedetailhandelaren door een allesomvattend aanbod van gehoste oplossingen, expertise en ongeëvenaarde service te bieden via onze CES | BLUE, CES | GREEN, CES | MarketIQ diensten."
+    },
+    "distributed": {
+      "title": "Gedistribueerde Energie",
+      "description": "CES bedient klanten in mondiale gedereguleerde markten door hen in staat te stellen de waarde van hun hulpbronnen te benutten."
+    },
+    "emerging": {
+      "title": "Opkomende Technologieën",
+      "description": "Proactief en toekomstgericht denken dat u kan helpen voor de toekomst."
+    }
+  },
+  "contact": {
+    "title": "Neem contact op",
+    "subtitle": "Globale Markt Operaties · 24/7",
+    "description": "Deel uw initiatief en onze regionale strategen zullen een engagementplan ontwerpen dat AI, IoT, Web3 en VR-mogelijkheden combineert die zijn afgestemd op uw markt.",
+    "name": "Volledige naam",
+    "email": "Werk e-mail",
+    "company": "Bedrijf of organisatie",
+    "region": "Operatieregio",
+    "message": "Projectdoelen",
+    "submit": "Bericht verzenden",
+    "success": "Bedankt! Een regionale strateeg neemt binnen één werkdag contact op.",
+    "connect": "Verbind met CES"
+  },
+  "footer": {
+    "copyright": "© 2025 Customized Energy Solutions Ltd. Alle rechten voorbehouden.",
+    "linksHeading": "Quick Links",
+    "officesHeading": "Global Offices",
+    "connectHeading": "Connect"
+  }
+}

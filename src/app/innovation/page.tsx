@@ -51,15 +51,15 @@ const innovationStories = [
   }
 ];
 
-const innovationCategories = [
-  'All',
-  'Technology Innovation',
-  'Digital Transformation',
-  'Clean Energy',
-  'Smart Grid',
-  'Predictive Maintenance',
-  'DER Integration'
-];
+// const innovationCategories = [
+//   'All',
+//   'Technology Innovation',
+//   'Digital Transformation',
+//   'Clean Energy',
+//   'Smart Grid',
+//   'Predictive Maintenance',
+//   'DER Integration'
+// ];
 
 export default function InnovationPage() {
   return (

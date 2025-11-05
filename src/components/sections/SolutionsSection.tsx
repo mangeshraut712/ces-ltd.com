@@ -1,24 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { solutions as solutionCatalog } from '@/lib/cesData';
+
+const solutionTranslationKeys: Record<string, string> = {
+  gold: 'generation',
+  blue: 'retail',
+  green: 'distributed',
+  comets: 'emerging',
+};
 
 export default function SolutionsSection() {
   const [selectedSolutionId, setSelectedSolutionId] = useState<string | null>(solutionCatalog[0]?.id ?? null);
   const selectedSolution = solutionCatalog.find(solution => solution.id === selectedSolutionId);
+  const tSolutions = useTranslations('solutions');
+
+  const localizedSelected = useMemo(() => {
+    if (!selectedSolution) return null;
+
+    const translationKey = solutionTranslationKeys[selectedSolution.id];
+    if (!translationKey) {
+      return {
+        title: selectedSolution.name,
+        description: selectedSolution.description,
+      };
+    }
+
+    return {
+      title: tSolutions(`${translationKey}.title`, { default: selectedSolution.name }),
+      description: tSolutions(`${translationKey}.description`, { default: selectedSolution.description }),
+    };
+  }, [selectedSolution, tSolutions]);
 
   return (
     <section id="solutions" className="mt-20">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900">Explore Solutions</h2>
+          <h2 className="text-3xl font-bold text-slate-900">{tSolutions('heading')}</h2>
           <p className="mt-2 max-w-2xl text-slate-600">
-            Select a domain to see how CES transforms market operations, retail programs, emerging technologies, and distributed energy ecosystems.
+            {tSolutions('description')}
           </p>
-        </div>
-        <div className="rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-700">
-          Localized delivery frameworks for the USA, Japan, and India.
+          <p className="mt-3 text-sm font-semibold text-blue-700">{tSolutions('localizedFrameworks')}</p>
         </div>
       </div>
 
@@ -39,8 +63,12 @@ export default function SolutionsSection() {
                   <span className="text-2xl">{solution.icon}</span>
                   <span className="text-xs uppercase tracking-wide text-blue-500">{solution.target}</span>
                 </div>
-                <p className="mt-3 text-lg font-semibold text-slate-900">{solution.name}</p>
-                <p className="mt-2 text-sm text-slate-600">{solution.description}</p>
+                <p className="mt-3 text-lg font-semibold text-slate-900">
+                  {tSolutions(`${solutionTranslationKeys[solution.id] ?? ''}.title`, { default: solution.name })}
+                </p>
+                <p className="mt-2 text-sm text-slate-600">
+                  {tSolutions(`${solutionTranslationKeys[solution.id] ?? ''}.description`, { default: solution.description })}
+                </p>
                 <span className="mt-4 inline-flex items-center text-sm font-semibold text-blue-600">
                   Learn more →
                 </span>
@@ -50,10 +78,10 @@ export default function SolutionsSection() {
         </div>
 
         <aside className="rounded-xl border border-blue-100 bg-blue-50 p-6">
-          {selectedSolution ? (
+          {selectedSolution && localizedSelected ? (
             <>
-              <h3 className="text-xl font-semibold text-slate-900">{selectedSolution.name}</h3>
-              <p className="mt-2 text-sm text-slate-700">{selectedSolution.description}</p>
+              <h3 className="text-xl font-semibold text-slate-900">{localizedSelected.title}</h3>
+              <p className="mt-2 text-sm text-slate-700">{localizedSelected.description}</p>
               <div className="mt-4">
                 <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-500">Key capabilities</h4>
                 <ul className="mt-3 space-y-2 text-sm text-slate-700">

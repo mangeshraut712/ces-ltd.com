@@ -68,15 +68,15 @@ export default function VRPreview() {
   const [vrMode, setVrMode] = useState(false);
 
   return (
-    <div className="w-full bg-gradient-to-b from-blue-900 to-blue-600 rounded-lg overflow-hidden relative">
+    <div className="w-full bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 rounded-lg overflow-hidden relative">
       <div className="absolute top-4 right-4 z-10 flex space-x-2">
         <motion.button
           onClick={() => setVrMode(!vrMode)}
-          className="bg-purple-600 text-white px-3 py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 transition-colors"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {vrMode ? 'Exit VR' : 'VR Mode'}
+          {vrMode ? 'Exit VR' : 'CES VR Experience'}
         </motion.button>
       </div>
 
@@ -181,10 +181,10 @@ export default function VRPreview() {
       {/* UI Overlay */}
       <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end text-white">
         <div className="bg-black/60 backdrop-blur-sm rounded-lg p-4">
-          <p className="text-sm font-semibold">VR Construction Site Preview</p>
+          <p className="text-sm font-semibold">CES VR Construction Site Preview</p>
           <p className="text-xs opacity-80">Mouse: rotate | Scroll: zoom | Click: interact</p>
           {vrMode && (
-            <p className="text-xs text-purple-300 mt-1">VR Mode Active - Immersive Experience</p>
+            <p className="text-xs text-blue-300 mt-1 font-medium">CES VR Mode Active - Immersive Energy Experience</p>
           )}
         </div>
 
@@ -218,8 +218,8 @@ export default function VRPreview() {
           animate={{ opacity: 1 }}
           className="absolute inset-0 pointer-events-none"
         >
-          <div className="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            VR MODE
+          <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+            CES VR MODE
           </div>
         </motion.div>
       )}

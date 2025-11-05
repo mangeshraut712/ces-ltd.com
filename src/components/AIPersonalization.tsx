@@ -27,7 +27,7 @@ const mockUserProfile: UserProfile = {
   name: 'Energy Executive',
   role: 'client',
   interests: ['renewable energy', 'sustainable construction', 'IoT', 'carbon reduction'],
-  location: 'Europe',
+  location: 'North America',
   industry: 'Energy & Construction',
 };
 
@@ -37,7 +37,7 @@ const mockRecommendations: Recommendation[] = [
     type: 'project',
     title: 'North Sea Offshore Wind Farm',
     description: 'Based on your interest in renewable energy, this 500MW offshore project matches your location and industry focus.',
-    relevance: 95,
+    relevance: 96,
     image: '/api/placeholder/300/200',
     action: 'View Project Details',
   },
@@ -46,7 +46,7 @@ const mockRecommendations: Recommendation[] = [
     type: 'service',
     title: 'AI-Predictive Maintenance',
     description: 'Our new IoT-based predictive maintenance service can reduce downtime by 40% for your operations.',
-    relevance: 88,
+    relevance: 94,
     image: '/api/placeholder/300/200',
     action: 'Explore Service',
   },
@@ -55,7 +55,7 @@ const mockRecommendations: Recommendation[] = [
     type: 'news',
     title: 'EU Green Deal Updates',
     description: 'Latest developments in European sustainable energy policies that may impact your business.',
-    relevance: 82,
+    relevance: 86,
     image: '/api/placeholder/300/200',
     action: 'Read Article',
   },
@@ -64,7 +64,7 @@ const mockRecommendations: Recommendation[] = [
     type: 'event',
     title: 'CES Ltd. VR Summit 2025',
     description: 'Join our virtual summit on emerging technologies in energy and construction.',
-    relevance: 75,
+    relevance: 76,
     image: '/api/placeholder/300/200',
     action: 'Register Now',
   },
@@ -232,7 +232,7 @@ export default function AIPersonalization() {
               </div>
               <h5 className="text-white font-medium mb-2">Market Trend</h5>
               <p className="text-gray-300 text-sm">
-                Based on your profile, renewable energy investments are predicted to grow 25% in Europe next quarter.
+                Based on your profile, renewable energy investments are predicted to grow 25% in North America next quarter.
               </p>
             </div>
 
@@ -252,7 +252,7 @@ export default function AIPersonalization() {
               </div>
               <h5 className="text-white font-medium mb-2">Priority Action</h5>
               <p className="text-gray-300 text-sm">
-                Schedule a VR meeting with our experts to discuss your upcoming wind farm project.
+                Schedule a VR meeting with our experts to discuss your upcoming solar farm project.
               </p>
             </div>
           </div>

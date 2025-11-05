@@ -1,16 +1,18 @@
 'use client';
 
-import AIChatbot from './AIChatbot';
+import dynamic from 'next/dynamic';
 import { DashboardSettingsProvider } from '@/context/DashboardSettingsContext';
 import AboutSection from './sections/AboutSection';
 import CareersSection from './sections/CareersSection';
 import ContactSection from './sections/ContactSection';
-import ExpertsSection from './sections/ExpertsSection';
 import HeroSection from './sections/HeroSection';
 import IndustriesSection from './sections/IndustriesSection';
 import InnovationSection from './sections/InnovationSection';
+import ExpertsSection from './sections/ExpertsSection';
 import NewsSection from './sections/NewsSection';
 import SolutionsSection from './sections/SolutionsSection';
+
+const AIChatbot = dynamic(() => import('./AIChatbot'), { ssr: false });
 
 interface HomePageProps {
   locale: string;

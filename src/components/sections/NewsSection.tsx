@@ -1,10 +1,12 @@
 'use client';
 
+import Link from 'next/link';
+
 const newsHighlights = [
   {
-    title: 'CES launches Nexus 3.0 innovation suite',
-    summary: 'AI-first upgrade introduces predictive dashboards, VR site tours, and Web3 certification workflows.',
-    tag: 'Product',
+    title: 'CES celebrates 25th anniversary milestone',
+    summary: 'Quarter-century of energy innovation: from pioneering advanced energy storage to leading AI-driven market operations across global grids.',
+    tag: 'Milestone',
   },
   {
     title: 'India storage portfolio achieves 40% faster deployment',
@@ -28,9 +30,9 @@ export default function NewsSection() {
             AI-curated highlights, announcements, and event spotlights from across CES global teams.
           </p>
         </div>
-        <a href="#innovation" className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700">
+        <Link href="/news" className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700">
           Explore innovation stories →
-        </a>
+        </Link>
       </div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">

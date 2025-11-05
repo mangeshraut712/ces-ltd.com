@@ -1,6 +1,7 @@
 'use client';
 
 import { type ChangeEvent, type FormEvent } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { companyInfo, globalOffices } from '@/lib/cesData';
 
@@ -29,6 +30,8 @@ const socialIconMap: Record<string, string> = {
 };
 
 export default function ContactForm({ contactForm, setContactForm, contactStatus, onSubmit }: ContactFormProps) {
+  const t = useTranslations('contact');
+
   const handleContactChange = (field: keyof ContactFormState) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setContactForm(prev => ({
       ...prev,
@@ -36,21 +39,43 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
     }));
   };
 
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(contactForm),
+      });
+
+      if (response.ok) {
+        onSubmit(e);
+      } else {
+        console.error('Failed to submit form');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   return (
     <div className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900">Contact Us</h2>
-        <p className="mt-1 text-xs uppercase tracking-[0.3em] text-blue-500">Global Market Operations · 24/7</p>
+        <h2 className="text-2xl font-bold text-slate-900">{t('title')}</h2>
+        <p className="mt-1 text-xs uppercase tracking-[0.3em] text-blue-500">{t('subtitle')}</p>
         <p className="mt-2 text-sm text-slate-600">
-          Share your initiative and our regional strategists will architect an engagement plan that blends AI, IoT, Web3, and VR capabilities tailored to your market.
+          {t('description')}
         </p>
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-slate-700">
-              Full name
+              {t('name')}
             </label>
             <input
               id="contact-name"
@@ -63,7 +88,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
           </div>
           <div>
             <label htmlFor="contact-email" className="block text-sm font-medium text-slate-700">
-              Work email
+              {t('email')}
             </label>
             <input
               id="contact-email"
@@ -80,7 +105,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="contact-company" className="block text-sm font-medium text-slate-700">
-              Company or organization
+              {t('company')}
             </label>
             <input
               id="contact-company"
@@ -92,7 +117,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
           </div>
           <div>
             <label htmlFor="contact-region" className="block text-sm font-medium text-slate-700">
-              Region of operation
+              {t('region')}
             </label>
             <select
               id="contact-region"
@@ -100,8 +125,8 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
               onChange={handleContactChange('region')}
               className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {globalOffices.map(office => (
-                <option key={office.country} value={office.country} className="text-slate-900">
+              {globalOffices.map((office, index) => (
+                <option key={`${office.country}-${index}`} value={office.country} className="text-slate-900">
                   {office.country}
                 </option>
               ))}
@@ -111,7 +136,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
 
         <div>
           <label htmlFor="contact-message" className="block text-sm font-medium text-slate-700">
-            Project goals
+            {t('message')}
           </label>
           <textarea
             id="contact-message"
@@ -124,29 +149,27 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
           />
         </div>
 
-        <div className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-          <p className="font-semibold text-slate-900">Zero-Knowledge Proof (demo)</p>
-          <p className="mt-1">
-            Coming soon: drop in credentials to generate zk-SNARK attestations for compliance teams without exposing identities.
-          </p>
-        </div>
 
         <button
           type="submit"
           disabled={contactStatus === 'submitting'}
           className="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:opacity-70"
         >
-          {contactStatus === 'submitting' ? 'Sending...' : contactStatus === 'success' ? 'Submitted' : 'Send message'}
+          {contactStatus === 'submitting'
+            ? t('sending', { default: 'Sending...' })
+            : contactStatus === 'success'
+              ? t('submitted', { default: 'Submitted' })
+              : t('submit')}
         </button>
 
         {contactStatus === 'success' && (
-          <p className="text-sm text-green-600">Thanks! A regional strategist will reach out within one business day.</p>
+          <p className="text-sm text-green-600">{t('success')}</p>
         )}
       </form>
 
       {companyInfo.socialLinks && (
         <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-          <h3 className="text-sm font-semibold text-slate-900">Connect With CES</h3>
+          <h3 className="text-sm font-semibold text-slate-900">{t('connect')}</h3>
           <ul className="mt-2 space-y-1">
             {companyInfo.socialLinks.map(link => (
               <li key={link.label}>

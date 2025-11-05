@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "about": "About",
+    "solutions": "Solutions",
+    "industries": "Industries",
+    "innovation": "Innovation",
+    "experts": "Experts",
+    "news": "News",
+    "careers": "Careers",
+    "contact": "Contact",
+    "consultation": "Request Consultation"
+  },
+  "hero": {
+    "title": "Customized Energy Solutions for a Transparent, Efficient Future",
+    "subtitle": "Since 1998, CES Ltd. has partnered with market operators, retailers, and innovators to analyze complex energy landscapes, simplify decision-making, and implement scaled solutions across the globe.",
+    "viewSolutions": "View Solutions",
+    "talkToExpert": "Talk to an Expert",
+    "innovationPillars": "Innovation Pillars",
+    "innovationDescription": "CES delivers comprehensive energy solutions through market intelligence, regulatory expertise, and emerging technologies."
+  },
+  "solutions": {
+    "heading": "Explore Solutions",
+    "description": "Select a domain to see how CES transforms market operations, retail programs, emerging technologies, and distributed energy ecosystems.",
+    "localizedFrameworks": "Localized delivery frameworks for the USA, Japan, and India.",
+    "generation": {
+      "title": "Power Generation Solution",
+      "description": "A portfolio of hosted software and service solutions is offered with CES | Gold. Advancing the growth of efficient power generation with hosted software solutions, expertise, and service has been a CES mission since 1998."
+    },
+    "retail": {
+      "title": "Retail Energy Services: Solutions for Power & Gas",
+      "description": "CES advances the growth of energy retailers by providing an end-to-end comprehensive offering of hosted solutions, expertise, and unparalleled service via our CES | BLUE, CES | GREEN, CES | MarketIQ services."
+    },
+    "distributed": {
+      "title": "Distributed Energy",
+      "description": "CES serves clients across global deregulated markets by empowering them to capture the value of their resources."
+    },
+    "emerging": {
+      "title": "Emerging Technologies",
+      "description": "Proactive, forward thinking that can help you for the future."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Global Market Operations · 24/7",
+    "description": "Share your initiative and our regional strategists will architect an engagement plan that blends AI, IoT, Web3, and VR capabilities tailored to your market.",
+    "name": "Full name",
+    "email": "Work email",
+    "company": "Company or organization",
+    "region": "Region of operation",
+    "message": "Project goals",
+    "submit": "Send message",
+    "success": "Thanks! A regional strategist will reach out within one business day.",
+    "connect": "Connect With CES"
+  },
+  "footer": {
+    "copyright": "© 2025 Customized Energy Solutions Ltd. All rights reserved.",
+    "linksHeading": "Quick Links",
+    "officesHeading": "Global Offices",
+    "connectHeading": "Connect"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "about": "À propos de nous",
+    "solutions": "Solutions",
+    "industries": "Industries",
+    "innovation": "Innovation",
+    "experts": "Experts",
+    "news": "Nouvelles",
+    "careers": "Carrières",
+    "contact": "Contact",
+    "consultation": "Demander une consultation"
+  },
+  "hero": {
+    "title": "Solutions Énergétiques Personnalisées pour un Avenir Transparent et Efficace",
+    "subtitle": "Depuis 1998, CES Ltd. collabore avec les opérateurs de marché, les détaillants et les innovateurs pour analyser des paysages énergétiques complexes, simplifier la prise de décision et mettre en œuvre des solutions évolutives à l'échelle mondiale.",
+    "viewSolutions": "Voir les Solutions",
+    "talkToExpert": "Parler à un Expert",
+    "innovationPillars": "Piliers d'Innovation",
+    "innovationDescription": "CES livre des solutions énergétiques complètes grâce à l'intelligence de marché, l'expertise réglementaire et les technologies émergentes."
+  },
+  "solutions": {
+    "heading": "Explorer les solutions",
+    "description": "Sélectionnez un domaine pour voir comment CES transforme les opérations de marché, les programmes de détail, les technologies émergentes et les écosystèmes d’énergie distribuée.",
+    "localizedFrameworks": "Cadres de prestation localisés pour les États-Unis, le Japon et l’Inde.",
+    "generation": {
+      "title": "Solutions de Génération",
+      "description": "Une gamme de solutions logicielles et de services hébergés est proposée avec CES | Gold. Depuis 1998, il a été essentiel d'améliorer la croissance de la production d'énergie efficace grâce aux solutions logicielles hébergées, à l'expertise et au service."
+    },
+    "retail": {
+      "title": "Services de Détail Énergétique : Solutions pour l'Électricité et le Gaz",
+      "description": "CES stimule la croissance des détaillants d'énergie en fournissant une offre complète intégrale de solutions hébergées, d'expertise et de service exceptionnel à travers CES | BLUE, CES | GREEN et CES | MarketIQ."
+    },
+    "distributed": {
+      "title": "Énergie Distribuée",
+      "description": "CES dessert les clients sur les marchés déréglementés mondiaux en les habilitant à capturer la valeur de leurs ressources."
+    },
+    "emerging": {
+      "title": "Technologies Émergentes",
+      "description": "Pensée prospective et future qui peut vous aider pour l'avenir."
+    }
+  },
+  "contact": {
+    "title": "Nous Contacter",
+    "subtitle": "Opérations de Marché Mondial · 24/7",
+    "description": "Partagez votre initiative et nos stratèges régionaux concevront un plan d'engagement qui combine les capacités d'IA, IoT, Web3 et VR personnalisées pour votre marché.",
+    "name": "Nom complet",
+    "email": "Courriel professionnel",
+    "company": "Entreprise ou organisation",
+    "region": "Région d'opération",
+    "message": "Objectifs du projet",
+    "submit": "Envoyer le message",
+    "success": "Merci ! Un stratège régional vous contactera dans un jour ouvrable.",
+    "connect": "Se Connecter avec CES"
+  },
+  "footer": {
+    "copyright": "© 2025 Customized Energy Solutions Ltd. Tous droits réservés.",
+    "linksHeading": "Quick Links",
+    "officesHeading": "Global Offices",
+    "connectHeading": "Connect"
+  }
+}

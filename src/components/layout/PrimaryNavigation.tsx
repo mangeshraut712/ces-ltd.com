@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import LocaleSwitcher from './LocaleSwitcher';
 import { companyInfo, solutions } from '@/lib/cesData';
 
@@ -10,19 +11,20 @@ interface PrimaryNavigationProps {
   locale: string;
 }
 
-const navItems = [
-  { label: 'About', href: '#about' },
-  { label: 'Solutions', href: '#solutions' },
-  { label: 'Industries', href: '#industries' },
-  { label: 'Innovation', href: '#innovation' },
-  { label: 'Experts', href: '#experts' },
-  { label: 'News', href: '#news' },
-  { label: 'Careers', href: '#careers' },
-  { label: 'Contact', href: '#contact' },
+export const navItems = [
+  { key: 'about', label: 'About', href: '#about' },
+  { key: 'solutions', label: 'Solutions', href: '#solutions' },
+  { key: 'industries', label: 'Industries', href: '#industries' },
+  { key: 'innovation', label: 'Innovation', href: '#innovation' },
+  { key: 'experts', label: 'Experts', href: '#experts' },
+  { key: 'news', label: 'News', href: '#news' },
+  { key: 'careers', label: 'Careers', href: '#careers' },
+  { key: 'contact', label: 'Contact', href: '#contact' },
 ];
 
 export default function PrimaryNavigation({ locale }: PrimaryNavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const t = useTranslations('nav');
 
   const solutionsPreview = solutions.slice(0, 3);
 
@@ -53,24 +55,24 @@ export default function PrimaryNavigation({ locale }: PrimaryNavigationProps) {
           </div>
         </Link>
 
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden lg:ml-12 lg:flex lg:items-center lg:gap-8">
           {navItems.map(item => (
             <Link
-              key={item.label}
+              key={item.key}
               href={item.href}
               onClick={handleNavigate}
               className="text-sm font-medium text-slate-600 transition hover:text-blue-600"
             >
-              {item.label}
+              {t(item.key)}
             </Link>
           ))}
           <LocaleSwitcher currentLocale={locale} />
           <Link
-            href="#contact"
+            href="/admin"
             onClick={handleNavigate}
-            className="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+            className="inline-flex items-center rounded-full bg-slate-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-700"
           >
-            Request Consultation
+            Login/Signup
           </Link>
         </div>
 
@@ -115,12 +117,12 @@ export default function PrimaryNavigation({ locale }: PrimaryNavigationProps) {
           <div className="mt-4 flex flex-col space-y-2">
             {navItems.map(item => (
               <Link
-                key={item.label}
+                key={item.key}
                 href={item.href}
                 onClick={handleNavigate}
                 className="rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
               >
-                {item.label}
+                {t(item.key)}
               </Link>
             ))}
           </div>
@@ -128,11 +130,11 @@ export default function PrimaryNavigation({ locale }: PrimaryNavigationProps) {
           <div className="mt-4 flex items-center justify-between">
             <LocaleSwitcher currentLocale={locale} />
             <Link
-              href="#contact"
+              href="/admin"
               onClick={handleNavigate}
-              className="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+              className="inline-flex items-center rounded-full bg-slate-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-700"
             >
-              Request Consultation
+              Login/Signup
             </Link>
           </div>
         </div>

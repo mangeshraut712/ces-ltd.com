@@ -4,9 +4,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 const locales = [
-  { value: 'en-US', label: 'USA' },
-  { value: 'ja-JP', label: '日本' },
-  { value: 'hi-IN', label: 'भारत' },
+  { value: 'en-US', label: '🇺🇸 English (Corporate)' },
+  { value: 'ja-JP', label: '🇯🇵 日本語 (Japan)' },
+  { value: 'hi-IN', label: '🇮🇳 हिंदी (India)' },
+  { value: 'es-MX', label: '🇲🇽 Español (Mexico)' },
+  { value: 'fr-CA', label: '🇨🇦 Français (Canada)' },
+  { value: 'vi-VN', label: '🇻🇳 Tiếng Việt (Vietnam)' },
+  { value: 'ar-AE', label: '🇦🇪 العربية (UAE)' },
+  { value: 'nl-NL', label: '🇳🇱 Nederlands (Netherlands)' },
 ];
 
 interface LocaleSwitcherProps {

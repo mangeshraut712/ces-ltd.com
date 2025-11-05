@@ -10,20 +10,16 @@ const AIDashboard = dynamic(() => import('../AIDashboard'), { ssr: false });
 const IoTDashboard = dynamic(() => import('../IoTDashboard'), { ssr: false });
 const GlobalProjectMap = dynamic(() => import('../GlobalProjectMap'), { ssr: false });
 const ProjectShowcase = dynamic(() => import('../ProjectShowcase'), { ssr: false });
-const VRPreview = dynamic(() => import('../VRPreview'), { ssr: false });
 const Web3NFTMinter = dynamic(() => import('../Web3NFTMinter'), { ssr: false });
 const AIPersonalization = dynamic(() => import('../AIPersonalization'), { ssr: false });
-const AdminPanel = dynamic(() => import('../AdminPanel'), { ssr: false });
 
 const capabilities = [
   { id: 'ai-dashboard', name: 'AI Dashboard', component: AIDashboard, icon: '🤖', description: 'Predictive intelligence & analytics' },
   { id: 'iot-dashboard', name: 'IoT Dashboard', component: IoTDashboard, icon: '📊', description: 'Real-time sensor monitoring' },
   { id: 'project-map', name: 'Project Map', component: GlobalProjectMap, icon: '🗺️', description: 'Global project visualization' },
   { id: 'project-showcase', name: 'Project Showcase', component: ProjectShowcase, icon: '🏗️', description: '3D project models' },
-  { id: 'vr-preview', name: 'VR Preview', component: VRPreview, icon: '🥽', description: 'Immersive experiences' },
   { id: 'web3-nft', name: 'Web3 NFTs', component: Web3NFTMinter, icon: '⛓️', description: 'Blockchain certificates' },
   { id: 'ai-personalization', name: 'AI Personalization', component: AIPersonalization, icon: '🎯', description: 'Smart recommendations' },
-  { id: 'admin-panel', name: 'Admin Panel', component: AdminPanel, icon: '⚙️', description: 'Content management' },
 ];
 
 export default function InnovationSection() {
@@ -51,11 +47,8 @@ export default function InnovationSection() {
         <div>
           <h2 className="text-3xl font-bold text-slate-900">Innovation Showcase</h2>
           <p className="mt-2 max-w-2xl text-slate-600">
-            Explore the interactive modules that power CES Nexus 3.0, from AI-driven forecasting to VR project previews and blockchain-secured certifications.
+            Explore the interactive modules that power CES, from AI-driven forecasting to VR project previews and blockchain-secured certifications.
           </p>
-        </div>
-        <div className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600 shadow-sm">
-          Toggle a capability to preview it live.
         </div>
       </div>
 

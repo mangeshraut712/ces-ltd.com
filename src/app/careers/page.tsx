@@ -252,7 +252,7 @@ function VisionMissionSection() {
             <ul className="space-y-4 text-slate-700">
               <li className="flex items-start">
                 <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                To have a world-wide presence wherever deregulated electricity or natural gas markets exist
+                To have a worldwide presence wherever deregulated electricity or natural gas markets exist
               </li>
               <li className="flex items-start">
                 <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -260,7 +260,7 @@ function VisionMissionSection() {
               </li>
               <li className="flex items-start">
                 <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                To represent the highest level of energy information technology and services available to clients world-wide
+                To represent the highest level of energy information technology and services available to clients worldwide
               </li>
             </ul>
           </div>
