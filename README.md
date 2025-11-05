@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CES Ltd. Prototype - CES Nexus 3.0
 
-## Getting Started
+A cutting-edge Next.js application showcasing CES Ltd.'s innovative energy solutions platform, featuring AI-driven personalization, IoT integration, Web3 capabilities, and immersive VR experiences.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **AI-Powered Personalization**: Adaptive experiences using OpenAI integration
+- **IoT Dashboard**: Real-time sensor monitoring and analytics with Three.js visualizations
+- **Web3 Integration**: Ethereum blockchain connectivity with Wagmi and Viem
+- **VR/AR Experiences**: Immersive 3D project walkthroughs using React Three Fiber
+- **Global Operations**: Multi-region deployment with international office support
+- **Modern UI**: Built with Tailwind CSS v4 and Framer Motion animations
+- **Type-Safe**: Full TypeScript implementation with strict type checking
+
+## 🛠️ Tech Stack
+
+### Core Framework
+- **Next.js 16.0.1** - React framework with App Router
+- **React 19.2.0** - Latest React with concurrent features
+- **TypeScript 5** - Type-safe JavaScript
+
+### UI & Styling
+- **Tailwind CSS v4** - Utility-first CSS framework
+- **Framer Motion** - Production-ready motion library
+- **Geist Font** - Modern typography from Vercel
+
+### 3D & Visualization
+- **Three.js** - 3D graphics library
+- **React Three Fiber** - React renderer for Three.js
+- **React Three Drei** - Useful helpers for React Three Fiber
+- **React Three XR** - WebXR integration for VR/AR
+
+### Blockchain & Web3
+- **Wagmi** - React hooks for Ethereum
+- **Viem** - TypeScript interface for Ethereum
+- **Ethers.js** - Ethereum wallet utilities
+
+### Maps & Location
+- **Leaflet** - Interactive maps
+- **React Leaflet** - React components for Leaflet
+
+### AI & APIs
+- **OpenAI** - AI-powered features
+- **Axios** - HTTP client for API calls
+
+### Development Tools
+- **ESLint 9** - Code linting with Next.js config
+- **TypeScript** - Type checking and compilation
+
+## 📦 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd ces-ltd-prototype
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   Configure your environment variables in `.env.local`
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🏗️ Project Structure
+
+```
+ces-ltd-prototype/
+├── src/
+│   ├── app/                 # Next.js App Router
+│   │   ├── api/            # API routes
+│   │   ├── [locale]/       # Internationalization
+│   │   └── globals.css     # Global styles
+│   ├── components/         # React components
+│   │   ├── sections/       # Page sections
+│   │   ├── layout/         # Layout components
+│   │   └── settings/       # Settings components
+│   ├── context/            # React context providers
+│   └── lib/                # Utility libraries
+├── public/                 # Static assets
+├── docs/                   # Documentation
+└── scripts/                # Build and migration scripts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 Available Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🌐 Internationalization
 
-## Learn More
+The application supports multiple locales through Next.js internationalization features. Locale-specific content is handled in the `[locale]` directory structure.
 
-To learn more about Next.js, take a look at the following resources:
+## 🔒 Security Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Security Headers**: Configured in `next.config.ts`
+- **XSS Protection**: Content Security Policy headers
+- **Frame Options**: X-Frame-Options set to DENY
+- **Type Safety**: Full TypeScript implementation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Deployment
 
-## Deploy on Vercel
+### Vercel (Recommended)
+1. Connect your GitHub repository to Vercel
+2. Configure environment variables
+3. Deploy automatically on push
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Manual Deployment
+```bash
+npm run build
+npm run start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+## 📄 License
+
+This project is proprietary software owned by CES Ltd.
+
+## 📞 Support
+
+For support or questions, please contact the CES Ltd. development team.
+
+---
+
+**CES Ltd. - Customized Energy Solutions for a Transparent, Efficient Future**

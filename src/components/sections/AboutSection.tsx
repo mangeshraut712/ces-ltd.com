@@ -1,0 +1,50 @@
+'use client';
+
+import { companyInfo } from '@/lib/cesData';
+
+export default function AboutSection() {
+  return (
+    <section id="about" className="mt-20">
+      <div className="grid gap-10 rounded-3xl border border-slate-200 bg-white p-8 text-slate-800 shadow-md lg:grid-cols-[1.2fr,0.8fr]">
+        <div>
+          <h2 className="text-3xl font-bold text-slate-900">About Customized Energy Solutions</h2>
+          <p className="mt-2 text-sm uppercase tracking-[0.3em] text-blue-600">
+            Providing energy management solutions since {companyInfo.founded}
+          </p>
+          <div className="mt-6 space-y-4 text-sm leading-relaxed text-slate-700">
+            {companyInfo.about?.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900">Our Mission</h3>
+            <p className="mt-3 text-sm text-slate-700">{companyInfo.mission}</p>
+          </div>
+
+          <div className="rounded-2xl border border-purple-100 bg-purple-50 p-5 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900">Our Vision</h3>
+            <p className="mt-3 text-sm text-slate-700">{companyInfo.vision}</p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900">Awards & Recognition</h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              {companyInfo.awards?.map((award, index) => (
+                <li key={`${award.name}-${index}`} className="flex items-start gap-2">
+                  <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-blue-500" />
+                  <span>
+                    <span className="font-semibold text-slate-900">{award.name}</span>
+                    {award.description ? ` – ${award.description}` : ''}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
