@@ -28,6 +28,51 @@ const expertProfiles = [
     role: 'Regional Lead, Japan',
     focus: 'Regulatory advisory, renewable integration, bilingual stakeholder alignment',
   },
+  {
+    name: 'Barbara Clemenhagen',
+    role: 'Vice President, Market Intelligence',
+    focus: 'Regulatory advocacy and market design, energy markets, strategic initiatives',
+  },
+  {
+    name: 'Charlie Howland',
+    role: 'Legal Counsel',
+    focus: 'Environmental and energy law, EPA regulatory experience, grid-edge energy projects',
+  },
+  {
+    name: 'Chip Minto',
+    role: 'Vice President – Sales & Marketing',
+    focus: 'Sales strategy, business development, client engagement, marketing initiatives',
+  },
+  {
+    name: 'Chris Maher',
+    role: 'Vice President of Infrastructure & Security',
+    focus: 'IT infrastructure design, system integration, security consulting',
+  },
+  {
+    name: 'Erik Paulson',
+    role: 'Vice President – Wholesale Market Services',
+    focus: 'Wholesale electricity markets, asset scheduling, electricity procurement',
+  },
+  {
+    name: 'Gustav H. Beerel',
+    role: 'Vice President Retail Services & Market Development',
+    focus: 'Retail energy platforms, business development, market expansion',
+  },
+  {
+    name: 'Jim Sloan',
+    role: 'Vice President, Technology Solutions',
+    focus: 'Technology strategy, software development, system architecture',
+  },
+  {
+    name: 'Vinayak Walimbe',
+    role: 'Managing Director - CES, India',
+    focus: 'Energy storage analysis, renewable integration, financial modeling',
+  },
+  {
+    name: 'William Schofield',
+    role: 'Vice President of Future-Grid Services',
+    focus: 'Distributed resources, demand response, grid integration, microgrids',
+  },
 ];
 
 const positionHierarchy = [
