@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useMemo } from 'react';
+
 const presidentProfile = {
   name: 'Stephen Fernands',
   role: 'President',
@@ -28,12 +30,52 @@ const expertProfiles = [
   },
 ];
 
+const positionHierarchy = [
+  'President',
+  'Vice President',
+  'Director',
+  'Manager',
+  'Senior Analyst',
+  'Analyst',
+  'Software Engineer',
+  'System Operator',
+  'Technology',
+  'Consultant',
+  'Controller',
+  'Assistant'
+];
+
 export default function ExpertsSection() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'position'>('name');
+  const [filterPosition, setFilterPosition] = useState<string>('');
+
+  const filteredAndSortedExperts = useMemo(() => {
+    let filtered = expertProfiles.filter(expert => {
+      const matchesSearch = expert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           expert.role.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesPosition = !filterPosition || expert.role.toLowerCase().includes(filterPosition.toLowerCase());
+      return matchesSearch && matchesPosition;
+    });
+
+    filtered.sort((a, b) => {
+      if (sortBy === 'name') {
+        return a.name.localeCompare(b.name);
+      } else {
+        const aIndex = positionHierarchy.findIndex(pos => a.role.toLowerCase().includes(pos.toLowerCase()));
+        const bIndex = positionHierarchy.findIndex(pos => b.role.toLowerCase().includes(pos.toLowerCase()));
+        return aIndex - bIndex;
+      }
+    });
+
+    return filtered;
+  }, [searchTerm, sortBy, filterPosition]);
+
   return (
     <section id="experts" className="mt-24">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900">Leadership & Experts</h2>
+          <h2 className="text-3xl font-bold text-slate-900">Industry Experts</h2>
           <p className="mt-2 max-w-2xl text-slate-600">
             Cross-disciplinary leaders who bring market operations, regulatory insight, and emerging technology expertise to every engagement.
           </p>
@@ -41,6 +83,53 @@ export default function ExpertsSection() {
         <a href="#contact" className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700">
           Connect with the team →
         </a>
+      </div>
+
+      {/* Filter and Sort Controls */}
+      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+          <select
+            value={filterPosition}
+            onChange={(e) => setFilterPosition(e.target.value)}
+            className="rounded-lg border border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="">All positions</option>
+            {positionHierarchy.map(position => (
+              <option key={position} value={position.toLowerCase()}>
+                {position}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setSortBy('name')}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              sortBy === 'name'
+                ? 'bg-blue-600 text-white'
+                : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            Sort alphabetically
+          </button>
+          <button
+            onClick={() => setSortBy('position')}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              sortBy === 'position'
+                ? 'bg-blue-600 text-white'
+                : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            Sort by position
+          </button>
+        </div>
       </div>
 
       {/* President Card - Special Design */}
@@ -86,25 +175,43 @@ export default function ExpertsSection() {
       </div>
 
       {/* Other Experts */}
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {expertProfiles.map(expert => (
-          <div key={expert.name} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md">
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                {expert.name
-                  .split(' ')
-                  .map(part => part[0])
-                  .join('')
-                  .toUpperCase()}
+      <div className="mt-10">
+        <div className="mb-6 flex items-center justify-between">
+          <h3 className="text-xl font-semibold text-slate-900">
+            {filteredAndSortedExperts.length} Expert{filteredAndSortedExperts.length !== 1 ? 's' : ''} Found
+          </h3>
+          {(searchTerm || filterPosition) && (
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setFilterPosition('');
+              }}
+              className="text-sm font-medium text-blue-600 hover:text-blue-700"
+            >
+              View All
+            </button>
+          )}
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {filteredAndSortedExperts.map(expert => (
+            <div key={expert.name} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                  {expert.name
+                    .split(' ')
+                    .map(part => part[0])
+                    .join('')
+                    .toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-base font-semibold text-slate-900">{expert.name}</p>
+                  <p className="text-sm text-slate-600">{expert.role}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-base font-semibold text-slate-900">{expert.name}</p>
-                <p className="text-sm text-slate-600">{expert.role}</p>
-              </div>
+              <p className="mt-4 text-sm text-slate-600">{expert.focus}</p>
             </div>
-            <p className="mt-4 text-sm text-slate-600">{expert.focus}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
