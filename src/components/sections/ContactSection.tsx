@@ -24,22 +24,41 @@ export default function ContactSection() {
   });
   const [contactStatus, setContactStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
 
-  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setContactStatus('submitting');
 
-    setTimeout(() => {
-      setContactStatus('success');
-      setContactForm({
-        name: '',
-        email: '',
-        company: '',
-        region: globalOffices[0]?.country ?? 'USA',
-        message: '',
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(contactForm),
       });
 
-      setTimeout(() => setContactStatus('idle'), 4000);
-    }, 800);
+      const data = await response.json();
+
+      if (response.ok) {
+        setContactStatus('success');
+        setContactForm({
+          name: '',
+          email: '',
+          company: '',
+          region: globalOffices[0]?.country ?? 'USA',
+          message: '',
+        });
+
+        setTimeout(() => setContactStatus('idle'), 4000);
+      } else {
+        setContactStatus('idle');
+        // You could add error state handling here if needed
+        alert(`Failed to submit form: ${data.error}`);
+      }
+    } catch {
+      setContactStatus('idle');
+      alert('Failed to submit form. Please try again.');
+    }
   };
 
   return (
