@@ -256,16 +256,13 @@ function PresidentCardBio({ profile }: PresidentCardProps) {
 
 function ExpertsSectionHeader() {
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <div className="flex flex-col gap-6">
       <div>
         <h2 className="text-3xl font-bold text-slate-900">Industry Experts</h2>
         <p className="mt-2 max-w-2xl text-slate-600">
           Cross-disciplinary leaders who bring market operations, regulatory insight, and emerging technology expertise to every engagement.
         </p>
       </div>
-      <Link href="/experts" className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700">
-        Connect with the team →
-      </Link>
     </div>
   );
 }
