@@ -394,7 +394,7 @@ export default function NewsPage() {
               News & Media
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100">
-              Stay informed with the latest insights, announcements, and thought leadership from Customized Energy Solutions
+              AI-curated highlights, announcements, and event spotlights from across CES global teams.
             </p>
           </div>
         </div>
@@ -408,7 +408,7 @@ export default function NewsPage() {
             Discover how CES is driving innovation in energy markets through cutting-edge technology and strategic partnerships.
           </p>
           <Link
-            href="#innovation"
+            href="/innovation"
             className="inline-flex items-center px-6 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
           >
             Explore Innovation Stories →
