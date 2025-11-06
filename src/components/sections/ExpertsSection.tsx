@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { FaEnvelope, FaLinkedin } from 'react-icons/fa6';
 
 import { presidentProfile } from '@/lib/expertProfiles';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
@@ -62,6 +63,7 @@ export default function ExpertsSection() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700"
                 >
+                  <FaLinkedin className="h-4 w-4" aria-hidden />
                   {t('experts.links.linkedin', 'LinkedIn')}
                 </a>
               )}
@@ -70,6 +72,7 @@ export default function ExpertsSection() {
                   href={`mailto:${presidentProfile.email}`}
                   className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-5 py-2 text-sm font-semibold text-blue-700 shadow hover:bg-blue-50"
                 >
+                  <FaEnvelope className="h-4 w-4" aria-hidden />
                   {t('experts.links.email', 'Email Stephen')}
                 </a>
               )}

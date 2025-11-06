@@ -1,7 +1,10 @@
+import { createHash } from 'crypto';
+
 import { NextRequest, NextResponse } from 'next/server';
 
 import { callOpenRouterChat, hasOpenRouterKey } from '@/lib/openrouter';
 import { supportedLanguages } from '@/i18n/config';
+import { hasRedis, redisGet, redisSet } from '@/lib/redisClient';
 
 type TranslationEntry = {
   key: string;
@@ -13,6 +16,10 @@ type TranslationResponse = {
 };
 
 const serverCache = new Map<string, string>();
+const translationCacheTtlMs = Number(process.env.TRANSLATION_CACHE_TTL_MS ?? 12 * 60 * 60 * 1000);
+
+const buildRedisKey = (lang: string, text: string) =>
+  `translate:${lang}:${createHash('sha256').update(text).digest('hex')}`;
 
 function isSupportedLanguage(code: string) {
   return supportedLanguages.some(language => language.code === code);
@@ -38,14 +45,49 @@ export async function POST(req: NextRequest) {
   const translations: Record<string, string> = {};
   const missingEntries: TranslationEntry[] = [];
 
+  const redisRequests: Array<Promise<void>> = [];
+
   entries.forEach(entry => {
     const cacheKey = `${targetLanguage}:${entry.key}`;
     if (serverCache.has(cacheKey)) {
       translations[entry.key] = serverCache.get(cacheKey)!;
+      return;
+    }
+
+    if (hasRedis()) {
+      const redisKey = buildRedisKey(targetLanguage, entry.text);
+      redisRequests.push(
+        (async () => {
+          const cached = await redisGet<string>(redisKey);
+          if (cached) {
+            translations[entry.key] = cached;
+            serverCache.set(cacheKey, cached);
+          } else {
+            missingEntries.push(entry);
+          }
+        })(),
+      );
     } else {
       missingEntries.push(entry);
     }
   });
+
+  if (redisRequests.length > 0) {
+    await Promise.all(redisRequests);
+  }
+
+  // Redis operations may have populated translations but also appended to missingEntries via async race.
+  // Filter out any duplicates that were resolved subsequently.
+  if (missingEntries.length > 0) {
+    const unresolved: TranslationEntry[] = [];
+    missingEntries.forEach(entry => {
+      if (!translations[entry.key]) {
+        unresolved.push(entry);
+      }
+    });
+    missingEntries.length = 0;
+    missingEntries.push(...unresolved);
+  }
 
   const hasKey = await hasOpenRouterKey();
 
@@ -97,7 +139,12 @@ export async function POST(req: NextRequest) {
           const translated = parsedTranslations[entry.key];
           if (typeof translated === 'string' && translated.trim().length > 0) {
             translations[entry.key] = translated;
-            serverCache.set(`${targetLanguage}:${entry.key}`, translated);
+            const cacheKey = `${targetLanguage}:${entry.key}`;
+            serverCache.set(cacheKey, translated);
+            if (hasRedis()) {
+              const redisKey = buildRedisKey(targetLanguage, entry.text);
+              void redisSet(redisKey, translated, translationCacheTtlMs);
+            }
           } else {
             unresolvedEntries.push(entry);
           }
@@ -115,10 +162,16 @@ export async function POST(req: NextRequest) {
       const googleTranslations = await translateViaGoogle(targetLanguage, unresolvedEntries);
       unresolvedEntries.forEach(entry => {
         const fallback = googleTranslations[entry.key];
-        translations[entry.key] = fallback ?? entry.text;
-        if (fallback) {
-          serverCache.set(`${targetLanguage}:${entry.key}`, fallback);
-        }
+        const value = fallback ?? entry.text;
+        translations[entry.key] = value;
+        const cacheKey = `${targetLanguage}:${entry.key}`;
+          if (fallback) {
+            serverCache.set(cacheKey, fallback);
+            if (hasRedis()) {
+              const redisKey = buildRedisKey(targetLanguage, entry.text);
+              void redisSet(redisKey, fallback, translationCacheTtlMs);
+            }
+          }
       });
     }
   }
@@ -127,9 +180,15 @@ export async function POST(req: NextRequest) {
     const googleTranslations = await translateViaGoogle(targetLanguage, missingEntries);
 
     missingEntries.forEach(entry => {
-      translations[entry.key] = googleTranslations[entry.key] ?? entry.text;
-      if (googleTranslations[entry.key]) {
-        serverCache.set(`${targetLanguage}:${entry.key}`, googleTranslations[entry.key]);
+      const fallback = googleTranslations[entry.key];
+      const value = fallback ?? entry.text;
+      translations[entry.key] = value;
+      if (fallback) {
+        serverCache.set(`${targetLanguage}:${entry.key}`, fallback);
+        if (hasRedis()) {
+          const redisKey = buildRedisKey(targetLanguage, entry.text);
+          void redisSet(redisKey, fallback, translationCacheTtlMs);
+        }
       }
     });
   }

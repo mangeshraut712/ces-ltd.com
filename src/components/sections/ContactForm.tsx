@@ -2,8 +2,18 @@
 
 import { type ChangeEvent, type FormEvent } from 'react';
 
-import { companyInfo, globalOffices } from '@/lib/cesData';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
+import { companyInfo, globalOffices } from '@/lib/cesData';
+import type { IconType } from 'react-icons';
+import {
+  FaEnvelope,
+  FaFacebook,
+  FaInstagram,
+  FaLink,
+  FaLinkedin,
+  FaXTwitter,
+  FaYoutube,
+} from 'react-icons/fa6';
 
 interface ContactFormState {
   name: string;
@@ -20,13 +30,20 @@ interface ContactFormProps {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
-const socialIconMap: Record<string, string> = {
-  Email: '✉️',
-  Twitter: '𝕏',
-  Facebook: '📘',
-  LinkedIn: '🔗',
-  Instagram: '📸',
-  YouTube: '▶️',
+type SocialIconConfig = {
+  icon: IconType;
+  className: string;
+};
+
+const socialIconMap: Record<string, SocialIconConfig> = {
+  mail: { icon: FaEnvelope, className: 'text-blue-600' },
+  email: { icon: FaEnvelope, className: 'text-blue-600' },
+  twitter: { icon: FaXTwitter, className: 'text-black' },
+  x: { icon: FaXTwitter, className: 'text-black' },
+  facebook: { icon: FaFacebook, className: 'text-[#1877F2]' },
+  linkedin: { icon: FaLinkedin, className: 'text-[#0A66C2]' },
+  instagram: { icon: FaInstagram, className: 'text-[#E1306C]' },
+  youtube: { icon: FaYoutube, className: 'text-[#FF0000]' },
 };
 
 export default function ContactForm({ contactForm, setContactForm, contactStatus, onSubmit }: ContactFormProps) {
@@ -193,9 +210,18 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 rounded-md border border-slate-200 px-2 py-1 text-xs transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                 >
-                  <span className="text-base">{socialIconMap[link.label] ?? '🔗'}</span>
+                  {(() => {
+                    const iconKey = link.icon?.toLowerCase() ?? link.label?.toLowerCase();
+                    const config = iconKey ? socialIconMap[iconKey] ?? undefined : undefined;
+                    const IconComponent = config?.icon ?? FaLink;
+                    const iconColorClass = config?.className ?? 'text-blue-500';
+                    return <IconComponent className={`h-4 w-4 ${iconColorClass}`} aria-hidden />;
+                  })()}
                   <span className="font-medium">
-                    {t(`contact.social.links.${link.label}`, link.label)}
+                    {t(
+                      `contact.social.links.${link.label}`,
+                      link.label === 'Twitter' ? 'X (Twitter)' : link.label,
+                    )}
                   </span>
                 </a>
               </li>

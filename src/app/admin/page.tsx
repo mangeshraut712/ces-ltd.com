@@ -1,112 +1,160 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import Link from 'next/link';
+import { FaEnvelope } from 'react-icons/fa6';
+
 import AdminPanel from '@/components/AdminPanel';
+
+interface Credentials {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  company: string;
+}
+
+const DEFAULT_CREDENTIALS: Credentials = {
+  email: '',
+  password: '',
+  confirmPassword: '',
+  firstName: '',
+  lastName: '',
+  company: '',
+};
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    company: ''
-  });
+  const [formData, setFormData] = useState<Credentials>(DEFAULT_CREDENTIALS);
 
   if (isAuthenticated) {
     return <AdminPanel />;
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    // Simple demo authentication
-    if (isLogin && formData.email === 'admin@ces-ltd.com' && formData.password === 'admin123') {
-      setIsAuthenticated(true);
-    } else if (!isLogin && formData.password === formData.confirmPassword) {
-      // For demo purposes, accept any registration
-      setIsAuthenticated(true);
-    } else {
-      alert(isLogin ? 'Invalid credentials. Use admin@ces-ltd.com / admin123 for demo.' : 'Passwords do not match or registration failed.');
+    if (isLogin) {
+      if (formData.email === 'admin@ces-ltd.com' && formData.password === 'admin123') {
+        setIsAuthenticated(true);
+        return;
+      }
+
+      alert('Invalid credentials. Use admin@ces-ltd.com / admin123 for the demo.');
+      return;
     }
+
+    if (formData.password === formData.confirmPassword && formData.password.length >= 6) {
+      setIsAuthenticated(true);
+      return;
+    }
+
+    alert('Passwords do not match or do not meet the minimum requirements.');
   };
 
   const handleGoogleSignIn = () => {
-    // Handle Google sign in - for demo, just authenticate
     setIsAuthenticated(true);
   };
 
+  const handleForgotPassword = () => {
+    alert('Contact support@ces-ltd.com for credential assistance.');
+  };
+
+  const renderRequired = (label: string) => (
+    <>
+      {label}
+      <span className="ml-1 text-red-500" aria-hidden>
+        *
+      </span>
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center px-4">
-      <div className="max-w-md w-full space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <Link href="/en-US" className="inline-block">
-            <h1 className="text-3xl font-bold text-white mb-2">CES Ltd.</h1>
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10">
+      <div className="grid w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-lg md:grid-cols-[1.05fr,1fr]">
+        <div className="hidden flex-col justify-between bg-gradient-to-br from-blue-600 via-blue-500 to-sky-500 p-10 text-white md:flex">
+          <Link href="/" className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.3em]">
+            <span className="text-white/80">Customized Energy Solutions</span>
           </Link>
-          <h2 className="text-xl font-semibold text-blue-100">
-            {isLogin ? 'Admin Login' : 'Create Admin Account'}
-          </h2>
-          <p className="text-blue-200 text-sm mt-2">
-            {isLogin ? 'Secure access to manage CES content and operations' : 'Join the CES administrative team'}
-          </p>
-          {isLogin && (
-            <p className="text-blue-300 text-xs mt-1 font-medium">
-              Demo: admin@ces-ltd.com / admin123
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold">Enterprise SSO Access</h2>
+            <p className="text-sm text-white/80">
+              Manage global trading operations, market intelligence reports, and AI dashboards from a unified CES control
+              plane. Verified users gain access to internal tooling, analytics, and support workflows.
             </p>
-          )}
+            <div className="rounded-2xl bg-white/15 p-5 shadow-lg">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/80">Demo Credentials</h3>
+              <p className="mt-3 text-xs text-white/70">
+                Email: <span className="font-semibold text-white">admin@ces-ltd.com</span>
+                <br />
+                Password: <span className="font-semibold text-white">admin123</span>
+              </p>
+            </div>
+          </div>
+          <p className="text-xs text-white/70">
+            Need access? Reach out to your CES engagement lead or{' '}
+            <a href="mailto:info@ces-ltd.com" className="text-white underline decoration-white/60 underline-offset-2 hover:text-blue-100">
+              info@ces-ltd.com
+            </a>
+            .
+          </p>
         </div>
 
-        {/* Form */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-white p-10">
+          <div className="space-y-3 text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-500">Customized Energy Solutions</p>
+            <h1 className="text-3xl font-bold text-slate-900">{isLogin ? 'Welcome' : 'Request Access'}</h1>
+            <p className="text-sm text-slate-600">
+              {isLogin ? 'Log in to SSO Dashboard.' : 'Provide details to request administrative access.'}
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             {!isLogin && (
-              <>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-blue-100 mb-2">
-                      First Name
-                    </label>
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      required={!isLogin}
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                      placeholder="John"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-blue-100 mb-2">
-                      Last Name
-                    </label>
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      required={!isLogin}
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                      placeholder="Doe"
-                    />
-                  </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label htmlFor="firstName" className="block text-sm font-medium text-slate-700">
+                    {renderRequired('First name')}
+                  </label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    required={!isLogin}
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                    placeholder="Jordan"
+                  />
                 </div>
                 <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-blue-100 mb-2">
-                    Company
+                  <label htmlFor="lastName" className="block text-sm font-medium text-slate-700">
+                    {renderRequired('Last name')}
+                  </label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    required={!isLogin}
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                    placeholder="Lee"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label htmlFor="company" className="block text-sm font-medium text-slate-700">
+                    {renderRequired('Company')}
                   </label>
                   <input
                     id="company"
@@ -115,16 +163,16 @@ export default function AdminPage() {
                     required={!isLogin}
                     value={formData.company}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                    placeholder="CES Ltd."
+                    className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                    placeholder="CES Partner"
                   />
                 </div>
-              </>
+              </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-blue-100 mb-2">
-                Email Address
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+                {renderRequired('Email address')}
               </label>
               <input
                 id="email"
@@ -133,15 +181,26 @@ export default function AdminPage() {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                placeholder="admin@ces-ltd.com"
+                className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                placeholder="you@company.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-blue-100 mb-2">
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+                  {renderRequired('Password')}
+                </label>
+                {isLogin && (
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                  >
+                    Forgot password?
+                  </button>
+                )}
+              </div>
               <input
                 id="password"
                 name="password"
@@ -149,15 +208,15 @@ export default function AdminPage() {
                 required
                 value={formData.password}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                 placeholder="Enter your password"
               />
             </div>
 
             {!isLogin && (
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-blue-100 mb-2">
-                  Confirm Password
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
+                  {renderRequired('Confirm password')}
                 </label>
                 <input
                   id="confirmPassword"
@@ -166,64 +225,54 @@ export default function AdminPage() {
                   required={!isLogin}
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                  placeholder="Confirm your password"
+                  className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                  placeholder="Re-enter your password"
                 />
               </div>
             )}
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-800"
+              className="w-full rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:ring-offset-2 focus:ring-offset-white"
             >
-              {isLogin ? 'Sign In' : 'Create Account'}
+              Continue
             </button>
           </form>
 
-          {/* Divider */}
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/30"></div>
+                <div className="w-full border-t border-slate-200" />
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-transparent text-blue-200">Or continue with</span>
+              <div className="relative flex justify-center">
+                <span className="bg-white px-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                  Or
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Google Sign In */}
           <div className="mt-6">
             <button
+              type="button"
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center px-4 py-3 border border-white/30 rounded-lg bg-white/10 hover:bg-white/20 text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-800"
+              className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:ring-offset-2 focus:ring-offset-white"
             >
-              <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              Sign {isLogin ? 'in' : 'up'} with Google
+              <FaEnvelope className="h-4 w-4" aria-hidden />
+              Continue with CES Email Address
             </button>
           </div>
 
-          {/* Toggle between login/register */}
-          <div className="mt-6 text-center">
+          <p className="mt-8 text-center text-xs text-slate-500">
+            {isLogin ? "Need administrative access?" : 'Already have credentials?'}{' '}
             <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-200 hover:text-white text-sm transition duration-200"
+              type="button"
+              onClick={() => setIsLogin(prev => !prev)}
+              className="font-semibold text-blue-600 hover:text-blue-700"
             >
-              {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+              {isLogin ? 'Request it here' : 'Sign in'}
             </button>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="text-center">
-          <Link href="/en-US" className="text-blue-200 hover:text-white text-sm transition duration-200">
-            ← Back to CES Homepage
-          </Link>
+          </p>
         </div>
       </div>
     </div>

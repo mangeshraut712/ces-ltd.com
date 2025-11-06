@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FaEnvelope, FaLinkedin } from 'react-icons/fa6';
 
 import { expertProfiles, presidentProfile } from '@/lib/expertProfiles';
 
@@ -63,6 +64,7 @@ function PresidentSpotlight() {
             rel="noopener noreferrer"
             className="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
           >
+            <FaLinkedin className="mr-2 h-4 w-4" aria-hidden />
             LinkedIn
           </Link>
         )}
@@ -71,6 +73,7 @@ function PresidentSpotlight() {
             href={`mailto:${presidentProfile.email}`}
             className="inline-flex items-center rounded-full border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50"
           >
+            <FaEnvelope className="mr-2 h-4 w-4" aria-hidden />
             Email Stephen
           </Link>
         )}

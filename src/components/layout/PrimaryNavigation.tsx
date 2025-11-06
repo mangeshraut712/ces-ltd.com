@@ -32,8 +32,8 @@ export default function PrimaryNavigation() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 text-slate-900 sm:px-6 lg:px-8">
         <Link
           href="/"
           className="flex items-center gap-3"
@@ -52,7 +52,7 @@ export default function PrimaryNavigation() {
           </div>
         </Link>
 
-        <div className="hidden lg:ml-12 lg:flex lg:items-center lg:gap-8">
+        <div className="hidden lg:ml-12 lg:flex lg:flex-wrap lg:items-center lg:gap-6">
           {navItems.map(item => {
             const label = t(item.labelKey, item.defaultLabel);
             return (
@@ -70,7 +70,7 @@ export default function PrimaryNavigation() {
           <Link
             href="/admin"
             onClick={handleNavigate}
-            className="inline-flex items-center rounded-full bg-slate-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-700"
+            className="inline-flex flex-shrink-0 items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500"
           >
             {t('navigation.login', 'Login/Signup')}
           </Link>
@@ -78,7 +78,7 @@ export default function PrimaryNavigation() {
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white p-2 text-slate-700 shadow-sm hover:bg-slate-100 lg:hidden"
+          className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white p-2 text-slate-700 shadow-sm hover:text-blue-600 lg:hidden"
           onClick={() => setIsMobileMenuOpen(prev => !prev)}
           aria-expanded={isMobileMenuOpen}
           aria-label="Toggle main menu"
@@ -94,7 +94,7 @@ export default function PrimaryNavigation() {
       </nav>
 
       {isMobileMenuOpen && (
-        <div className="border-t border-slate-200 bg-white/95 px-4 pb-6 pt-4 shadow-lg lg:hidden">
+        <div className="border-t border-slate-200 bg-white/95 px-4 pb-6 pt-4 text-slate-900 shadow-lg lg:hidden">
           <div className="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
             {solutionsPreview.map(solution => {
               const name = t(`solutions.preview.${solution.id}.name`, solution.name);
@@ -137,7 +137,7 @@ export default function PrimaryNavigation() {
             <Link
               href="/admin"
               onClick={handleNavigate}
-              className="inline-flex items-center rounded-full bg-slate-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-700"
+              className="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500"
             >
               {t('navigation.login', 'Login/Signup')}
             </Link>

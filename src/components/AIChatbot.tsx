@@ -301,7 +301,9 @@ export default function AIChatbot() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={handleSendMessage}
+                  onClick={() => {
+                    void handleSendMessage();
+                  }}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   {t('chatbot.send', 'Send')}

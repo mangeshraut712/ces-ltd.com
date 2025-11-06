@@ -1,8 +1,8 @@
-# 🚀 CES Platform 3.0 - Advanced Energy Intelligence Platform
+# 🚀 CES Pro - Advanced Energy Intelligence Platform
 
 <div align="center">
 
-![CES Platform 3.0](https://img.shields.io/badge/CES%20Platform-3.0-blue?style=for-the-badge&logo=react&logoColor=white)
+![CES Pro](https://img.shields.io/badge/CES%20Pro-blue?style=for-the-badge&logo=react&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -199,6 +199,7 @@ OPENROUTER_DEFAULT_MODEL=google/gemini-2.0-flash-exp:free
 OPENROUTER_FALLBACK_MODELS=google/gemini-2.5-flash
 OPENROUTER_TIMEOUT_MS=20000
 CHAT_CACHE_TTL_MS=600000
+TRANSLATION_CACHE_TTL_MS=43200000
 WEATHER_API_KEY=your_weather_api_key
 
 # Web3 Configuration
@@ -228,6 +229,8 @@ UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token
 - **Backoff & Caching**: `callOpenRouterChat` retries on rate limiting (HTTP 429) with exponential delay and optional caching to smooth load.
 - **Optional Redis**: Provide `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` to enable Redis-backed caching in `src/lib/openrouter.ts` (in addition to in-memory caching).
 - **Health Check**: `npm run test:openrouter` exercises the chat completions endpoint using your configured model and prints the response.
+
+> Tip: Responses from `/api/translate` are cached in Redis (when configured) for `TRANSLATION_CACHE_TTL_MS` (default 12 hours) to make subsequent language switches instant across sessions.
 
 ### 🧠 AI Feature Overview & Testing
 
@@ -277,7 +280,7 @@ npm run content:sync # Content management sync
 ## 🏗️ Architecture & Structure
 
 ```
-ces-platform-3.0/
+ces-pro/
 ├── 📁 src/
 │   ├── 📁 app/                    # Next.js App Router
 │   │   ├── 📁 admin/             # Admin panel
