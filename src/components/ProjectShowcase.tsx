@@ -4,6 +4,8 @@ import { useState, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Text, Box, Cylinder, Sphere, Environment } from '@react-three/drei';
 import { motion } from 'framer-motion';
+import { ResponsiveContainer, AreaChart, Area, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts';
+import { useInnovationInsights } from '@/hooks/useInnovationInsights';
 
 type ProjectStatus = 'completed' | 'in-progress' | 'planning';
 type ProjectType =
@@ -166,20 +168,38 @@ const projectCatalog: Project[] = [
     isoTags: ['APAC'],
   },
   {
-    id: 'guam-island-microgrid',
-    name: 'Guam Island Microgrid Operations',
-    type: 'microgrid',
-    region: 'Guam',
-    country: 'Guam',
-    location: 'Hagåtña',
-    status: 'completed',
-    co2Reduction: 21000,
-    energyOutput: 95,
-    startYear: 2020,
-    summary: 'Hybrid solar, storage, and diesel optimization ensuring resilient island power.',
-    technologies: ['Hybrid microgrids', 'Diesel optimization', 'Solar + storage'],
-    focusAreas: ['Island resiliency', 'Disaster recovery'],
-    isoTags: ['Island Grid'],
+    id: 'uae-dubai-hydrogen',
+    name: 'Dubai Hydrogen-Ready Grid Program',
+    type: 'construction',
+    region: 'United Arab Emirates',
+    country: 'United Arab Emirates',
+    location: 'Dubai',
+    status: 'in-progress',
+    co2Reduction: 41000,
+    energyOutput: 160,
+    startYear: 2024,
+    summary:
+      'Hydrogen blending pilots linking district cooling, desalination, and large-scale storage readiness.',
+    technologies: ['Hydrogen blending', 'Thermal storage', 'Advanced SCADA'],
+    focusAreas: ['Clean cooling', 'Grid modernization'],
+    isoTags: ['Middle East'],
+  },
+  {
+    id: 'netherlands-offshore-control',
+    name: 'North Sea Offshore Wind Control Center',
+    type: 'wind',
+    region: 'Netherlands',
+    country: 'Netherlands',
+    location: 'The Hague',
+    status: 'planning',
+    co2Reduction: 56000,
+    energyOutput: 380,
+    startYear: 2024,
+    summary:
+      'Coordinated offshore wind control room supporting cross-border interconnector dispatch and balancing.',
+    technologies: ['Offshore wind', 'HVDC interconnectors', 'Forecasting analytics'],
+    focusAreas: ['Market coupling', 'Grid balancing'],
+    isoTags: ['EU'],
   },
 ];
 
@@ -191,7 +211,8 @@ const regionFilters = [
   'Japan',
   'Mexico',
   'Vietnam',
-  'Guam',
+  'United Arab Emirates',
+  'Netherlands',
 ] as const;
 
 const statusColors: Record<ProjectStatus, string> = {
@@ -375,6 +396,34 @@ export default function ProjectShowcase() {
     }
     return visibleProjects[0];
   }, [selectedProjectId, visibleProjects]);
+  const showcaseTrajectory = useMemo(() => {
+    if (!selectedProject) {
+      return [];
+    }
+    const phases = ['Kickoff', 'Commissioning', 'Ramp', 'Optimization'];
+    const baseEnergy = selectedProject.energyOutput || 1;
+    const baseCo2 = selectedProject.co2Reduction || 1;
+    return phases.map((phase, index) => {
+      const energyScale = 0.5 + index * 0.18;
+      const carbonScale = 0.35 + index * 0.16;
+      return {
+        phase,
+        energy: Math.round(baseEnergy * energyScale),
+        carbon: Math.round(baseCo2 * carbonScale),
+      };
+    });
+  }, [selectedProject]);
+
+  const {
+    data: showcaseInsights,
+    loading: showcaseInsightsLoading,
+    error: showcaseInsightsError,
+    refresh: refreshShowcaseInsights,
+  } = useInnovationInsights('project-showcase', {
+    projectName: selectedProject?.name ?? 'Flagship project',
+    technologies: selectedProject?.technologies ?? [],
+    iso: selectedProject?.isoTags ?? [],
+  });
 
   const totalMW = useMemo(
     () => visibleProjects.reduce((sum, project) => sum + project.energyOutput, 0),
@@ -585,6 +634,153 @@ export default function ProjectShowcase() {
                   </span>
                 ))}
               </div>
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-white/15 bg-white/10 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
+                Impact Trajectory
+              </p>
+              <div className="mt-3 h-52">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={showcaseTrajectory}>
+                    <defs>
+                      <linearGradient id="showcaseEnergyGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity={0.6} />
+                        <stop offset="100%" stopColor="#38bdf8" stopOpacity={0.1} />
+                      </linearGradient>
+                      <linearGradient id="showcaseCarbonGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#f97316" stopOpacity={0.6} />
+                        <stop offset="100%" stopColor="#f97316" stopOpacity={0.1} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+                    <XAxis dataKey="phase" stroke="#9ca3af" fontSize={12} />
+                    <YAxis stroke="#9ca3af" fontSize={12} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #cbd5f5',
+                        borderRadius: '8px',
+                        color: '#0f172a',
+                      }}
+                      formatter={(value: number, name) => [
+                        `${value.toLocaleString()} ${name === 'energy' ? 'MW' : 'tons CO₂e'}`,
+                        name === 'energy' ? 'Energy Output' : 'CO₂ Reduction',
+                      ]}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="energy"
+                      stroke="#38bdf8"
+                      strokeWidth={2}
+                      fill="url(#showcaseEnergyGradient)"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="carbon"
+                      stroke="#f97316"
+                      strokeWidth={2}
+                      fill="url(#showcaseCarbonGradient)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+              <p className="mt-3 text-xs text-blue-100">
+                Energy and carbon projections scale through project phases, highlighting measurable benefits as delivery accelerates.
+              </p>
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-4">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
+                  AI Showcase Narrative
+                </p>
+                <button
+                  type="button"
+                  onClick={refreshShowcaseInsights}
+                  disabled={showcaseInsightsLoading}
+                  className={`text-[10px] font-semibold rounded-full border px-3 py-1 transition ${
+                    showcaseInsightsLoading
+                      ? 'border-white/20 bg-white/5 text-blue-200 cursor-not-allowed'
+                      : 'border-purple-400/30 bg-purple-500/10 text-purple-100 hover:bg-purple-500/20'
+                  }`}
+                >
+                  {showcaseInsightsLoading ? 'Refreshing…' : 'Refresh'}
+                </button>
+              </div>
+
+              {showcaseInsights && (
+                <div className="mt-1 flex items-center gap-2 text-[11px] text-blue-200">
+                  <span
+                    className={`inline-flex items-center gap-2 ${
+                      showcaseInsights.source === 'openrouter' ? 'text-emerald-200' : 'text-blue-200'
+                    }`}
+                  >
+                    <span
+                      className={`h-2 w-2 rounded-full ${
+                        showcaseInsights.source === 'openrouter' ? 'bg-emerald-400' : 'bg-blue-400'
+                      }`}
+                    />
+                    {showcaseInsights.source === 'openrouter' ? 'Live OpenRouter' : 'Fallback cache'}
+                  </span>
+                </div>
+              )}
+
+              {showcaseInsightsError && (
+                <p className="mt-3 rounded-lg border border-red-500/30 bg-red-500/20 px-3 py-2 text-[11px] text-red-200">
+                  {showcaseInsightsError}
+                </p>
+              )}
+
+              {showcaseInsights ? (
+                <div className="mt-3 space-y-2 text-[11px] text-blue-100 leading-relaxed">
+                  <p className="text-sm text-white font-semibold">{showcaseInsights.summary}</p>
+                  {showcaseInsights.highlights.length > 0 && (
+                    <ul className="space-y-1">
+                      {showcaseInsights.highlights.map(item => (
+                        <li key={item} className="flex items-start gap-2">
+                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-purple-300" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {showcaseInsights.actions.length > 0 && (
+                    <div className="mt-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white">
+                        Next Steps
+                      </p>
+                      <ul className="mt-2 space-y-1">
+                        {showcaseInsights.actions.map(action => (
+                          <li key={action} className="rounded-lg border border-purple-400/30 bg-purple-500/10 px-3 py-2">
+                            {action}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {showcaseInsights.metadata && typeof showcaseInsights.metadata === 'object' && (
+                    <div className="mt-3 space-y-1">
+                      {Object.entries(showcaseInsights.metadata)
+                        .slice(0, 4)
+                        .map(([key, value]) => (
+                          <div key={key} className="flex items-center justify-between gap-2 text-[11px] text-blue-100">
+                            <span className="uppercase tracking-[0.2em] text-blue-300">{key}</span>
+                            <span className="text-white/80">
+                              {typeof value === 'number' ? value.toLocaleString() : String(value)}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                !showcaseInsightsLoading && (
+                  <p className="mt-3 text-[11px] text-blue-100">
+                    AI narration will populate once OpenRouter insights are available.
+                  </p>
+                )
+              )}
             </div>
           </motion.div>
         )}

@@ -1,9 +1,9 @@
 'use client';
 
 import { type ChangeEvent, type FormEvent } from 'react';
-import { useTranslations } from 'next-intl';
 
 import { companyInfo, globalOffices } from '@/lib/cesData';
+import { useAppTranslation } from '@/hooks/useAppTranslation';
 
 interface ContactFormState {
   name: string;
@@ -30,7 +30,7 @@ const socialIconMap: Record<string, string> = {
 };
 
 export default function ContactForm({ contactForm, setContactForm, contactStatus, onSubmit }: ContactFormProps) {
-  const t = useTranslations('contact');
+  const { t } = useAppTranslation();
 
   const handleContactChange = (field: keyof ContactFormState) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setContactForm(prev => ({
@@ -64,10 +64,17 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
   return (
     <div className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900">{t('title')}</h2>
-        <p className="mt-1 text-xs uppercase tracking-[0.3em] text-blue-500">{t('subtitle')}</p>
+        <h2 className="text-2xl font-bold text-slate-900">
+          {t('contact.title', 'Contact Us')}
+        </h2>
+        <p className="mt-1 text-xs uppercase tracking-[0.3em] text-blue-500">
+          {t('contact.subtitle', 'Global Market Operations · 24/7')}
+        </p>
         <p className="mt-2 text-sm text-slate-600">
-          {t('description')}
+          {t(
+            'contact.description',
+            'Share your initiative and our regional strategists will architect an engagement plan that blends AI, IoT, Web3, and VR capabilities tailored to your market.',
+          )}
         </p>
       </div>
 
@@ -75,20 +82,20 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-slate-700">
-              {t('name')}
+              {t('contact.form.nameLabel', 'Full name')}
             </label>
             <input
               id="contact-name"
               required
               value={contactForm.name}
               onChange={handleContactChange('name')}
-              placeholder="Jordan Lee"
+              placeholder={t('contact.form.namePlaceholder', 'Jordan Lee')}
               className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
             <label htmlFor="contact-email" className="block text-sm font-medium text-slate-700">
-              {t('email')}
+              {t('contact.form.emailLabel', 'Work email')}
             </label>
             <input
               id="contact-email"
@@ -96,7 +103,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
               required
               value={contactForm.email}
               onChange={handleContactChange('email')}
-              placeholder="you@company.com"
+              placeholder={t('contact.form.emailPlaceholder', 'you@company.com')}
               className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -105,19 +112,19 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="contact-company" className="block text-sm font-medium text-slate-700">
-              {t('company')}
+              {t('contact.form.companyLabel', 'Company or organization')}
             </label>
             <input
               id="contact-company"
               value={contactForm.company}
               onChange={handleContactChange('company')}
-              placeholder="CES Nexus Partner"
+              placeholder={t('contact.form.companyPlaceholder', 'CES Partner')}
               className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
             <label htmlFor="contact-region" className="block text-sm font-medium text-slate-700">
-              {t('region')}
+              {t('contact.form.regionLabel', 'Region of operation')}
             </label>
             <select
               id="contact-region"
@@ -127,7 +134,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
             >
               {globalOffices.map((office, index) => (
                 <option key={`${office.country}-${index}`} value={office.country} className="text-slate-900">
-                  {office.country}
+                  {t(`contact.form.regions.${office.country}`, office.country)}
                 </option>
               ))}
             </select>
@@ -136,7 +143,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
 
         <div>
           <label htmlFor="contact-message" className="block text-sm font-medium text-slate-700">
-            {t('message')}
+            {t('contact.form.messageLabel', 'Project goals')}
           </label>
           <textarea
             id="contact-message"
@@ -144,7 +151,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
             rows={4}
             value={contactForm.message}
             onChange={handleContactChange('message')}
-            placeholder="Describe your initiative, timelines, and what success looks like."
+            placeholder={t('contact.form.messagePlaceholder', 'Describe your initiative, timelines, and what success looks like.')}
             className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -156,20 +163,27 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
           className="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:opacity-70"
         >
           {contactStatus === 'submitting'
-            ? t('sending', { default: 'Sending...' })
+            ? t('contact.form.status.sending', 'Sending...')
             : contactStatus === 'success'
-              ? t('submitted', { default: 'Submitted' })
-              : t('submit')}
+              ? t('contact.form.status.success', 'Submitted')
+              : t('contact.form.submit', 'Send message')}
         </button>
 
         {contactStatus === 'success' && (
-          <p className="text-sm text-green-600">{t('success')}</p>
+          <p className="text-sm text-green-600">
+            {t(
+              'contact.form.successMessage',
+              'Thanks! A regional strategist will reach out within one business day.',
+            )}
+          </p>
         )}
       </form>
 
       {companyInfo.socialLinks && (
         <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-          <h3 className="text-sm font-semibold text-slate-900">{t('connect')}</h3>
+          <h3 className="text-sm font-semibold text-slate-900">
+            {t('contact.social.title', 'Connect With CES')}
+          </h3>
           <ul className="mt-2 space-y-1">
             {companyInfo.socialLinks.map(link => (
               <li key={link.label}>
@@ -180,7 +194,9 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
                   className="flex items-center gap-2 rounded-md border border-slate-200 px-2 py-1 text-xs transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                 >
                   <span className="text-base">{socialIconMap[link.label] ?? '🔗'}</span>
-                  <span className="font-medium">{link.label}</span>
+                  <span className="font-medium">
+                    {t(`contact.social.links.${link.label}`, link.label)}
+                  </span>
                 </a>
               </li>
             ))}

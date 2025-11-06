@@ -56,10 +56,9 @@ const regionOptions: RegionOption[] = [
   {
     id: 'united-states',
     label: 'United States',
-    description:
-      'Headquarters in Philadelphia with market operations across PJM, CAISO, ERCOT, ISO-NE, MISO, and NYISO.',
-    highlight: '13,000 MW of assets managed across wholesale and retail programs.',
-    coverageTags: ['PJM', 'CAISO', 'ERCOT', 'ISO-NE', 'MISO', 'NYISO'],
+    description: 'Corporate headquarters with delivery hubs supporting every North American ISO/RTO.',
+    highlight: 'Philadelphia HQ plus regional teams spanning PJM, CAISO, ERCOT, ISO-NE and MISO.',
+    coverageTags: ['PJM', 'CAISO', 'ERCOT', 'ISO-NE', 'MISO'],
     locations: [
       {
         id: 'philadelphia-pa',
@@ -69,30 +68,8 @@ const regionOptions: RegionOption[] = [
         country: 'USA',
         lat: 39.9526,
         lon: -75.1652,
-        summary: 'Corporate headquarters and PJM market analytics center.',
-        coverageNotes: ['Demand response portfolio', 'Wholesale market advisory'],
-      },
-      {
-        id: 'san-francisco-ca',
-        label: 'San Francisco, California',
-        city: 'San Francisco',
-        state: 'CA',
-        country: 'USA',
-        lat: 37.7749,
-        lon: -122.4194,
-        summary: 'CAISO solar + storage commercialization programs.',
-        coverageNotes: ['Solar + storage integration', 'Grid modernization pilots'],
-      },
-      {
-        id: 'indianapolis-in',
-        label: 'Indianapolis, Indiana',
-        city: 'Indianapolis',
-        state: 'IN',
-        country: 'USA',
-        lat: 39.7684,
-        lon: -86.1581,
-        summary: 'Midcontinent ISO operations and fleet performance monitoring.',
-        coverageNotes: ['MISO wholesale operations', 'Thermal fleet optimization'],
+        summary: 'Corporate headquarters, 24/7 market operations, and national demand response center.',
+        coverageNotes: ['Wholesale optimization', 'Demand response portfolio'],
       },
       {
         id: 'boston-ma',
@@ -102,39 +79,50 @@ const regionOptions: RegionOption[] = [
         country: 'USA',
         lat: 42.3601,
         lon: -71.0589,
-        summary: 'ISO-NE strategic advisory and offshore wind collaboration.',
+        summary: 'ISO-NE advisory and offshore wind program management.',
         coverageNotes: ['Offshore wind analytics', 'Capacity market strategy'],
       },
       {
-        id: 'washington-dc',
-        label: 'Washington, D.C.',
-        city: 'Washington',
-        state: 'DC',
+        id: 'folsom-ca',
+        label: 'Folsom, California',
+        city: 'Folsom',
+        state: 'CA',
         country: 'USA',
-        lat: 38.9072,
-        lon: -77.0369,
-        summary: 'Federal policy advocacy and FERC engagement.',
-        coverageNotes: ['Policy advisory', 'Regulatory engagement'],
+        lat: 38.6777,
+        lon: -121.1761,
+        summary: 'CAISO integration lab supporting solar, storage, and grid modernization pilots.',
+        coverageNotes: ['Solar + storage integration', 'Western market operations'],
       },
       {
-        id: 'austin-tx',
-        label: 'Austin, Texas',
-        city: 'Austin',
+        id: 'houston-tx',
+        label: 'Houston, Texas',
+        city: 'Houston',
         state: 'TX',
         country: 'USA',
-        lat: 30.2672,
-        lon: -97.7431,
-        summary: 'ERCOT storage optimization and retail program management.',
-        coverageNotes: ['Storage optimization', 'Retail energy programs'],
+        lat: 29.7604,
+        lon: -95.3698,
+        summary: 'ERCOT energy trading desk and retail program delivery.',
+        coverageNotes: ['Energy trading', 'Retail energy programs'],
+      },
+      {
+        id: 'carmel-in',
+        label: 'Carmel, Indiana',
+        city: 'Carmel',
+        state: 'IN',
+        country: 'USA',
+        lat: 39.9784,
+        lon: -86.1180,
+        summary: 'MISO grid services and Midwest distribution system support.',
+        coverageNotes: ['Midwest grid services', 'Operational analytics'],
       },
     ],
   },
   {
     id: 'canada',
     label: 'Canada',
-    description: 'Market operations and asset management for Ontario and Atlantic markets.',
-    highlight: 'Co-manages bids and settlements for large commercial portfolios in Ontario.',
-    coverageTags: ['IESO', 'Ontario DER'],
+    description: 'Toronto delivery office coordinating IESO market operations and regulatory support.',
+    highlight: 'Asset scheduling, regulatory advisory, and DER strategy across Ontario and Atlantic Canada.',
+    coverageTags: ['IESO', 'Regulatory Advisory'],
     locations: [
       {
         id: 'toronto-on',
@@ -144,7 +132,7 @@ const regionOptions: RegionOption[] = [
         country: 'Canada',
         lat: 43.6532,
         lon: -79.3832,
-        summary: 'Wholesale market participation and renewable asset scheduling across IESO.',
+        summary: 'Wholesale market participation and renewable asset scheduling for Canadian portfolios.',
         coverageNotes: ['Asset bid optimization', 'Regulatory compliance'],
       },
     ],
@@ -152,9 +140,9 @@ const regionOptions: RegionOption[] = [
   {
     id: 'india',
     label: 'India',
-    description: 'Innovation lab and emerging technologies delivery hub serving APAC.',
-    highlight: 'Supports grid modernization, e-mobility pilots, and energy storage policy.',
-    coverageTags: ['Energy Storage', 'EV Readiness', 'Open Access'],
+    description: 'Pune innovation headquarters supporting APAC grid modernization and storage analytics.',
+    highlight: 'Energy storage policy, open-access advisory, and real-time analytics for Indian markets.',
+    coverageTags: ['Energy Storage', 'Open Access'],
     locations: [
       {
         id: 'pune-mh',
@@ -164,7 +152,7 @@ const regionOptions: RegionOption[] = [
         country: 'India',
         lat: 18.5204,
         lon: 73.8567,
-        summary: 'R&D hub with real-time analytics for India’s renewable and storage assets.',
+        summary: 'Innovation lab delivering analytics, policy support, and e-mobility pilots.',
         coverageNotes: ['Policy support', 'R&D collaborations'],
       },
     ],
@@ -172,19 +160,19 @@ const regionOptions: RegionOption[] = [
   {
     id: 'japan',
     label: 'Japan',
-    description: 'Tokyo office guiding deregulation, capacity markets, and microgrid pilots.',
-    highlight: 'Advises utilities and C&I clients on the Japanese capacity market transition.',
-    coverageTags: ['Capacity Market', 'Microgrids'],
+    description: 'Tokyo headquarters guiding deregulation, capacity markets, and bilingual stakeholder engagement.',
+    highlight: 'Advises utilities and C&I clients on capacity market evolution and smart grid pilots.',
+    coverageTags: ['Capacity Market', 'Smart Grid'],
     locations: [
       {
         id: 'tokyo',
         label: 'Shibuya-ku, Tokyo',
         city: 'Tokyo',
         country: 'Japan',
-        lat: 35.6595,
-        lon: 139.7005,
-        summary: 'Supports bilingual stakeholder engagement and DER integration efforts.',
-        coverageNotes: ['Bilingual advisory', 'Smart grid pilots'],
+        lat: 35.6618,
+        lon: 139.7075,
+        summary: 'Market intelligence, DER integration planning, and bilingual program delivery.',
+        coverageNotes: ['Bilingual advisory', 'DER integration'],
       },
     ],
   },
@@ -192,7 +180,7 @@ const regionOptions: RegionOption[] = [
     id: 'mexico',
     label: 'Mexico',
     description: 'Mexico City hub focusing on distributed energy, microgrids, and C&I markets.',
-    highlight: 'Deploying microgrid resiliency programs for industrial clients.',
+    highlight: 'Deploying microgrid resiliency programs for industrial clients across Latin America.',
     coverageTags: ['Microgrids', 'C&I Strategy'],
     locations: [
       {
@@ -210,9 +198,9 @@ const regionOptions: RegionOption[] = [
   {
     id: 'vietnam',
     label: 'Vietnam',
-    description: 'Data operations and software delivery center supporting global analytics.',
-    highlight: 'Provides round-the-clock telemetry and market intelligence processing.',
-    coverageTags: ['Data Ops', 'Software Engineering'],
+    description: 'Ho Chi Minh City center providing software engineering and telemetry analytics.',
+    highlight: '24/7 telemetry processing and visualization tooling for global operations.',
+    coverageTags: ['Data Operations', 'Software Engineering'],
     locations: [
       {
         id: 'ho-chi-minh',
@@ -221,27 +209,46 @@ const regionOptions: RegionOption[] = [
         country: 'Vietnam',
         lat: 10.8231,
         lon: 106.6297,
-        summary: 'Centralizes global market data pipelines and visualization tooling.',
+        summary: 'Centralized data operations powering global analytics dashboards and alerts.',
         coverageNotes: ['Telemetry processing', 'Analytics delivery'],
       },
     ],
   },
   {
-    id: 'guam',
-    label: 'Guam',
-    description: 'Island grid asset management and remote operations.',
-    highlight: 'Manages hybrid microgrids for remote resilience and energy independence.',
-    coverageTags: ['Island Grids', 'Resilience'],
+    id: 'uae',
+    label: 'United Arab Emirates',
+    description: 'Dubai Science Park office leading Middle East energy transition programs.',
+    highlight: 'Supports GCC market intelligence, hydrogen strategy, and resiliency planning.',
+    coverageTags: ['GCC Markets', 'Energy Transition'],
     locations: [
       {
-        id: 'hagatna',
-        label: 'Hagåtña, Guam',
-        city: 'Hagåtña',
-        country: 'Guam',
-        lat: 13.4757,
-        lon: 144.7489,
-        summary: 'Remote monitoring and optimization of island microgrid assets.',
-        coverageNotes: ['Microgrid command center', 'Disaster recovery planning'],
+        id: 'dubai',
+        label: 'Dubai Science Park',
+        city: 'Dubai',
+        country: 'United Arab Emirates',
+        lat: 25.0893,
+        lon: 55.2053,
+        summary: 'Regional headquarters for MENA advisory, hydrogen pilots, and market analytics.',
+        coverageNotes: ['Hydrogen pilots', 'Market intelligence'],
+      },
+    ],
+  },
+  {
+    id: 'netherlands',
+    label: 'Netherlands',
+    description: 'The Hague headquarters coordinating cross-border trading and EU regulatory work.',
+    highlight: 'Advises European partners on integration, compliance, and market coupling.',
+    coverageTags: ['European Markets', 'Regulatory Compliance'],
+    locations: [
+      {
+        id: 'the-hague',
+        label: 'The Hague, South Holland',
+        city: 'The Hague',
+        country: 'Netherlands',
+        lat: 52.0705,
+        lon: 4.3007,
+        summary: 'European headquarters supporting cross-border trading and policy engagement.',
+        coverageNotes: ['Cross-border trading', 'Policy engagement'],
       },
     ],
   },
@@ -299,6 +306,8 @@ export default function AIDashboard() {
   const [analysisSource, setAnalysisSource] = useState<AnalysisSource>('unknown');
   const [analysisTimestamp, setAnalysisTimestamp] = useState<string | null>(null);
   const [weatherSnapshot, setWeatherSnapshot] = useState<WeatherSnapshot | null>(null);
+  const [analysisSummary, setAnalysisSummary] = useState<string | null>(null);
+  const [personaBriefing, setPersonaBriefing] = useState<string | null>(null);
   const [lastError, setLastError] = useState<string | null>(null);
   const [selectedRegionId, setSelectedRegionId] = useState<string>(defaultRegion.id);
   const [selectedLocationId, setSelectedLocationId] = useState<string>(defaultLocation.id);
@@ -342,6 +351,8 @@ export default function AIDashboard() {
       setLastError(null);
       setAnalysisSource('unknown');
       setPersonalizedSuggestions([]);
+      setAnalysisSummary(null);
+      setPersonaBriefing(null);
 
       const response = await fetch('/api/personalize', {
         method: 'POST',
@@ -372,6 +383,23 @@ export default function AIDashboard() {
       );
       setWeatherSnapshot(data.weather || null);
       setAnalysisSource(data.source ?? 'unknown');
+      const summaryText =
+        typeof data.summary === 'string' && data.summary.trim().length > 0
+          ? data.summary.trim()
+          : null;
+      const personaText =
+        typeof data.personaBriefing === 'string' && data.personaBriefing.trim().length > 0
+          ? data.personaBriefing.trim()
+          : null;
+
+      setAnalysisSummary(
+        summaryText ??
+          `AI summary unavailable. Using baseline analytics for ${selectedLocation.label}.`,
+      );
+      setPersonaBriefing(
+        personaText ??
+          'Keep executive stakeholders aligned with weekly recaps and targeted operations briefings.',
+      );
       setAnalysisTimestamp(new Date().toISOString());
     } catch (error) {
       console.error('AI analysis failed:', error);
@@ -381,6 +409,12 @@ export default function AIDashboard() {
       setWeatherSnapshot(null);
       setAnalysisSource('fallback');
       setLastError('Unable to reach personalization services. Displaying cached metrics.');
+      setAnalysisSummary(
+        `Personalization services unavailable. Showing cached insights for ${selectedLocation.label}.`,
+      );
+      setPersonaBriefing(
+        'Fallback persona guidance active. Review stored playbooks and monitor engagement dashboards manually.',
+      );
     }
 
     setIsAnalyzing(false);
@@ -438,6 +472,9 @@ export default function AIDashboard() {
           <div>
             <p className="text-sm font-semibold text-blue-200 uppercase tracking-[0.3em] mb-2">
               Choose an operating region
+              <span className="mt-1 block text-[0.65rem] uppercase tracking-[0.1em] text-blue-100">
+                United States • Canada • India • Japan • Vietnam • United Arab Emirates • Netherlands
+              </span>
             </p>
             <div className="flex flex-wrap gap-2">
               {regionOptions.map(region => (
@@ -495,7 +532,7 @@ export default function AIDashboard() {
             </p>
             <p className="mt-3 text-xs">
               Use this to compare U.S. ISO territories, Canadian provinces, and CES innovation hubs in India, Japan,
-              Mexico, Vietnam, and Guam.
+              Mexico, Vietnam, the United Arab Emirates, and the Netherlands.
             </p>
             <DashboardSettingsControls className="mt-4" />
           </div>
@@ -539,11 +576,12 @@ export default function AIDashboard() {
                   <YAxis stroke="#9CA3AF" />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1F2937',
-                      border: '1px solid #374151',
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid #cbd5f5',
                       borderRadius: '8px',
+                      color: '#0f172a',
                     }}
-                    labelStyle={{ color: '#F3F4F6' }}
+                    labelStyle={{ color: '#0f172a' }}
                   />
                   <Area
                     type="monotone"
@@ -647,6 +685,14 @@ export default function AIDashboard() {
           {/* AI Insights */}
           <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10">
             <h4 className="text-xl font-bold text-white mb-4">AI Predictive Insights</h4>
+            {analysisSummary && (
+              <div className="rounded-lg border border-white/10 bg-white/10 p-4 mb-4 text-sm text-blue-100 leading-relaxed">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white mb-2">
+                  Summary ({analysisSource})
+                </p>
+                <p>{analysisSummary}</p>
+              </div>
+            )}
             <div className="space-y-4">
               {mockInsights.map((insight, index) => (
                 <motion.div
@@ -692,9 +738,10 @@ export default function AIDashboard() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1F2937',
-                      border: '1px solid #374151',
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid #cbd5f5',
                       borderRadius: '8px',
+                      color: '#0f172a',
                     }}
                   />
                 </PieChart>
@@ -729,6 +776,14 @@ export default function AIDashboard() {
                   <li key={`${item}-${index}`}>{item}</li>
                 ))}
               </ul>
+              {personaBriefing && (
+                <div className="mt-5 rounded-lg border border-white/10 bg-white/5 p-4 text-sm text-blue-100 leading-relaxed">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white mb-2">
+                    Persona Briefing
+                  </p>
+                  <p>{personaBriefing}</p>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

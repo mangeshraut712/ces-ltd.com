@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import { DashboardSettingsProvider } from '@/context/DashboardSettingsContext';
+import PrimaryNavigation from '@/components/layout/PrimaryNavigation';
+import SiteFooter from '@/components/layout/SiteFooter';
 import AboutSection from './sections/AboutSection';
 import CareersSection from './sections/CareersSection';
 import ContactSection from './sections/ContactSection';
@@ -14,24 +16,26 @@ import SolutionsSection from './sections/SolutionsSection';
 
 const AIChatbot = dynamic(() => import('./AIChatbot'), { ssr: false });
 
-interface HomePageProps {
-  locale: string;
-}
-
-export default function HomePage({ locale }: HomePageProps) {
+export default function HomePage() {
   return (
     <DashboardSettingsProvider>
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <HeroSection locale={locale} />
-        <AboutSection />
-        <SolutionsSection />
-        <IndustriesSection />
-        <InnovationSection />
-        <ExpertsSection />
-        <NewsSection />
-        <CareersSection />
-        <ContactSection />
-        <AIChatbot />
+      <div className="flex min-h-screen flex-col bg-slate-50">
+        <PrimaryNavigation />
+        <main className="flex-1">
+          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <HeroSection />
+            <AboutSection />
+            <SolutionsSection />
+            <IndustriesSection />
+            <InnovationSection />
+            <ExpertsSection />
+            <NewsSection />
+            <CareersSection />
+            <ContactSection />
+            <AIChatbot />
+          </div>
+        </main>
+        <SiteFooter />
       </div>
     </DashboardSettingsProvider>
   );

@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 // import { ethers } from 'ethers'; // Commented out for demo purposes
+import { useInnovationInsights } from '@/hooks/useInnovationInsights';
 
 interface Certificate {
   id: string;
@@ -50,6 +52,42 @@ export default function Web3NFTMinter() {
   const [mintedNFTs, setMintedNFTs] = useState<string[]>([]);
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
+
+  const certificateContext = selectedCertificate ?? sampleCertificates[0];
+  const {
+    data: web3Insights,
+    loading: web3Loading,
+    error: web3Error,
+    refresh: refreshWeb3Insights,
+  } = useInnovationInsights('web3-nft', {
+    certificate: certificateContext?.projectName ?? 'Sustainability certificate',
+    chain: 'Polygon',
+    benefit: certificateContext?.description ?? 'Tokenized ESG record',
+  });
+  const mintDistribution = useMemo(() => {
+    const counts: Record<string, number> = {};
+    mintedNFTs.forEach(token => {
+      const segments = token.split('-');
+      if (segments.length >= 3) {
+        const id = segments[1];
+        counts[id] = (counts[id] ?? 0) + 1;
+      }
+    });
+    return sampleCertificates.map(cert => ({
+      id: cert.id,
+      name: cert.projectName,
+      minted: counts[cert.id] ?? 0,
+    }));
+  }, [mintedNFTs]);
+  const pieChartData = useMemo(() => {
+    const allZero = mintDistribution.every(item => item.minted === 0);
+    return mintDistribution.map(item => ({
+      name: item.name,
+      value: allZero ? 1 : item.minted,
+      minted: item.minted,
+    }));
+  }, [mintDistribution]);
+  const pieColors = ['#38bdf8', '#f97316', '#22c55e', '#a855f7', '#facc15', '#ec4899'];
 
   const connectWallet = async () => {
     // Simulate wallet connection for demo purposes
@@ -141,6 +179,58 @@ export default function Web3NFTMinter() {
           ))}
         </div>
 
+        <div className="mb-8 rounded-2xl border border-white/15 bg-white/10 p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
+              Mint Distribution
+            </p>
+            <span className="text-[11px] text-blue-100">
+              {mintDistribution.reduce((sum, item) => sum + item.minted, 0)} on-chain attestations
+            </span>
+          </div>
+          <div className="mt-3 h-56">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={pieChartData}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius="60%"
+                  outerRadius="90%"
+                  paddingAngle={3}
+                >
+                  {pieChartData.map((entry, index) => (
+                    <Cell key={entry.name} fill={pieColors[index % pieColors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#f8fafc',
+                    border: '1px solid #cbd5f5',
+                    borderRadius: '8px',
+                    color: '#0f172a',
+                  }}
+                  formatter={(value: number, name, props) => [`${props.payload.minted} minted`, name]}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-3 grid gap-2 text-xs text-blue-100 md:grid-cols-2">
+            {mintDistribution.map((item, index) => (
+              <div key={item.id} className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-2">
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: pieColors[index % pieColors.length] }}
+                  />
+                  {item.name}
+                </span>
+                <span className="text-white/80">{item.minted} minted</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Selected Certificate Details */}
         {selectedCertificate && (
           <motion.div
@@ -213,6 +303,99 @@ export default function Web3NFTMinter() {
                     'Connect Wallet to Mint'
                   )}
                 </motion.button>
+
+                <div className="mt-4 w-full rounded-2xl border border-white/15 bg-white/5 p-4 text-xs text-blue-100">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-200">
+                      AI Certificate Brief
+                    </p>
+                    <button
+                      type="button"
+                      onClick={refreshWeb3Insights}
+                      disabled={web3Loading}
+                      className={`text-[10px] font-semibold rounded-full border px-3 py-1 transition ${
+                        web3Loading
+                          ? 'border-white/20 bg-white/5 text-blue-200 cursor-not-allowed'
+                          : 'border-purple-400/30 bg-purple-500/10 text-purple-100 hover:bg-purple-500/20'
+                      }`}
+                    >
+                      {web3Loading ? 'Refreshing…' : 'Refresh'}
+                    </button>
+                  </div>
+
+                  {web3Insights && (
+                    <div className="mt-1 flex items-center gap-2 text-[11px] text-blue-200">
+                      <span
+                        className={`inline-flex items-center gap-2 ${
+                          web3Insights.source === 'openrouter' ? 'text-emerald-200' : 'text-blue-200'
+                        }`}
+                      >
+                        <span
+                          className={`h-2 w-2 rounded-full ${
+                            web3Insights.source === 'openrouter' ? 'bg-emerald-400' : 'bg-blue-400'
+                          }`}
+                        />
+                        {web3Insights.source === 'openrouter' ? 'Live OpenRouter' : 'Fallback cache'}
+                      </span>
+                    </div>
+                  )}
+
+                  {web3Error && (
+                    <p className="mt-3 rounded-lg border border-red-500/30 bg-red-500/20 px-3 py-2 text-[11px] text-red-200">
+                      {web3Error}
+                    </p>
+                  )}
+
+                  {web3Insights ? (
+                    <div className="mt-3 space-y-2 leading-relaxed">
+                      <p className="text-sm text-white font-semibold">{web3Insights.summary}</p>
+                      {web3Insights.highlights.length > 0 && (
+                        <ul className="space-y-1">
+                          {web3Insights.highlights.map(item => (
+                            <li key={item} className="flex items-start gap-2">
+                              <span className="mt-1 h-1.5 w-1.5 rounded-full bg-purple-300" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {web3Insights.actions.length > 0 && (
+                        <div className="mt-2">
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white">
+                            Action Plan
+                          </p>
+                          <ul className="mt-2 space-y-1">
+                            {web3Insights.actions.map(action => (
+                              <li key={action} className="rounded-lg border border-purple-400/30 bg-purple-500/10 px-3 py-2">
+                                {action}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {web3Insights.metadata && typeof web3Insights.metadata === 'object' && (
+                        <div className="mt-3 space-y-1">
+                          {Object.entries(web3Insights.metadata)
+                            .slice(0, 4)
+                            .map(([key, value]) => (
+                              <div key={key} className="flex items-center justify-between gap-2 text-[11px]">
+                                <span className="uppercase tracking-[0.2em] text-purple-200">{key}</span>
+                                <span className="text-white/80">
+                                  {typeof value === 'number' ? value.toLocaleString() : String(value)}
+                                </span>
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    !web3Loading && (
+                      <p className="mt-3 text-[11px] text-blue-100">
+                        AI certificate guidance appears here after the first refresh.
+                      </p>
+                    )
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>

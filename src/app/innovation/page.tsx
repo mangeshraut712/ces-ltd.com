@@ -1,4 +1,17 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import AIDashboard from '@/components/AIDashboard';
+import IoTDashboard from '@/components/IoTDashboard';
+import GlobalProjectMap from '@/components/GlobalProjectMap';
+import ProjectShowcase from '@/components/ProjectShowcase';
+import SustainabilityCommandCenter from '@/components/SustainabilityCommandCenter';
+import MarketIntelligenceCockpit from '@/components/MarketIntelligenceCockpit';
+import Web3NFTMinter from '@/components/Web3NFTMinter';
+import VRPreview from '@/components/VRPreview';
+import AIPersonalization from '@/components/AIPersonalization';
 
 const innovationStories = [
   {
@@ -51,17 +64,84 @@ const innovationStories = [
   }
 ];
 
-// const innovationCategories = [
-//   'All',
-//   'Technology Innovation',
-//   'Digital Transformation',
-//   'Clean Energy',
-//   'Smart Grid',
-//   'Predictive Maintenance',
-//   'DER Integration'
-// ];
+const interactiveModules = [
+  {
+    id: 'ai-dashboard',
+    title: '🤖 AI Dashboard',
+    description: 'Predictive intelligence & analytics',
+    component: AIDashboard,
+    category: 'AI & Analytics'
+  },
+  {
+    id: 'iot-dashboard',
+    title: '📊 IoT Dashboard',
+    description: 'Real-time sensor monitoring',
+    component: IoTDashboard,
+    category: 'IoT & Monitoring'
+  },
+  {
+    id: 'project-map',
+    title: '🗺️ Project Map',
+    description: 'Global project visualization',
+    component: GlobalProjectMap,
+    category: 'Visualization'
+  },
+  {
+    id: 'project-showcase',
+    title: '🏗️ Project Showcase',
+    description: 'Immersive 3D project tours',
+    component: ProjectShowcase,
+    category: '3D Experience'
+  },
+  {
+    id: 'sustainability',
+    title: '🌱 Sustainability Command',
+    description: 'Carbon & ESG intelligence',
+    component: SustainabilityCommandCenter,
+    category: 'Sustainability'
+  },
+  {
+    id: 'market-intelligence',
+    title: '📈 Market Intelligence',
+    description: 'ISO & PPA price radar',
+    component: MarketIntelligenceCockpit,
+    category: 'Markets'
+  },
+  {
+    id: 'web3-nfts',
+    title: '⛓️ Web3 NFTs',
+    description: 'Blockchain certificates',
+    component: Web3NFTMinter,
+    category: 'Blockchain'
+  },
+  {
+    id: 'ai-personalization',
+    title: '🎯 AI Personalization',
+    description: 'Smart recommendations',
+    component: AIPersonalization,
+    category: 'AI & Personalization'
+  },
+  {
+    id: 'vr-preview',
+    title: 'VR Preview',
+    description: 'Virtual reality experience',
+    component: VRPreview,
+    category: 'VR Experience'
+  }
+];
 
 export default function InnovationPage() {
+  const [activeModule, setActiveModule] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  const filteredModules = selectedCategory === 'All'
+    ? interactiveModules
+    : interactiveModules.filter(module => module.category === selectedCategory);
+
+  const categories = ['All', ...Array.from(new Set(interactiveModules.map(m => m.category)))];
+
+  const ActiveComponent = activeModule ? interactiveModules.find(m => m.id === activeModule)?.component : null;
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
@@ -69,10 +149,10 @@ export default function InnovationPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Innovation Stories
+              Innovation Showcase
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-purple-100 max-w-4xl mx-auto">
-              Discover how CES is pioneering the future of energy through cutting-edge technology, strategic partnerships, and groundbreaking solutions.
+              Explore the interactive modules that power CES, from AI-driven forecasting to VR project previews and blockchain-secured certifications.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <span className="bg-white/20 px-4 py-2 rounded-full">AI & Machine Learning</span>
@@ -84,11 +164,106 @@ export default function InnovationPage() {
         </div>
       </section>
 
-      {/* Innovation Showcase */}
+      {/* Interactive Modules Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">CES Innovation Portfolio</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">CES Interactive Innovation Modules</h2>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
+              Experience cutting-edge energy technology through our interactive dashboards, powered by OpenRouter AI models and advanced data visualizations.
+            </p>
+
+            {/* Category Filter */}
+            <div className="flex flex-wrap justify-center gap-2 mb-8">
+              {categories.map(category => (
+                <motion.button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                    selectedCategory === category
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {category}
+                </motion.button>
+              ))}
+            </div>
+          </div>
+
+          {/* Module Grid */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12">
+            {filteredModules.map((module, index) => (
+              <motion.div
+                key={module.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-slate-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-blue-300"
+                onClick={() => setActiveModule(module.id)}
+              >
+                <div className="h-32 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <div className="text-2xl mb-2">{module.title}</div>
+                    <p className="text-sm opacity-90">{module.description}</p>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                      {module.category}
+                    </span>
+                    <span className="text-xs text-slate-500">Interactive</span>
+                  </div>
+                  <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    Launch Module →
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Active Module Display */}
+          <AnimatePresence>
+            {activeModule && ActiveComponent && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="mb-12"
+              >
+                <div className="bg-slate-100 rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-slate-900">
+                        {interactiveModules.find(m => m.id === activeModule)?.title}
+                      </h3>
+                      <p className="text-slate-600">
+                        {interactiveModules.find(m => m.id === activeModule)?.description}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveModule(null)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors"
+                    >
+                      Close Module
+                    </button>
+                  </div>
+                  <ActiveComponent />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* Innovation Stories */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Innovation Stories</h2>
             <p className="text-lg text-slate-600 max-w-3xl mx-auto">
               From AI-driven optimization to blockchain-based trading platforms, explore the technologies shaping the future of energy.
             </p>
@@ -96,7 +271,7 @@ export default function InnovationPage() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {innovationStories.map((story, index) => (
-              <article key={index} className="bg-slate-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <article key={index} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                   <div className="text-white text-center">
                     <svg className="w-16 h-16 mx-auto mb-2 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,99 +304,6 @@ export default function InnovationPage() {
                 </div>
               </article>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Innovation Categories */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Innovation by Category</h2>
-            <p className="text-lg text-slate-600">
-              Explore CES innovations across different technology domains
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">AI & Machine Learning</h3>
-              <p className="text-slate-600 text-sm mb-4">
-                Advanced algorithms for energy optimization, predictive maintenance, and automated decision-making.
-              </p>
-              <span className="text-blue-600 font-medium text-sm">6 active projects →</span>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Clean Energy Storage</h3>
-              <p className="text-slate-600 text-sm mb-4">
-                Breakthrough solutions for hydrogen, battery, and thermal energy storage technologies.
-              </p>
-              <span className="text-blue-600 font-medium text-sm">4 active projects →</span>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Smart Grid Technology</h3>
-              <p className="text-slate-600 text-sm mb-4">
-                IoT-enabled infrastructure for real-time monitoring, control, and optimization of energy systems.
-              </p>
-              <span className="text-blue-600 font-medium text-sm">8 active projects →</span>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Blockchain & Digital Assets</h3>
-              <p className="text-slate-600 text-sm mb-4">
-                Decentralized platforms for energy trading, carbon credits, and digital asset management.
-              </p>
-              <span className="text-blue-600 font-medium text-sm">3 active projects →</span>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Predictive Analytics</h3>
-              <p className="text-slate-600 text-sm mb-4">
-                Data-driven insights for asset performance, market forecasting, and risk management.
-              </p>
-              <span className="text-blue-600 font-medium text-sm">5 active projects →</span>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Virtual Power Plants</h3>
-              <p className="text-slate-600 text-sm mb-4">
-                Orchestration platforms for aggregating distributed energy resources into grid-scale assets.
-              </p>
-              <span className="text-blue-600 font-medium text-sm">7 active projects →</span>
-            </div>
           </div>
         </div>
       </section>

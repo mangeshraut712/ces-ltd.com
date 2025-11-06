@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { useAppTranslation } from '@/hooks/useAppTranslation';
+
 interface Message {
   id: string;
   text: string;
@@ -11,11 +13,15 @@ interface Message {
 }
 
 export default function AIChatbot() {
+  const { t, i18n } = useAppTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     {
       id: '1',
-      text: 'Hello! I\'m your CES Ltd. AI assistant. How can I help you with energy and construction solutions today?',
+      text: t(
+        'chatbot.initialGreeting',
+        "Hello! I'm your CES AI assistant. Feel free to ask me anything—projects, technology, or general questions.",
+      ),
       sender: 'bot',
       timestamp: new Date(),
     },
@@ -23,14 +29,21 @@ export default function AIChatbot() {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [chatError, setChatError] = useState<string | null>(null);
+  const [insights, setInsights] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [modelUsed, setModelUsed] = useState<string | null>(null);
+  const [responseSource, setResponseSource] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+  const handleSendMessage = async (overrideText?: string) => {
+    const messageText = overrideText ?? inputValue;
+    if (typeof messageText !== 'string' || !messageText.trim()) {
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: messageText,
       sender: 'user',
       timestamp: new Date(),
     };
@@ -39,6 +52,9 @@ export default function AIChatbot() {
     setInputValue('');
     setIsTyping(true);
     setChatError(null);
+    setSuggestions([]);
+    setInsights([]);
+    setResponseSource(null);
 
     const updatedMessages = [...messages, userMessage];
 
@@ -59,9 +75,16 @@ export default function AIChatbot() {
         throw new Error(data?.error || 'Chat API error');
       }
 
+      setInsights(Array.isArray(data?.insights) ? data.insights : []);
+      setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
+      setModelUsed(typeof data?.model === 'string' ? data.model : null);
+      setResponseSource(data?.cached ? 'cache' : data?.source ?? null);
+
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data?.reply || 'Our AI assistant is currently busy. Please try again shortly.',
+        text:
+          data?.reply ||
+          t('chatbot.fallbackBusy', 'Our AI assistant is currently busy. Please try again shortly.'),
         sender: 'bot',
         timestamp: new Date(),
       };
@@ -69,16 +92,23 @@ export default function AIChatbot() {
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Chat assistant failed:', error);
-      setChatError('AI assistant is unavailable. Displaying cached knowledge.');
+      setChatError(t('chatbot.errorBanner', 'AI assistant is unavailable. Displaying cached knowledge.'));
       setMessages(prev => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
-          text: 'I encountered a temporary issue reaching our AI services. Please review the dashboards or ask again in a moment.',
+          text: t(
+            'chatbot.errorMessage',
+            'I encountered a temporary issue reaching our AI services. Please review the dashboards or ask again in a moment.',
+          ),
           sender: 'bot',
           timestamp: new Date(),
         },
       ]);
+      setSuggestions([]);
+      setInsights([]);
+      setModelUsed(null);
+      setResponseSource('fallback');
     } finally {
       setIsTyping(false);
     }
@@ -91,11 +121,31 @@ export default function AIChatbot() {
     }
   };
 
+  const handleSuggestionClick = (suggestion: string) => {
+    void handleSendMessage(suggestion);
+  };
+
   useEffect(() => {
     if (isOpen && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isOpen]);
+
+  useEffect(() => {
+    setMessages(prev =>
+      prev.map((message, index) =>
+        index === 0 && message.sender === 'bot'
+          ? {
+              ...message,
+              text: t(
+                'chatbot.initialGreeting',
+                "Hello! I'm your CES AI assistant. Feel free to ask me anything—projects, technology, or general questions.",
+              ),
+            }
+          : message,
+      ),
+    );
+  }, [i18n.language, t]);
 
   return (
     <>
@@ -105,7 +155,9 @@ export default function AIChatbot() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? 'Close chat assistant' : 'Open chat assistant'}
+        aria-label={
+          isOpen ? t('chatbot.actions.close', 'Close chat assistant') : t('chatbot.actions.open', 'Open chat assistant')
+        }
       >
         {isOpen ? (
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -133,8 +185,12 @@ export default function AIChatbot() {
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 to-green-600 text-white p-4 rounded-t-lg">
-              <h3 className="font-bold">CES Ltd. AI Assistant</h3>
-              <p className="text-sm opacity-90">Energy & Construction Expert</p>
+              <h3 className="font-bold">
+                {t('chatbot.header.title', 'CES Ltd. AI Assistant')}
+              </h3>
+              <p className="text-sm opacity-90">
+                {t('chatbot.header.subtitle', 'Energy & Construction Expert')}
+              </p>
             </div>
 
             {/* Messages */}
@@ -171,6 +227,49 @@ export default function AIChatbot() {
                 </div>
               )}
 
+              {insights.length > 0 && (
+                <div className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-900 shadow-sm">
+                  <p className="font-semibold uppercase tracking-[0.24em] text-blue-700">
+                    {t('chatbot.insights.title', 'Key insights')}
+                  </p>
+                  <ul className="mt-2 space-y-1 text-blue-900">
+                    {insights.map((item, index) => (
+                      <li key={`${item}-${index}`} className="flex gap-2">
+                        <span>•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-2 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.3em] text-blue-500">
+                    {modelUsed && (
+                      <span>
+                        {t('chatbot.insights.model', 'Model')}: {modelUsed}
+                      </span>
+                    )}
+                    {responseSource && (
+                      <span>
+                        {t('chatbot.insights.source', 'Source')}: {responseSource}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {suggestions.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={`${suggestion}-${index}`}
+                      type="button"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {isTyping && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -196,8 +295,8 @@ export default function AIChatbot() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask about energy solutions, projects, weather..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder={t('chatbot.inputPlaceholder', 'Ask me anything...')}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -205,7 +304,7 @@ export default function AIChatbot() {
                   onClick={handleSendMessage}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  Send
+                  {t('chatbot.send', 'Send')}
                 </motion.button>
               </div>
             </div>

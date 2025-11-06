@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import type { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { useInnovationInsights } from '@/hooks/useInnovationInsights';
 
 // Dynamically import Leaflet components to avoid SSR issues
 const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
@@ -126,19 +128,52 @@ const projects: Project[] = [
     completionDate: '2022-12-01',
   },
   {
-    id: 'guam-island-microgrid',
-    name: 'Guam Island Microgrid Operations',
-    type: 'microgrid',
-    location: 'Hagåtña, Guam',
-    coordinates: [13.4757, 144.7489],
-    status: 'completed',
-    co2Reduction: 21000,
-    energyOutput: 95,
-    description: 'Hybrid solar, storage, and diesel optimization for island resiliency.',
-    startDate: '2020-10-01',
-    completionDate: '2022-05-30',
+    id: 'uae-dubai-hydrogen',
+    name: 'Dubai Hydrogen-Ready Grid Program',
+    type: 'construction',
+    location: 'Dubai, United Arab Emirates',
+    coordinates: [25.2048, 55.2708],
+    status: 'in-progress',
+    co2Reduction: 41000,
+    energyOutput: 160,
+    description:
+      'Hydrogen blending pilots combining district cooling optimization, desalination, and large-scale storage readiness.',
+    startDate: '2024-03-01',
+  },
+  {
+    id: 'netherlands-north-sea-offshore',
+    name: 'North Sea Offshore Wind Control Center',
+    type: 'wind',
+    location: 'The Hague, Netherlands',
+    coordinates: [52.0705, 4.3007],
+    status: 'planning',
+    co2Reduction: 56000,
+    energyOutput: 380,
+    description:
+      'Cross-border interconnector scheduling and offshore wind forecasting supporting Dutch and EU market coupling.',
+    startDate: '2024-09-01',
   },
 ];
+
+const projectTypeLabels: Record<Project['type'], string> = {
+  solar: 'Solar',
+  wind: 'Wind',
+  hydro: 'Hydro',
+  construction: 'Construction',
+  storage: 'Storage',
+  microgrid: 'Microgrid',
+  software: 'Software & Analytics',
+};
+
+const projectTypeColors: Record<Project['type'], string> = {
+  solar: '#f59e0b',
+  wind: '#22d3ee',
+  hydro: '#6366f1',
+  construction: '#fb7185',
+  storage: '#22c55e',
+  microgrid: '#f97316',
+  software: '#8b5cf6',
+};
 
 interface CountryProfile {
   name: string;
@@ -185,10 +220,16 @@ const countriesOfOperation: CountryProfile[] = [
     highlight: 'Global analytics center powering CES dashboards, reporting, and IoT services.',
   },
   {
-    name: 'Guam',
-    offices: ['Hagåtña'],
-    focus: ['Island grid operations', 'Disaster recovery planning'],
-    highlight: 'Operates hybrid microgrids to ensure resilient power for island communities.',
+    name: 'United Arab Emirates',
+    offices: ['Dubai'],
+    focus: ['Hydrogen-ready grid pilots', 'District cooling optimization', 'Energy storage integration'],
+    highlight: 'Partnering with utilities on hydrogen blending, clean cooling, and dispatch optimization across the UAE.',
+  },
+  {
+    name: 'Netherlands',
+    offices: ['The Hague'],
+    focus: ['Offshore wind coordination', 'Interconnector scheduling', 'Market coupling analytics'],
+    highlight: 'Supports North Sea offshore wind fleets with cross-border balancing and European market insights.',
   },
 ];
 
@@ -196,6 +237,35 @@ function MapComponent() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [markerIcon, setMarkerIcon] = useState<Icon | null>(null);
   const projectTypes = Array.from(new Set(projects.map(project => project.type)));
+  const insightTarget = selectedProject ?? projects[0];
+  const energyByTypeData = useMemo(
+    () =>
+      projectTypes.map(type => {
+        const relevant = projects.filter(project => project.type === type);
+        const energy = relevant.reduce((sum, project) => sum + project.energyOutput, 0);
+        const co2 = relevant.reduce((sum, project) => sum + project.co2Reduction, 0);
+        return {
+          type,
+          label: projectTypeLabels[type],
+          energy,
+          co2,
+          count: relevant.length,
+        };
+      }),
+    [projectTypes],
+  );
+
+  const {
+    data: projectInsights,
+    loading: projectInsightsLoading,
+    error: projectInsightsError,
+    refresh: refreshProjectInsights,
+  } = useInnovationInsights('project-map', {
+    projectName: insightTarget?.name ?? 'Global portfolio',
+    projectType: insightTarget?.type ?? 'renewable',
+    status: insightTarget?.status ?? 'in-progress',
+    region: insightTarget?.location ?? 'Global reach',
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -253,7 +323,8 @@ function MapComponent() {
           <div>
             <h3 className="text-2xl font-bold text-white">Global Project Map</h3>
             <p className="text-gray-300">
-              Interactive visualization of CES Ltd. programs across the United States, Canada, India, Japan, Mexico, Vietnam, and Guam.
+              Interactive visualization of CES Ltd. programs across the United States, Canada, India, Japan, Mexico,
+              Vietnam, the United Arab Emirates, and the Netherlands.
             </p>
             <p className="text-blue-100 text-xs mt-2">
               Asset management, emerging technology pilots, and market operations spanning wholesale, retail, microgrid, and software services.
@@ -337,6 +408,143 @@ function MapComponent() {
                 {projects.reduce((sum, p) => sum + p.co2Reduction, 0).toLocaleString()}
               </div>
               <div className="text-gray-300 text-sm">Tons CO2 Reduced/Year</div>
+            </div>
+
+            <div className="bg-white/10 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
+                  Portfolio Mix
+                </p>
+                <span className="text-[11px] text-blue-100">Energy output by type</span>
+              </div>
+              <div className="mt-4 h-44">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={energyByTypeData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+                    <XAxis dataKey="label" stroke="#9ca3af" fontSize={11} />
+                    <YAxis stroke="#9ca3af" fontSize={11} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid #cbd5f5',
+                      borderRadius: '8px',
+                      color: '#0f172a',
+                    }}
+                    formatter={(value: number, name) => [
+                      `${value.toLocaleString()} ${name === 'energy' ? 'MW' : 'tons CO₂e'}`,
+                      name === 'energy' ? 'Energy Output' : 'CO₂ Impact',
+                    ]}
+                    />
+                    <Bar dataKey="energy" radius={[6, 6, 0, 0]}>
+                      {energyByTypeData.map(item => (
+                        <Cell key={item.type} fill={projectTypeColors[item.type]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <p className="mt-3 text-xs text-blue-100">
+                {energyByTypeData.reduce((sum, item) => sum + item.count, 0)} projects tracked across{' '}
+                {energyByTypeData.length} technology classes.
+              </p>
+            </div>
+
+            <div className="bg-white/10 rounded-lg p-4 border border-white/20">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
+                    AI Delivery Highlights
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-white">
+                    <span
+                      className={`inline-flex items-center gap-2 text-xs ${
+                        projectInsights?.source === 'openrouter' ? 'text-emerald-200' : 'text-blue-200'
+                      }`}
+                    >
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          projectInsights?.source === 'openrouter' ? 'bg-emerald-400' : 'bg-blue-400'
+                        }`}
+                      />
+                      {projectInsights?.source === 'openrouter' ? 'Live OpenRouter' : 'Fallback cache'}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={refreshProjectInsights}
+                  disabled={projectInsightsLoading}
+                  className={`text-xs font-semibold rounded-full border px-3 py-1 transition ${
+                    projectInsightsLoading
+                      ? 'border-white/20 bg-white/5 text-blue-200 cursor-not-allowed'
+                      : 'border-blue-400/40 bg-blue-500/10 text-blue-100 hover:bg-blue-500/20'
+                  }`}
+                >
+                  {projectInsightsLoading ? 'Refreshing…' : 'Refresh'}
+                </button>
+              </div>
+
+              {projectInsightsError && (
+                <p className="mt-3 rounded-lg border border-red-500/30 bg-red-500/20 px-3 py-2 text-xs text-red-200">
+                  {projectInsightsError}
+                </p>
+              )}
+
+              {projectInsights ? (
+                <div className="mt-3 space-y-3 text-xs text-blue-100 leading-relaxed">
+                  <p className="text-sm text-white font-semibold">Summary</p>
+                  <p>{projectInsights.summary}</p>
+                  {projectInsights.highlights.length > 0 && (
+                    <div>
+                      <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
+                        Highlights
+                      </p>
+                      <ul className="mt-2 space-y-1">
+                        {projectInsights.highlights.map(item => (
+                          <li key={item} className="flex items-start gap-2">
+                            <span className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-300" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {projectInsights.actions.length > 0 && (
+                    <div>
+                      <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
+                        Next Actions
+                      </p>
+                      <ul className="mt-2 space-y-1">
+                        {projectInsights.actions.map(action => (
+                          <li key={action} className="rounded-lg border border-blue-400/20 bg-blue-500/10 px-3 py-2">
+                            {action}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {projectInsights.metadata && typeof projectInsights.metadata === 'object' && (
+                    <div className="mt-3 space-y-1 text-[11px] text-blue-100">
+                      {Object.entries(projectInsights.metadata)
+                        .slice(0, 4)
+                        .map(([key, value]) => (
+                          <div key={key} className="flex items-center justify-between gap-2">
+                            <span className="uppercase tracking-[0.2em] text-blue-300">{key}</span>
+                            <span className="text-white/80">
+                              {typeof value === 'number' ? value.toLocaleString() : String(value)}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                !projectInsightsLoading && (
+                  <p className="mt-3 text-xs text-blue-100">
+                    AI highlights will appear here once insights are generated.
+                  </p>
+                )
+              )}
             </div>
 
             {/* Selected Project Details */}

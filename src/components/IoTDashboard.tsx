@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useMemo, useCallback, ChangeEvent } from 'react';
 import { motion } from 'framer-motion';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 import { useDashboardSettings } from '@/context/DashboardSettingsContext';
 import DashboardSettingsControls from '@/components/settings/DashboardSettingsControls';
+import { useInnovationInsights } from '@/hooks/useInnovationInsights';
 
 type SensorType =
   | 'temperature'
@@ -482,52 +483,103 @@ const regionDefinitions: RegionDefinition[] = [
     ],
   },
   {
-    id: 'guam',
-    label: 'Guam',
-    description: 'Island grid asset management for hybrid solar, storage, and diesel microgrids.',
-    highlight: 'Ensures resilient power for island communities with advanced microgrid operations.',
-    tags: ['Island Grids', 'Resilience'],
+    id: 'uae',
+    label: 'United Arab Emirates',
+    description: 'Dubai Science Park command center supporting GCC market intelligence and hydrogen pilots.',
+    highlight: 'Manages Gulf region analytics, hydrogen strategy, and resiliency planning for MENA utilities.',
+    tags: ['GCC Markets', 'Hydrogen', 'Energy Transition'],
     sites: [
       {
-        id: 'gu-hagatna',
-        label: 'Hagåtña',
-        city: 'Hagåtña',
-        country: 'Guam',
-        timezone: 'Pacific/Guam',
-        focus: ['Island microgrids', 'Disaster recovery', 'Hybrid operations'],
-        summary:
-          'Remote command center managing solar, storage, and diesel assets for island resiliency and recovery.',
-        metrics: { uptimePct: 98.6, activeSensors: 102, avgLatency: 0.74, criticalAlerts: 3 },
+        id: 'uae-dubai',
+        label: 'Dubai Science Park',
+        city: 'Dubai',
+        country: 'United Arab Emirates',
+        timezone: 'Asia/Dubai',
+        focus: ['Hydrogen pilots', 'Market intelligence', 'Resiliency planning'],
+        summary: 'Regional HQ analyzing GCC market signals, hydrogen blending programs, and DER policy.',
+        metrics: { uptimePct: 99.0, activeSensors: 165, avgLatency: 0.58, criticalAlerts: 1 },
         sensors: [
           {
-            id: 'gu-solar-output',
-            name: 'Solar Array Output',
-            type: 'energy',
-            unit: 'MW',
-            baseValue: 28,
-            variance: 6,
-            status: 'normal',
-            locationLabel: 'Northern Solar Field',
-          },
-          {
-            id: 'gu-diesel-reserve',
-            name: 'Diesel Reserve Days',
-            type: 'power_quality',
-            unit: 'days',
+            id: 'uae-hydrogen-blend',
+            name: 'Hydrogen Blend Ratio',
+            type: 'market_signal',
+            unit: '%',
             baseValue: 12,
             variance: 3,
-            status: 'warning',
-            locationLabel: 'Fuel Storage',
+            status: 'normal',
+            locationLabel: 'Pilot Pipeline',
           },
           {
-            id: 'gu-grid-frequency',
-            name: 'Island Frequency',
-            type: 'power_quality',
-            unit: 'Hz',
-            baseValue: 60.03,
-            variance: 0.09,
+            id: 'uae-grid-heat',
+            name: 'Grid Heat Index',
+            type: 'temperature',
+            unit: '°C',
+            baseValue: 44,
+            variance: 4,
+            status: 'warning',
+            locationLabel: 'Desert Transmission Corridor',
+          },
+          {
+            id: 'uae-peak-demand',
+            name: 'Peak Demand Offset',
+            type: 'energy',
+            unit: 'MW',
+            baseValue: 320,
+            variance: 35,
             status: 'normal',
-            locationLabel: 'Island Grid Monitor',
+            locationLabel: 'Demand Response Fleet',
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    id: 'netherlands',
+    label: 'Netherlands',
+    description: 'The Hague operations center coordinating European cross-border trading and compliance.',
+    highlight: 'Supports EU market coupling, offshore wind integration, and regulatory engagement.',
+    tags: ['European Markets', 'Regulatory Compliance', 'Cross-border Trading'],
+    sites: [
+      {
+        id: 'nl-hague',
+        label: 'The Hague, South Holland',
+        city: 'The Hague',
+        country: 'Netherlands',
+        timezone: 'Europe/Amsterdam',
+        focus: ['Market coupling', 'Offshore wind integration', 'Policy engagement'],
+        summary: 'European HQ delivering cross-border trading analytics and offshore wind integration support.',
+        metrics: { uptimePct: 99.3, activeSensors: 172, avgLatency: 0.51, criticalAlerts: 1 },
+        sensors: [
+          {
+            id: 'nl-market-spread',
+            name: 'Market Spread Index',
+            type: 'market_signal',
+            unit: '€/MWh',
+            baseValue: 7.4,
+            variance: 1.6,
+            status: 'normal',
+            locationLabel: 'EU Market Hub',
+          },
+          {
+            id: 'nl-offshore-lidar',
+            name: 'Offshore LIDAR Wind Speed',
+            type: 'air_quality',
+            unit: 'm/s',
+            baseValue: 11.2,
+            variance: 1.9,
+            status: 'normal',
+            locationLabel: 'North Sea Platform',
+          },
+          {
+            id: 'nl-interconnector',
+            name: 'Interconnector Load',
+            type: 'energy',
+            unit: 'MW',
+            baseValue: 520,
+            variance: 45,
+            status: 'warning',
+            locationLabel: 'HVDC Interconnector',
           },
         ],
       },
@@ -672,6 +724,11 @@ export default function IoTDashboard() {
 
   const warningCount = displaySensors.filter(sensor => sensor.status === 'warning').length;
   const criticalCount = displaySensors.filter(sensor => sensor.status === 'critical').length;
+  const sensorSummary = useMemo(
+    () =>
+      displaySensors.slice(0, 6).map(sensor => `${sensor.name}: ${sensor.status}`),
+    [displaySensors],
+  );
   const uptime = Math.max(
     90,
     Number(
@@ -693,6 +750,33 @@ export default function IoTDashboard() {
     ),
   );
   const activeSensors = displaySensors.length;
+  const statusDistribution = useMemo(
+    () =>
+      (['normal', 'warning', 'critical'] as SensorStatus[]).map(status => ({
+        status,
+        count: displaySensors.filter(sensor => sensor.status === status).length,
+      })),
+    [displaySensors],
+  );
+  const statusColors: Record<SensorStatus, string> = {
+    normal: '#22c55e',
+    warning: '#facc15',
+    critical: '#ef4444',
+  };
+
+  const {
+    data: aiOpsInsights,
+    loading: aiOpsLoading,
+    error: aiOpsError,
+    refresh: refreshAiOps,
+  } = useInnovationInsights('iot-dashboard', {
+    region: selectedRegion.label,
+    site: selectedSite.label,
+    sensors: sensorSummary,
+    warnings: warningCount,
+    criticalAlerts: criticalCount,
+  });
+  const aiOpsSource = aiOpsInsights?.source ?? (aiOpsError ? 'fallback' : 'pending');
 
   const formatSensorValue = useCallback(
     (sensor: SensorData, value: number) => {
@@ -739,8 +823,8 @@ export default function IoTDashboard() {
               Real-time monitoring of global energy and construction assets
             </p>
             <p className="text-xs text-blue-200 mt-2">
-              United States, Canada, India, Japan, Mexico, Vietnam, and Guam footprints with live sensor
-              feeds.
+              United States, Canada, India, Japan, Mexico, Vietnam, the United Arab Emirates, and the Netherlands
+              footprints with live sensor feeds.
             </p>
           </div>
           <div className="flex items-center space-x-2">
@@ -931,11 +1015,12 @@ export default function IoTDashboard() {
                       <YAxis stroke="#9CA3AF" fontSize={12} />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: '#1F2937',
-                          border: '1px solid #374151',
+                          backgroundColor: '#f8fafc',
+                          border: '1px solid #cbd5f5',
                           borderRadius: '8px',
+                          color: '#0f172a',
                         }}
-                        labelStyle={{ color: '#F3F4F6' }}
+                        labelStyle={{ color: '#0f172a' }}
                         formatter={(value: number) => {
                           if (!selectedSensor) return [value, ''];
                           if (selectedSensor.type === 'temperature') {
@@ -1016,6 +1101,139 @@ export default function IoTDashboard() {
             <div className="text-purple-200 text-2xl font-bold mt-1">{avgLatency.toFixed(2)}s</div>
             <p className="text-xs text-purple-200 mt-2">Sub-second telemetry processing across regions.</p>
           </div>
+        </div>
+
+        <div className="mt-8 rounded-3xl border border-white/15 bg-white/5 p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h4 className="text-lg font-semibold text-white">AI Operations Co-Pilot</h4>
+              <p className="text-xs text-blue-200 flex items-center gap-3">
+                <span className="inline-flex items-center gap-2">
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      aiOpsSource === 'openrouter' ? 'bg-emerald-400' : aiOpsSource === 'pending' ? 'bg-amber-300' : 'bg-blue-400'
+                    }`}
+                  />
+                  {aiOpsSource === 'openrouter' ? 'Live OpenRouter' : aiOpsSource === 'pending' ? 'Analyzing' : 'Fallback cache'}
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.3em] text-blue-300">
+                  Auto-summarized IoT playbook
+                </span>
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={refreshAiOps}
+              disabled={aiOpsLoading}
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition ${
+                aiOpsLoading
+                  ? 'border-white/20 bg-white/5 text-blue-200 cursor-not-allowed'
+                  : 'border-blue-400/40 bg-blue-500/10 text-blue-100 hover:bg-blue-500/20'
+              }`}
+            >
+              {aiOpsLoading && <span className="h-3 w-3 animate-spin rounded-full border-2 border-blue-200 border-t-transparent" />}
+              Refresh
+            </button>
+          </div>
+
+          {aiOpsError && (
+            <p className="mt-4 rounded-lg border border-red-500/30 bg-red-500/20 px-4 py-2 text-xs text-red-200">
+              {aiOpsError}
+            </p>
+          )}
+
+          {aiOpsInsights ? (
+            <div className="mt-4 grid gap-5 lg:grid-cols-[1.1fr,0.9fr] xl:grid-cols-[1fr,0.9fr,0.8fr]">
+              <div className="space-y-3 text-sm text-blue-100 leading-relaxed">
+                <p className="text-white font-semibold">Summary</p>
+                <p>{aiOpsInsights.summary}</p>
+                {aiOpsInsights.highlights.length > 0 && (
+                  <div>
+                    <p className="mt-3 text-xs font-semibold uppercase tracking-[0.3em] text-white">
+                      Highlights
+                    </p>
+                    <ul className="mt-2 space-y-2 text-sm">
+                      {aiOpsInsights.highlights.map(item => (
+                        <li key={item} className="flex items-start gap-2">
+                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-300" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white">
+                  Recommended Actions
+                </p>
+                <ul className="mt-3 space-y-2 text-sm text-blue-100">
+                  {aiOpsInsights.actions.map(action => (
+                    <li key={action} className="rounded-lg border border-blue-400/20 bg-blue-500/10 px-3 py-2">
+                      {action}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white">
+                  Sensor Status Mix
+                </p>
+                <div className="mt-3 h-44">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={statusDistribution}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+                      <XAxis
+                        dataKey="status"
+                        stroke="#9ca3af"
+                        fontSize={12}
+                        tickFormatter={value => value.charAt(0).toUpperCase() + value.slice(1)}
+                      />
+                      <YAxis stroke="#9ca3af" fontSize={12} allowDecimals={false} />
+                      <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid #cbd5f5',
+                      borderRadius: '8px',
+                      color: '#0f172a',
+                    }}
+                    formatter={(value: number, name) => [`${value} sensors`, name]}
+                      />
+                      <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+                        {statusDistribution.map(item => (
+                          <Cell key={item.status} fill={statusColors[item.status]} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                {aiOpsInsights.metadata && typeof aiOpsInsights.metadata === 'object' ? (
+                  <div className="mt-3 space-y-1 text-xs text-blue-100">
+                    {Object.entries(aiOpsInsights.metadata)
+                      .slice(0, 4)
+                      .map(([key, value]) => (
+                        <div key={key} className="flex items-center justify-between gap-2">
+                          <span className="uppercase tracking-[0.2em] text-blue-300">{key}</span>
+                          <span className="text-white/80">
+                            {typeof value === 'number' ? value.toLocaleString() : String(value)}
+                          </span>
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-xs text-blue-200">
+                    Status bars reflect live telemetry counts for the selected site.
+                  </p>
+                )}
+              </div>
+            </div>
+          ) : (
+            !aiOpsLoading && (
+              <p className="mt-4 text-sm text-blue-100">
+                AI insights will appear here after the first data refresh.
+              </p>
+            )
+          )}
         </div>
       </div>
     </div>

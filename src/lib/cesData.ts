@@ -1,5 +1,5 @@
 // CES Ltd. Legacy Data - Migrated from ces-ltd.com
-// This file contains the core data structure for CES Nexus 3.0
+// This file contains the core data structure for the CES digital platform
 
 export const companyInfo = {
   name: "Customized Energy Solutions Ltd.",
@@ -405,8 +405,8 @@ export const socialMedia = {
   youtube: "CustomizedEnergySolutions"
 };
 
-// CES Nexus 3.0 Enhancement Data
-export const nexus3Features = {
+// CES platform enhancement data
+export const platformEnhancements = {
   ai: {
     enabled: true,
     models: ["Grok-5", "Llama 4"],

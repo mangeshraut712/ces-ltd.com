@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const OPENROUTER_SITE_URL = process.env.OPENROUTER_SITE_URL;
-const OPENROUTER_APP_NAME = process.env.OPENROUTER_APP_NAME;
+import { callOpenRouterChat, hasOpenRouterKey } from '@/lib/openrouter';
+
 const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 
 const FALLBACK_WEATHER = {
@@ -58,43 +57,94 @@ export async function POST(req: NextRequest) {
   }
 
   let suggestions: string | null = null;
+  let personaBriefing: string | null = null;
+  let summary: string | null = null;
+  let responseSource: 'openrouter' | 'fallback' = 'fallback';
 
-  const hasOpenRouterKey = Boolean(OPENROUTER_API_KEY && !OPENROUTER_API_KEY.toLowerCase().includes('your-api'));
+  if (await hasOpenRouterKey()) {
+    const cacheKey = JSON.stringify({
+      type: 'personalize',
+      focus: energyFocus ?? 'default',
+      city: userLocation?.city ?? '',
+      lat: userLocation?.lat ?? null,
+      lon: userLocation?.lon ?? null,
+      weather: weatherData.description,
+    });
 
-  if (hasOpenRouterKey) {
-    try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-          ...(OPENROUTER_SITE_URL ? { 'HTTP-Referer': OPENROUTER_SITE_URL } : {}),
-          ...(OPENROUTER_APP_NAME ? { 'X-Title': OPENROUTER_APP_NAME } : {}),
-        },
-        body: JSON.stringify({
-          model: 'openrouter/auto',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an energy markets strategist for CES Ltd. Provide clear, actionable recommendations.',
-            },
-            {
-              role: 'user',
-              content: `Suggest CES energy projects for ${energyFocus} in ${userLocation.city || 'the requested region'}, factoring ${weatherData.description} conditions with temperatures around ${weatherData.temperatureC}°C. Provide 3 numbered, actionable recommendations tailored to utility leaders.`,
-            },
-          ],
-          max_tokens: 400,
-        }),
-      });
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      {
+        role: 'system',
+        content:
+          'You are an energy markets strategist for CES Ltd. Provide JSON only: {"summary": "...", "suggestions": ["..."], "persona_briefing": "..."} with sharp, executive-ready language.',
+      },
+      {
+        role: 'user',
+        content: `Energy focus: ${energyFocus || 'sustainable energy transformation'}.`,
+      },
+      {
+        role: 'user',
+        content: `Location: ${userLocation?.city || 'requested region'} (${userLocation?.lat ?? 'n/a'}, ${
+          userLocation?.lon ?? 'n/a'
+        }).`,
+      },
+      {
+        role: 'user',
+        content: `Weather context: ${weatherData.description} with temperature ${weatherData.temperatureC}°C, humidity ${weatherData.humidity}%.`,
+      },
+      {
+        role: 'user',
+        content: 'Deliver 3 concrete recommendations tuned for utility or grid leaders, plus a quick persona briefing.',
+      },
+    ];
 
-      if (!response.ok) {
-        console.warn('OpenRouter API responded with non-200 status', response.status);
-      } else {
-        const completion = await response.json();
-        suggestions = completion?.choices?.[0]?.message?.content?.trim() || null;
+    const chatResult = await callOpenRouterChat({
+      messages,
+      maxTokens: 450,
+      temperature: 0.55,
+      cacheKey,
+      cacheTtlMs: 2 * 60 * 1000,
+      responseFormat: 'json_object',
+      metadata: {
+        module: 'personalization',
+      },
+    });
+
+    if (chatResult.ok) {
+      let parsed: {
+        summary?: string;
+        suggestions?: string[];
+        persona_briefing?: string;
+      } | null = null;
+
+      try {
+        parsed = JSON.parse(chatResult.message);
+      } catch (error) {
+        console.warn('Failed to parse OpenRouter personalization payload, falling back to defaults.', error);
       }
-    } catch (error) {
-      console.warn('OpenAI request failed, serving fallback suggestions.', error);
+
+      if (parsed) {
+        responseSource = 'openrouter';
+        const parsedSuggestions = Array.isArray(parsed.suggestions)
+          ? parsed.suggestions.map(item => String(item).trim()).filter(Boolean)
+          : [];
+
+        if (parsedSuggestions.length > 0) {
+          suggestions = parsedSuggestions.join('\n');
+        }
+
+        const parsedSummary = typeof parsed.summary === 'string' ? parsed.summary.trim() : null;
+        const parsedPersona = typeof parsed.persona_briefing === 'string' ? parsed.persona_briefing.trim() : null;
+
+        if (parsedSummary) {
+          summary = parsedSummary;
+        }
+
+        if (parsedPersona) {
+          personaBriefing = parsedPersona;
+        }
+      }
+    } else {
+      console.warn('OpenRouter personalization call failed, using fallback suggestions.', chatResult.error);
     }
   }
 
@@ -105,6 +155,12 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     suggestions,
     weather: weatherData,
-    source: hasOpenRouterKey ? 'openrouter' : 'fallback',
+    summary:
+      summary ??
+      `AI guidance cached for ${energyFocus || 'energy innovation'} in ${userLocation?.city || 'your region'}.`,
+    personaBriefing:
+      personaBriefing ??
+      'Maintain weekly executive touchpoints, highlight ROI milestones, and reinforce regulatory readiness across the portfolio.',
+    source: responseSource,
   });
 }

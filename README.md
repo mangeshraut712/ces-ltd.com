@@ -1,8 +1,8 @@
-# 🚀 CES Nexus 3.0 - Advanced Energy Intelligence Platform
+# 🚀 CES Platform 3.0 - Advanced Energy Intelligence Platform
 
 <div align="center">
 
-![CES Nexus 3.0](https://img.shields.io/badge/CES%20Nexus-3.0-blue?style=for-the-badge&logo=react&logoColor=white)
+![CES Platform 3.0](https://img.shields.io/badge/CES%20Platform-3.0-blue?style=for-the-badge&logo=react&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -21,7 +21,7 @@
 
 ## 🎯 Overview
 
-CES Nexus 3.0 represents the pinnacle of energy industry innovation, orchestrating cutting-edge technologies to transform how energy markets operate globally. This advanced platform integrates AI-driven intelligence, real-time IoT monitoring, immersive VR experiences, and Web3 blockchain capabilities to deliver unprecedented operational excellence.
+CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestrating cutting-edge technologies to transform how energy markets operate globally. This advanced platform integrates AI-driven intelligence, real-time IoT monitoring, immersive VR experiences, and Web3 blockchain capabilities to deliver unprecedented operational excellence.
 
 ### 🏆 Key Achievements
 
@@ -61,7 +61,8 @@ CES Nexus 3.0 represents the pinnacle of energy industry innovation, orchestrati
 
 ### 🌍 **Global Intelligence Network**
 - **Multi-Regional Operations**: Localized frameworks for USA, Japan, and India markets
-- **Real-Time Translation**: 8-language support with cultural adaptation
+- **Unified Operations View**: Single-pane visibility for CES hubs in USA, India, Japan, Vietnam, Mexico, Canada, and beyond
+- **OpenRouter Analytics**: Scenario briefings and executive summaries sourced from OpenRouter energy models
 - **Cross-Border Orchestration**: Unified platform for international energy programs
 - **Regulatory Compliance**: Automated compliance monitoring across jurisdictions
 
@@ -81,7 +82,7 @@ CES Nexus 3.0 represents the pinnacle of energy industry innovation, orchestrati
 ```
 
 ### **AI & Machine Learning**
-- **OpenAI GPT Integration** - Advanced natural language processing
+- **OpenRouter (Gemini) Integration** - Conversational and insight generation APIs
 - **TensorFlow.js** - Client-side machine learning
 - **Scikit-learn Models** - Predictive analytics pipelines
 - **Custom ML Algorithms** - Energy-specific forecasting models
@@ -105,12 +106,6 @@ CES Nexus 3.0 represents the pinnacle of energy industry innovation, orchestrati
 - **Server-Sent Events** - Push notifications for critical alerts
 - **WebRTC** - Peer-to-peer communication for VR collaboration
 - **Service Workers** - Offline-capable progressive web app
-
-### **Internationalization**
-- **Next.js i18n** - Built-in internationalization
-- **8 Languages Supported**: English, Japanese, Hindi, Spanish, French, Dutch, Arabic, Vietnamese
-- **Cultural Adaptation** - Locale-specific content and formatting
-- **RTL Support** - Right-to-left language compatibility
 
 ### **Maps & Geospatial**
 - **Leaflet** - Interactive mapping library
@@ -188,7 +183,7 @@ npm install
 cp .env.local.example .env.local
 
 # Configure your API keys in .env.local
-# Required: OPENAI_API_KEY, WEATHER_API_KEY, OPENROUTER_API_KEY
+# Required: OPENROUTER_API_KEY, WEATHER_API_KEY
 
 # Start development server
 npm run dev
@@ -197,8 +192,13 @@ npm run dev
 ### **Environment Configuration**
 ```env
 # AI & APIs
-OPENAI_API_KEY=your_openai_key
 OPENROUTER_API_KEY=your_openrouter_key
+OPENROUTER_SITE_URL=https://your-domain.com
+OPENROUTER_APP_NAME=CES Platform 3.0
+OPENROUTER_DEFAULT_MODEL=google/gemini-2.0-flash-exp:free
+OPENROUTER_FALLBACK_MODELS=google/gemini-2.5-flash
+OPENROUTER_TIMEOUT_MS=20000
+CHAT_CACHE_TTL_MS=600000
 WEATHER_API_KEY=your_weather_api_key
 
 # Web3 Configuration
@@ -208,7 +208,49 @@ NEXT_PUBLIC_INFURA_PROJECT_ID=your_infura_id
 # Analytics & Monitoring
 NEXT_PUBLIC_VERCEL_ANALYTICS=true
 NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
+
+# Optional Redis (Upstash)
+UPSTASH_REDIS_REST_URL=your_upstash_rest_url
+UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token
 ```
+
+## 🔌 OpenRouter AI Integrations
+
+| API Route | Powered Modules | Description | Resilience |
+|-----------|-----------------|-------------|------------|
+| `POST /api/chat` | `AIChatbot` (home page) | Conversational assistant that answers CES, market, and cross-domain questions. | Automatic retry with exponential back-off on HTTP 429. |
+| `POST /api/personalize` | `AI Dashboard` (personalized recommendations) | Weather + focus aware playbooks for utility leaders. | 2‑minute response cache keyed by location/focus, retry on rate limits. |
+| `POST /api/innovation` | Innovation Showcase modules (`IoT Dashboard`, `Project Map`, `Project Showcase`, `Sustainability Command`, `Market Intelligence`, `Web3 NFTs`, `AI Personalization`, AI innovation cards) | Structured JSON insights summarizing each capability. | 2‑minute response cache per module/context with automatic retry. |
+| _Inline utility_ | Innovation insight cache (`src/hooks/useInnovationInsights.ts`) | Shares OpenRouter payloads across modules and keeps last-known-good data. | Maintains per-module cache with automatic stale response buffering. |
+| `POST /api/translate` | Language switcher | Generates on-demand translations using OpenRouter first, Google Translate fallback second. | Caches per-language phrases to minimise repeat calls. |
+
+- **Model**: All AI routes use `google/gemini-2.0-flash-exp:free` by default. Set `OPENROUTER_DEFAULT_MODEL` to change it globally or `OPENROUTER_FALLBACK_MODELS` for automatic fallbacks (e.g., `google/gemini-2.5-flash`).
+- **Backoff & Caching**: `callOpenRouterChat` retries on rate limiting (HTTP 429) with exponential delay and optional caching to smooth load.
+- **Optional Redis**: Provide `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` to enable Redis-backed caching in `src/lib/openrouter.ts` (in addition to in-memory caching).
+- **Health Check**: `npm run test:openrouter` exercises the chat completions endpoint using your configured model and prints the response.
+
+### 🧠 AI Feature Overview & Testing
+
+| Feature | Location | What it does | How to Test |
+|---------|----------|--------------|-------------|
+| Conversational Chatbot | UI: `src/components/AIChatbot.tsx`<br/>API: `src/app/api/chat/route.ts` | Answers any user question (general or CES-specific) using OpenRouter Gemini; augments responses with CES knowledge when relevant. Caches Q&A in Redis (if available) for instant repeats. | 1. `npm run dev`<br/>2. Visit `/` and open the floating chat button.<br/>3. Ask a general question (e.g. “Who is Google’s CEO?”) and a CES question (e.g. “What is CES BLUE?”).<br/>4. Verify “Model” in the insight panel shows a Google Gemini model. Check console/server logs for cache hits. |
+| AI Personalization Cards | UI: `src/components/AIPersonalization.tsx`<br/>API: `src/app/api/personalize/route.ts` | Generates weather-aware action plans, summaries, and persona briefings for selected locations & focuses. | 1. `npm run dev`<br/>2. On the homepage, scroll to “AI Personalization”.<br/>3. Change location/focus and click “Refresh Guidance”.<br/>4. Inspect network panel for `/api/personalize` (should return JSON with suggestions, summary, persona). |
+| Innovation Showcase Modules | UI components in `src/components` (AI Dashboard, IoT Dashboard, etc.)<br/>API: `src/app/api/innovation/route.ts` | Each showcase tile fetches curated insights, highlights, and recommended actions from OpenRouter, tailored to the selected module context. | 1. `npm run dev`<br/>2. Navigate to `/innovation` and select each module card.<br/>3. Watch requests to `/api/innovation`; confirm the rendered copy updates per module and logs show Gemini model usage. |
+| Market/Sustainability Dashboards | `src/components/MarketIntelligenceCockpit.tsx`, `src/components/SustainabilityCommandCenter.tsx`, `src/components/GlobalProjectMap.tsx` | Consume innovation API responses to populate AI narratives (status, guidance, summaries). | 1. From the innovation page, open each embedded dashboard.<br/>2. Ensure the “Insights” sections display data (source badge shows `Live OpenRouter` when not cached). |
+| Dynamic Translation | UI: `src/components/layout/LanguageSwitcher.tsx`<br/>API: `src/app/api/translate/route.ts` | On-demand localization across 8 languages with OpenRouter primary translations and Google fallback; results cached in localStorage + Redis (optional). | 1. `npm run dev`<br/>2. Use the top-right language selector (e.g., switch to Japanese).<br/>3. Observe immediate translation after first load (cached on repeat). Check network panel for `/api/translate` and verify responses contain translated strings. |
+| AI Health Check | `scripts/test-openrouter.mjs` | CLI script to validate OpenRouter connectivity and model configuration. | `npm run test:openrouter` (expects `OPENROUTER_API_KEY` etc. set). |
+
+### 🧪 QA & Diagnostics Checklist
+- `npm run lint` — ensure React hooks + TypeScript rules are satisfied (TranslationProvider initialization, etc.).
+- `npm run test:openrouter` — confirms Gemini endpoints are reachable and fallbacks are not downgraded to non-Google models.
+- Optional: Set `DEBUG=openrouter` (or inspect server logs) to monitor model selection, rate-limit warnings, and Redis cache hits.
+
+### **AI Feature Map**
+- `src/app/api/chat/route.ts` + `src/components/AIChatbot.tsx`: Conversational assistant with guardrails (`src/app/api/chat/safety.ts`).
+- `src/app/api/personalize/route.ts` + `src/components/AIPersonalization.tsx`: Weather-aware playbooks and persona briefings.
+- `src/app/api/innovation/route.ts` + innovation modules (`AIDashboard`, `IoTDashboard`, `ProjectShowcase`, etc.): Narrative summaries for each showcase tile.
+- `src/app/api/translate/route.ts` + `src/components/layout/LanguageSwitcher.tsx`: Dynamic localisation with OpenRouter primary responses and Google fallback.
+- `src/components/MarketIntelligenceCockpit.tsx`, `SustainabilityCommandCenter.tsx`, `GlobalProjectMap.tsx`: Each module consumes the innovation insights API to render live AI narratives.
 
 ### **Development Commands**
 ```bash
@@ -223,6 +265,7 @@ npm run lint         # ESLint checking
 npm run type-check   # TypeScript validation
 npm run test         # Run test suite
 npm run test:watch   # Watch mode testing
+npm run test:openrouter # Smoke-test OpenRouter connectivity and model selection
 
 # Database & Content
 npm run db:migrate   # Database migrations
@@ -234,10 +277,9 @@ npm run content:sync # Content management sync
 ## 🏗️ Architecture & Structure
 
 ```
-ces-nexus-3.0/
+ces-platform-3.0/
 ├── 📁 src/
 │   ├── 📁 app/                    # Next.js App Router
-│   │   ├── 📁 [locale]/          # Internationalization routes
 │   │   ├── 📁 admin/             # Admin panel
 │   │   ├── 📁 api/               # API routes & endpoints
 │   │   ├── 📁 careers/           # Career pages
@@ -247,13 +289,13 @@ ces-nexus-3.0/
 │   │   ├── 📁 team/              # Team directory
 │   │   └── 📄 layout.tsx         # Root layout
 │   ├── 📁 components/            # React components
-│   │   ├── 📁 sections/          # Page sections
 │   │   ├── 📁 layout/            # Layout components
+│   │   ├── 📁 sections/          # Page sections
 │   │   ├── 📁 settings/          # Configuration panels
 │   │   └── 📄 *                  # Feature components
 │   ├── 📁 context/               # React context providers
+│   ├── 📁 hooks/                 # Data hooks & caches
 │   ├── 📁 lib/                   # Utility libraries
-│   ├── 📁 messages/              # i18n translations
 │   └── 📁 types/                 # TypeScript definitions
 ├── 📁 public/                    # Static assets
 │   ├── 📁 images/                # Optimized images
@@ -407,8 +449,8 @@ CMD ["npm", "start"]
 
 ### **Technical Support**
 - **📧 Email**: support@ces-ltd.com
-- **💬 Discord**: [CES Nexus Community](https://discord.gg/ces-nexus)
-- **📖 Documentation**: [docs.ces-nexus.com](https://docs.ces-nexus.com)
+- **💬 Discord**: Community server coming soon
+- **📖 Documentation**: Internal wiki access provided to CES teams
 
 ### **Business Development**
 - **🌐 Website**: [ces-ltd.com](https://ces-ltd.com)
@@ -433,7 +475,7 @@ This platform represents proprietary technology developed by Customized Energy S
 
 <div align="center">
 
-**CES Nexus 3.0** - *Transforming Energy, Empowering Tomorrow*
+**CES Platform 3.0** - *Transforming Energy, Empowering Tomorrow*
 
 *Built with ❤️ by the CES Innovation Team*
 
@@ -441,109 +483,3 @@ This platform represents proprietary technology developed by Customized Energy S
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-CES%20Ltd.-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/company/ces-ltd)
 
 </div>
-
-## 📦 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd ces-ltd-prototype
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp .env.local.example .env.local
-   ```
-   Configure your environment variables in `.env.local`
-
-4. **Run the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
-   ```
-
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 🏗️ Project Structure
-
-```
-ces-ltd-prototype/
-├── src/
-│   ├── app/                 # Next.js App Router
-│   │   ├── api/            # API routes
-│   │   ├── [locale]/       # Internationalization
-│   │   └── globals.css     # Global styles
-│   ├── components/         # React components
-│   │   ├── sections/       # Page sections
-│   │   ├── layout/         # Layout components
-│   │   └── settings/       # Settings components
-│   ├── context/            # React context providers
-│   └── lib/                # Utility libraries
-├── public/                 # Static assets
-├── docs/                   # Documentation
-└── scripts/                # Build and migration scripts
-```
-
-## 🔧 Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## 🌐 Internationalization
-
-The application supports multiple locales through Next.js internationalization features. Locale-specific content is handled in the `[locale]` directory structure.
-
-## 🔒 Security Features
-
-- **Security Headers**: Configured in `next.config.ts`
-- **XSS Protection**: Content Security Policy headers
-- **Frame Options**: X-Frame-Options set to DENY
-- **Type Safety**: Full TypeScript implementation
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Configure environment variables
-3. Deploy automatically on push
-
-### Manual Deployment
-```bash
-npm run build
-npm run start
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-## 📄 License
-
-This project is proprietary software owned by CES Ltd.
-
-## 📞 Support
-
-For support or questions, please contact the CES Ltd. development team.
-
----
-
-**CES Ltd. - Customized Energy Solutions for a Transparent, Efficient Future**

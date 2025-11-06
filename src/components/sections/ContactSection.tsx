@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react';
 
 import { globalOffices } from '@/lib/cesData';
+import { useAppTranslation } from '@/hooks/useAppTranslation';
 import ContactForm from './ContactForm';
 import GlobalOffices from './GlobalOffices';
 
@@ -15,6 +16,7 @@ interface ContactFormState {
 }
 
 export default function ContactSection() {
+  const { t } = useAppTranslation();
   const [contactForm, setContactForm] = useState<ContactFormState>({
     name: '',
     email: '',
@@ -53,11 +55,11 @@ export default function ContactSection() {
       } else {
         setContactStatus('idle');
         // You could add error state handling here if needed
-        alert(`Failed to submit form: ${data.error}`);
+        alert(t('contact.form.submitError', 'Failed to submit form: {{error}}', { error: data.error ?? 'Unknown error' }));
       }
     } catch {
       setContactStatus('idle');
-      alert('Failed to submit form. Please try again.');
+      alert(t('contact.form.submitCatch', 'Failed to submit form. Please try again.'));
     }
   };
 
