@@ -255,27 +255,74 @@ export const businessLines = [
 export const serviceCategories = [
   {
     name: "Generation Owners",
-    description: "Comprehensive Solutions in a dynamic energy environment",
+    description: "24/7 market operations, ISO registration, and revenue optimization for utility-scale and IPP fleets across PJM, MISO, ERCOT, IESO, and CAISO.",
     icon: "⚡",
-    link: "/emerging-technologies/"
+    link: "/solutions/generation"
   },
   {
     name: "Retail Providers",
-    description: "Comprehensive Solutions in a dynamic energy environment",
+    description: "Full retail lifecycle support—from load forecasting and hedging to billing operations, EDI, compliance, and customer acquisition playbooks.",
     icon: "🏪",
-    link: "/power-generation-solutions/"
+    link: "/solutions/retail"
   },
   {
     name: "Demand Response Providers",
-    description: "Comprehensive Solutions in a dynamic energy environment",
+    description: "Program design, asset registration, dispatch operations, and settlement analytics that keep C&I portfolios compliant with FERC 745 and ISO telemetry rules.",
     icon: "📊",
-    link: "/retail-energy-solutions/"
+    link: "/solutions/distributed"
   },
   {
     name: "Emerging Technology Participants",
-    description: "Comprehensive Solutions in a dynamic energy environment",
+    description: "Energy storage, EV, and microgrid roadmaps that cover interconnection, market qualification, project finance modeling, and performance monitoring.",
     icon: "🚀",
-    link: "/load-management-solutions-old/"
+    link: "/solutions/emerging"
+  }
+];
+
+export const industryShowcase = [
+  {
+    name: "Independent Power Producers & Utilities",
+    icon: "⚡",
+    description:
+      "Multi-market asset management for thermal, renewable, and storage fleets backed by CES | GOLD operations centers.",
+    highlights: [
+      "Bid optimization, outage coordination, and telemetry oversight across PJM, MISO, ERCOT, IESO, and CAISO",
+      "Fuel, emissions, and regulatory reporting workflows tailored to utility compliance",
+      "OEM-agnostic SCADA performance analytics with 24/7 dispatch support"
+    ]
+  },
+  {
+    name: "Retail & C&I Energy Providers",
+    icon: "🏪",
+    description:
+      "Mass market and large C&I programs powered by CES | BLUE forecasting, hedging, billing, and UX orchestration.",
+    highlights: [
+      "Load forecasting, hedging, and structured product design for competitive markets",
+      "EDI automation, billing QA, and settlement audits for multi-state portfolios",
+      "Customer acquisition playbooks plus regulatory watch for rate case readiness"
+    ]
+  },
+  {
+    name: "Demand Response & Grid Services",
+    icon: "📊",
+    description:
+      "Program design, enrollment, dispatch, and measurement & verification for aggregators and utilities.",
+    highlights: [
+      "Launch kits for PJM, ISO-NE, NYISO, and provincial DR programs",
+      "Telemetry, dispatch, and performance settlement runbooks aligned with FERC 745",
+      "C&I portfolio analytics with emissions accounting and capacity planning"
+    ]
+  },
+  {
+    name: "Storage, EV & Microgrid Innovators",
+    icon: "🚀",
+    description:
+      "Market-entry and long-term optimization services for energy storage, EV fleets, and hybrid microgrids via CES | EMERGE.",
+    highlights: [
+      "Interconnection, market qualification, and revenue stacking models",
+      "Hybrid resource control, SOC optimization, and warranty compliance monitoring",
+      "Finance and O&M dashboards for investors, OEMs, and project operators"
+    ]
   }
 ];
 

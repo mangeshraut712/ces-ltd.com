@@ -20,8 +20,12 @@ export const navItems = [
 ];
 
 export default function PrimaryNavigation() {
-  const { t } = useAppTranslation();
+  const { t, i18n } = useAppTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const currentLanguage = i18n.language ?? 'en';
+  const wideSpacingLanguages = new Set(['en', 'ja', 'hi', 'ar']);
+  const useWideSpacing = wideSpacingLanguages.has(currentLanguage);
 
   const solutionsPreview = solutions.slice(0, 3);
 
@@ -52,28 +56,40 @@ export default function PrimaryNavigation() {
           </div>
         </Link>
 
-        <div className="hidden lg:ml-12 lg:flex lg:flex-wrap lg:items-center lg:gap-6">
-          {navItems.map(item => {
-            const label = t(item.labelKey, item.defaultLabel);
-            return (
-              <Link
-                key={item.key}
-                href={item.href}
-                onClick={handleNavigate}
-                className="text-sm font-medium text-slate-600 transition hover:text-blue-600"
-              >
-                {label}
-              </Link>
-            );
-          })}
-          <LanguageSwitcher />
-          <Link
-            href="/admin"
-            onClick={handleNavigate}
-            className="inline-flex flex-shrink-0 items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500"
+        <div
+          className={`hidden flex-1 items-center gap-4 overflow-hidden lg:ml-12 lg:flex ${
+            useWideSpacing ? 'justify-between' : 'justify-center'
+          }`}
+        >
+          <div
+            className={`flex flex-1 flex-wrap items-center gap-4 ${
+              useWideSpacing ? 'justify-between' : 'justify-center'
+            }`}
           >
-            {t('navigation.login', 'Login/Signup')}
-          </Link>
+            {navItems.map(item => {
+              const label = t(item.labelKey, item.defaultLabel);
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  onClick={handleNavigate}
+                  className="text-sm font-medium text-slate-600 transition hover:text-blue-600"
+                >
+                  {label}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="flex flex-shrink-0 items-center gap-3">
+            <LanguageSwitcher />
+            <Link
+              href="/admin"
+              onClick={handleNavigate}
+              className="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500"
+            >
+              {t('navigation.login.label', 'Login')}
+            </Link>
+          </div>
         </div>
 
         <button
@@ -139,7 +155,7 @@ export default function PrimaryNavigation() {
               onClick={handleNavigate}
               className="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500"
             >
-              {t('navigation.login', 'Login/Signup')}
+              {t('navigation.login.label', 'Login')}
             </Link>
           </div>
         </div>

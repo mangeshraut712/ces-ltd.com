@@ -4,7 +4,6 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { heroHighlights } from './HeroSection';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 
 const AIDashboard = dynamic(() => import('../AIDashboard'), { ssr: false });
@@ -25,6 +24,21 @@ const capabilities = [
   { id: 'market-intel', name: 'Market Intelligence', component: MarketIntelligenceCockpit, icon: '📈', description: 'ISO & PPA price radar' },
   { id: 'web3-nft', name: 'Web3 NFTs', component: Web3NFTMinter, icon: '⛓️', description: 'Blockchain certificates' },
   { id: 'ai-personalization', name: 'AI Personalization', component: AIPersonalization, icon: '🎯', description: 'Smart recommendations' },
+];
+
+const innovationWhy = [
+  {
+    title: 'AI copilots for every market operator',
+    description: 'Blend OpenRouter intelligence with CES historical datasets to scenario-plan congestion, outages, and hedging moves.',
+  },
+  {
+    title: 'Immersive field visibility',
+    description: 'VR and IoT layers provide commissioning teams and executives with the same high-fidelity project status at any time.',
+  },
+  {
+    title: 'Digital trust & ESG proof',
+    description: 'Web3 credentials plus sustainability command centers assure counterparties and regulators of asset-level performance.',
+  },
 ];
 
 export default function InnovationSection() {
@@ -61,6 +75,9 @@ export default function InnovationSection() {
             )}
           </p>
         </div>
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-500">
+          {t('innovation.prompt', 'Tap a module to launch a live demo')}
+        </p>
       </div>
 
       <motion.div layout className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5 xl:grid-cols-8 xl:gap-6">
@@ -101,6 +118,17 @@ export default function InnovationSection() {
             transition={{ duration: 0.3 }}
             className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-xl"
           >
+            <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-500">
+                {t('innovation.activeModule', 'Active module')}
+              </p>
+              <span className="text-sm font-semibold text-slate-700">
+                {t(
+                  `innovation.capabilities.${activeComponent}.name`,
+                  capabilities.find(item => item.id === activeComponent)?.name ?? '',
+                )}
+              </span>
+            </div>
             {ActiveComponent && <ActiveComponent />}
           </motion.div>
         )}
@@ -108,16 +136,16 @@ export default function InnovationSection() {
 
       {!activeComponent && (
         <div className="mt-8 grid gap-6 rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:grid-cols-3">
-          {heroHighlights.map((highlight, index) => (
-            <div key={highlight.title}>
+          {innovationWhy.map((item, index) => (
+            <div key={item.title}>
               <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-500">
                 {t('innovation.whyItMatters', 'Why it matters')}
               </p>
               <h3 className="mt-3 text-lg font-semibold text-slate-900">
-                {t(`hero.highlights.${index}.title`, highlight.title)}
+                {t(`innovation.why.${index}.title`, item.title)}
               </h3>
               <p className="mt-2 text-sm text-slate-600">
-                {t(`hero.highlights.${index}.description`, highlight.description)}
+                {t(`innovation.why.${index}.description`, item.description)}
               </p>
             </div>
           ))}

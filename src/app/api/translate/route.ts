@@ -15,7 +15,8 @@ type TranslationResponse = {
   translations: Record<string, string>;
 };
 
-const serverCache = new Map<string, string>();
+const serverKeyCache = new Map<string, string>();
+const serverTextCache = new Map<string, string>();
 const translationCacheTtlMs = Number(process.env.TRANSLATION_CACHE_TTL_MS ?? 12 * 60 * 60 * 1000);
 
 const buildRedisKey = (lang: string, text: string) =>
@@ -23,6 +24,52 @@ const buildRedisKey = (lang: string, text: string) =>
 
 function isSupportedLanguage(code: string) {
   return supportedLanguages.some(language => language.code === code);
+}
+
+function safeParseJSON<T>(payload: string): T | null {
+  const attemptParse = (text: string) => {
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      return null;
+    }
+  };
+
+  const parsed = attemptParse(payload);
+  if (parsed) {
+    return parsed;
+  }
+
+  const start = payload.indexOf('{');
+  const end = payload.lastIndexOf('}');
+
+  if (start !== -1 && end !== -1 && end > start) {
+    let braces = 0;
+    let startIndex = -1;
+
+    for (let i = start; i <= end; i += 1) {
+      const char = payload[i];
+      if (char === '{') {
+        if (braces === 0) {
+          startIndex = i;
+        }
+        braces += 1;
+      } else if (char === '}') {
+        braces -= 1;
+        if (braces === 0 && startIndex !== -1) {
+          const candidate = payload.slice(startIndex, i + 1);
+          const recovered = attemptParse(candidate);
+          if (recovered) {
+            return recovered;
+          }
+          startIndex = -1;
+        }
+      }
+    }
+  }
+
+  console.warn('Failed to parse translation payload');
+  return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -43,32 +90,42 @@ export async function POST(req: NextRequest) {
   }
 
   const translations: Record<string, string> = {};
-  const missingEntries: TranslationEntry[] = [];
+  const pendingEntries: TranslationEntry[] = [];
 
   const redisRequests: Array<Promise<void>> = [];
 
   entries.forEach(entry => {
     const cacheKey = `${targetLanguage}:${entry.key}`;
-    if (serverCache.has(cacheKey)) {
-      translations[entry.key] = serverCache.get(cacheKey)!;
+    const textCacheKey = buildRedisKey(targetLanguage, entry.text);
+
+    if (serverKeyCache.has(cacheKey)) {
+      translations[entry.key] = serverKeyCache.get(cacheKey)!;
+      return;
+    }
+
+    if (serverTextCache.has(textCacheKey)) {
+      const cached = serverTextCache.get(textCacheKey)!;
+      translations[entry.key] = cached;
+      serverKeyCache.set(cacheKey, cached);
       return;
     }
 
     if (hasRedis()) {
-      const redisKey = buildRedisKey(targetLanguage, entry.text);
+      const redisKey = textCacheKey;
       redisRequests.push(
         (async () => {
           const cached = await redisGet<string>(redisKey);
           if (cached) {
             translations[entry.key] = cached;
-            serverCache.set(cacheKey, cached);
+            serverKeyCache.set(cacheKey, cached);
+            serverTextCache.set(redisKey, cached);
           } else {
-            missingEntries.push(entry);
+            pendingEntries.push(entry);
           }
         })(),
       );
     } else {
-      missingEntries.push(entry);
+      pendingEntries.push(entry);
     }
   });
 
@@ -78,21 +135,53 @@ export async function POST(req: NextRequest) {
 
   // Redis operations may have populated translations but also appended to missingEntries via async race.
   // Filter out any duplicates that were resolved subsequently.
-  if (missingEntries.length > 0) {
+  if (pendingEntries.length > 0) {
     const unresolved: TranslationEntry[] = [];
-    missingEntries.forEach(entry => {
+    pendingEntries.forEach(entry => {
       if (!translations[entry.key]) {
         unresolved.push(entry);
       }
     });
-    missingEntries.length = 0;
-    missingEntries.push(...unresolved);
+    pendingEntries.length = 0;
+    pendingEntries.push(...unresolved);
   }
+
+  const dedupeMap = new Map<string, TranslationEntry[]>();
+  const entriesToTranslate: TranslationEntry[] = [];
+
+  pendingEntries.forEach(entry => {
+    const textKey = buildRedisKey(targetLanguage, entry.text);
+    const bucket = dedupeMap.get(textKey);
+    if (bucket) {
+      bucket.push(entry);
+    } else {
+      dedupeMap.set(textKey, [entry]);
+      entriesToTranslate.push(entry);
+    }
+  });
+
+  const applyTranslation = (entry: TranslationEntry, value: string) => {
+    if (!value?.trim()) {
+      return;
+    }
+
+    const textKey = buildRedisKey(targetLanguage, entry.text);
+    const bucket = dedupeMap.get(textKey) ?? [entry];
+    bucket.forEach(bucketEntry => {
+      translations[bucketEntry.key] = value;
+      const cacheKey = `${targetLanguage}:${bucketEntry.key}`;
+      serverKeyCache.set(cacheKey, value);
+    });
+    serverTextCache.set(textKey, value);
+    if (hasRedis()) {
+      void redisSet(textKey, value, translationCacheTtlMs);
+    }
+  };
 
   const hasKey = await hasOpenRouterKey();
 
-  if (missingEntries.length > 0 && hasKey) {
-    const promptPayload = missingEntries.map(entry => ({
+  if (entriesToTranslate.length > 0 && hasKey) {
+    const promptPayload = entriesToTranslate.map(entry => ({
       key: entry.key,
       text: entry.text,
     }));
@@ -112,7 +201,7 @@ export async function POST(req: NextRequest) {
       },
     ];
 
-    const cacheKey = `translate:${targetLanguage}:${missingEntries.map(entry => `${entry.key}:${entry.text}`).join('|')}`;
+    const cacheKey = `translate:${targetLanguage}:${entriesToTranslate.map(entry => `${entry.key}:${entry.text}`).join('|')}`;
 
     const translationResult = await callOpenRouterChat({
       messages,
@@ -128,67 +217,60 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    let unresolvedEntries: TranslationEntry[] = [];
+    const unresolvedEntries: TranslationEntry[] = [];
 
     if (translationResult.ok) {
-      try {
-        const parsed = JSON.parse(translationResult.message) as TranslationResponse;
-        const parsedTranslations = parsed?.translations ?? {};
-
-        missingEntries.forEach(entry => {
+      const parsed = safeParseJSON<TranslationResponse>(translationResult.message);
+      if (parsed) {
+        const parsedTranslations = parsed.translations ?? {};
+        entriesToTranslate.forEach(entry => {
           const translated = parsedTranslations[entry.key];
           if (typeof translated === 'string' && translated.trim().length > 0) {
-            translations[entry.key] = translated;
-            const cacheKey = `${targetLanguage}:${entry.key}`;
-            serverCache.set(cacheKey, translated);
-            if (hasRedis()) {
-              const redisKey = buildRedisKey(targetLanguage, entry.text);
-              void redisSet(redisKey, translated, translationCacheTtlMs);
-            }
+            applyTranslation(entry, translated);
           } else {
-            unresolvedEntries.push(entry);
+            const textKey = buildRedisKey(targetLanguage, entry.text);
+            const bucket = dedupeMap.get(textKey) ?? [entry];
+            unresolvedEntries.push(...bucket);
           }
         });
-      } catch (error) {
-        console.warn('Failed to parse translation payload:', error);
-        unresolvedEntries = missingEntries;
+      } else {
+        entriesToTranslate.forEach(entry => {
+          const textKey = buildRedisKey(targetLanguage, entry.text);
+          const bucket = dedupeMap.get(textKey) ?? [entry];
+          unresolvedEntries.push(...bucket);
+        });
       }
     } else {
       console.warn('Translation call failed:', translationResult.error);
-      unresolvedEntries = missingEntries;
+      entriesToTranslate.forEach(entry => {
+        const textKey = buildRedisKey(targetLanguage, entry.text);
+        const bucket = dedupeMap.get(textKey) ?? [entry];
+        unresolvedEntries.push(...bucket);
+      });
     }
 
     if (unresolvedEntries.length > 0) {
       const googleTranslations = await translateViaGoogle(targetLanguage, unresolvedEntries);
       unresolvedEntries.forEach(entry => {
         const fallback = googleTranslations[entry.key];
-        const value = fallback ?? entry.text;
-        translations[entry.key] = value;
-        const cacheKey = `${targetLanguage}:${entry.key}`;
-          if (fallback) {
-            serverCache.set(cacheKey, fallback);
-            if (hasRedis()) {
-              const redisKey = buildRedisKey(targetLanguage, entry.text);
-              void redisSet(redisKey, fallback, translationCacheTtlMs);
-            }
-          }
+        if (fallback) {
+          applyTranslation(entry, fallback);
+        } else {
+          translations[entry.key] = entry.text;
+        }
       });
     }
   }
 
-  if (missingEntries.length > 0 && !hasKey) {
-    const googleTranslations = await translateViaGoogle(targetLanguage, missingEntries);
+  if (entriesToTranslate.length > 0 && !hasKey) {
+    const googleTranslations = await translateViaGoogle(targetLanguage, entriesToTranslate);
 
-    missingEntries.forEach(entry => {
+    entriesToTranslate.forEach(entry => {
       const fallback = googleTranslations[entry.key];
-      const value = fallback ?? entry.text;
-      translations[entry.key] = value;
       if (fallback) {
-        serverCache.set(`${targetLanguage}:${entry.key}`, fallback);
-        if (hasRedis()) {
-          const redisKey = buildRedisKey(targetLanguage, entry.text);
-          void redisSet(redisKey, fallback, translationCacheTtlMs);
-        }
+        applyTranslation(entry, fallback);
+      } else {
+        translations[entry.key] = entry.text;
       }
     });
   }

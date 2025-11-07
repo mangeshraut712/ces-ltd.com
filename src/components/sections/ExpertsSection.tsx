@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaEnvelope, FaLinkedin } from 'react-icons/fa6';
 
-import { presidentProfile } from '@/lib/expertProfiles';
+import { expertProfiles, presidentProfile } from '@/lib/expertProfiles';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 
 export default function ExpertsSection() {
@@ -12,6 +12,20 @@ export default function ExpertsSection() {
   const presidentDetails = [presidentProfile.bio, presidentProfile.achievements, presidentProfile.education].filter(
     Boolean,
   ) as string[];
+  const leadershipStats = [
+    {
+      label: t('experts.metrics.offices', '10 Global offices'),
+      detail: t('experts.metrics.officesDetail', 'Regulatory + operations coverage'),
+    },
+    {
+      label: t('experts.metrics.experts', `${expertProfiles.length}+ subject-matter experts`),
+      detail: t('experts.metrics.expertsDetail', 'Market design, software, and operations leaders'),
+    },
+    {
+      label: t('experts.metrics.languages', '8+ languages'),
+      detail: t('experts.metrics.languagesDetail', 'Client delivery in local markets'),
+    },
+  ];
 
   return (
     <section id="experts" className="mt-24">
@@ -79,6 +93,15 @@ export default function ExpertsSection() {
             </div>
           </div>
         </article>
+
+        <div className="mt-8 grid gap-4 rounded-2xl border border-blue-100 bg-blue-50/60 p-5 text-sm text-blue-900 sm:grid-cols-3">
+          {leadershipStats.map(stat => (
+            <div key={stat.label} className="rounded-xl border border-white/70 bg-white/70 p-4 shadow-sm">
+              <p className="text-base font-semibold text-slate-900">{stat.label}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.3em] text-blue-500">{stat.detail}</p>
+            </div>
+          ))}
+        </div>
 
         <div className="mt-8 flex justify-center">
           <Link

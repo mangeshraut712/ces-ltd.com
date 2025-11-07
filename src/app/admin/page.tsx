@@ -1,39 +1,26 @@
 'use client';
 
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { FaEnvelope } from 'react-icons/fa6';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 
 import AdminPanel from '@/components/AdminPanel';
 
-interface Credentials {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
-  company: string;
-}
-
-const DEFAULT_CREDENTIALS: Credentials = {
-  email: '',
-  password: '',
-  confirmPassword: '',
-  firstName: '',
-  lastName: '',
-  company: '',
-};
+const DEMO_EMAIL = 'admin@ces-ltd.com';
+const DEMO_PASSWORD = 'admin123';
 
 export default function AdminPage() {
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState<Credentials>(DEFAULT_CREDENTIALS);
 
   if (isAuthenticated) {
     return <AdminPanel />;
   }
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData(prev => ({
       ...prev,
@@ -43,238 +30,154 @@ export default function AdminPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
-    if (isLogin) {
-      if (formData.email === 'admin@ces-ltd.com' && formData.password === 'admin123') {
+    window.setTimeout(() => {
+      setIsSubmitting(false);
+      if (formData.email === DEMO_EMAIL && formData.password === DEMO_PASSWORD) {
         setIsAuthenticated(true);
-        return;
+      } else {
+        alert('Invalid credentials. Use admin@ces-ltd.com / admin123 for demo access.');
       }
-
-      alert('Invalid credentials. Use admin@ces-ltd.com / admin123 for the demo.');
-      return;
-    }
-
-    if (formData.password === formData.confirmPassword && formData.password.length >= 6) {
-      setIsAuthenticated(true);
-      return;
-    }
-
-    alert('Passwords do not match or do not meet the minimum requirements.');
-  };
-
-  const handleGoogleSignIn = () => {
-    setIsAuthenticated(true);
+    }, 400);
   };
 
   const handleForgotPassword = () => {
-    alert('Contact support@ces-ltd.com for credential assistance.');
+    alert('Contact support@ces-ltd.com to reset your credentials.');
   };
 
-  const renderRequired = (label: string) => (
-    <>
-      {label}
-      <span className="ml-1 text-red-500" aria-hidden>
-        *
-      </span>
-    </>
-  );
+  const handleCesEmailContinue = () => {
+    setIsAuthenticated(true);
+  };
+
+  const togglePasswordVisibility = () => setShowPassword(prev => !prev);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10">
-      <div className="grid w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-lg md:grid-cols-[1.05fr,1fr]">
-        <div className="hidden flex-col justify-between bg-gradient-to-br from-blue-600 via-blue-500 to-sky-500 p-10 text-white md:flex">
-          <Link href="/" className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.3em]">
-            <span className="text-white/80">Customized Energy Solutions</span>
+    <div className="flex min-h-screen items-center justify-center bg-[#004b8f] px-4 py-12">
+      <div className="w-full max-w-md rounded-[32px] bg-white p-8 shadow-[0_25px_70px_rgba(10,38,76,0.35)]">
+        <div className="text-center">
+          <Link href="/" className="inline-flex flex-col items-center gap-2">
+            <Image
+              src="/images/logo.png"
+              alt="Customized Energy Solutions logo"
+              width={220}
+              height={70}
+              priority
+              className="h-16 w-auto object-contain"
+            />
           </Link>
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold">Enterprise SSO Access</h2>
-            <p className="text-sm text-white/80">
-              Manage global trading operations, market intelligence reports, and AI dashboards from a unified CES control
-              plane. Verified users gain access to internal tooling, analytics, and support workflows.
-            </p>
-            <div className="rounded-2xl bg-white/15 p-5 shadow-lg">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/80">Demo Credentials</h3>
-              <p className="mt-3 text-xs text-white/70">
-                Email: <span className="font-semibold text-white">admin@ces-ltd.com</span>
-                <br />
-                Password: <span className="font-semibold text-white">admin123</span>
-              </p>
+          <h1 className="mt-6 text-3xl font-semibold text-slate-900">Welcome</h1>
+          <p className="mt-1 text-sm text-slate-600">Log in to SSO Dashboard.</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          <div>
+            <label htmlFor="email" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="Email address*"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:font-medium placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                required
+                autoComplete="current-password"
+                placeholder="Password*"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-slate-200 px-4 py-3 pr-12 text-base text-slate-900 placeholder:font-medium placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-700"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <FaEyeSlash className="h-4 w-4" /> : <FaEye className="h-4 w-4" />}
+              </button>
+            </div>
+            <div className="mt-2 text-right">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-sm font-semibold text-[#4B5BD8] hover:text-[#2F3AB8]"
+              >
+                Forgot password?
+              </button>
             </div>
           </div>
-          <p className="text-xs text-white/70">
-            Need access? Reach out to your CES engagement lead or{' '}
-            <a href="mailto:info@ces-ltd.com" className="text-white underline decoration-white/60 underline-offset-2 hover:text-blue-100">
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full rounded-2xl bg-[#0b56a4] px-4 py-3 text-base font-semibold text-white shadow transition hover:bg-[#0a4c90] focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting ? 'Continuing…' : 'Continue'}
+          </button>
+        </form>
+
+        <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+          <span className="h-px flex-1 bg-slate-200" />
+          <span>Or</span>
+          <span className="h-px flex-1 bg-slate-200" />
+        </div>
+
+        <div className="mt-6">
+          <button
+            type="button"
+            onClick={handleCesEmailContinue}
+            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:ring-offset-2 focus:ring-offset-white"
+          >
+            <MicrosoftGlyph />
+            Continue with CES Email Address
+          </button>
+        </div>
+
+        <div className="mt-8 space-y-1 text-center text-xs text-slate-500">
+          <p>
+            Need help? Email{' '}
+            <a href="mailto:info@ces-ltd.com" className="font-semibold text-blue-600 hover:text-blue-700">
               info@ces-ltd.com
             </a>
             .
           </p>
-        </div>
-
-        <div className="bg-white p-10">
-          <div className="space-y-3 text-left">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-500">Customized Energy Solutions</p>
-            <h1 className="text-3xl font-bold text-slate-900">{isLogin ? 'Welcome' : 'Request Access'}</h1>
-            <p className="text-sm text-slate-600">
-              {isLogin ? 'Log in to SSO Dashboard.' : 'Provide details to request administrative access.'}
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-            {!isLogin && (
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-slate-700">
-                    {renderRequired('First name')}
-                  </label>
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    required={!isLogin}
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                    placeholder="Jordan"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-slate-700">
-                    {renderRequired('Last name')}
-                  </label>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    required={!isLogin}
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                    placeholder="Lee"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label htmlFor="company" className="block text-sm font-medium text-slate-700">
-                    {renderRequired('Company')}
-                  </label>
-                  <input
-                    id="company"
-                    name="company"
-                    type="text"
-                    required={!isLogin}
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                    placeholder="CES Partner"
-                  />
-                </div>
-              </div>
-            )}
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
-                {renderRequired('Email address')}
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-                className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                placeholder="you@company.com"
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium text-slate-700">
-                  {renderRequired('Password')}
-                </label>
-                {isLogin && (
-                  <button
-                    type="button"
-                    onClick={handleForgotPassword}
-                    className="text-sm font-semibold text-blue-600 hover:text-blue-700"
-                  >
-                    Forgot password?
-                  </button>
-                )}
-              </div>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={formData.password}
-                onChange={handleInputChange}
-                className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                placeholder="Enter your password"
-              />
-            </div>
-
-            {!isLogin && (
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
-                  {renderRequired('Confirm password')}
-                </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required={!isLogin}
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-                  placeholder="Re-enter your password"
-                />
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:ring-offset-2 focus:ring-offset-white"
-            >
-              Continue
-            </button>
-          </form>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200" />
-              </div>
-              <div className="relative flex justify-center">
-                <span className="bg-white px-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                  Or
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:ring-offset-2 focus:ring-offset-white"
-            >
-              <FaEnvelope className="h-4 w-4" aria-hidden />
-              Continue with CES Email Address
-            </button>
-          </div>
-
-          <p className="mt-8 text-center text-xs text-slate-500">
-            {isLogin ? "Need administrative access?" : 'Already have credentials?'}{' '}
-            <button
-              type="button"
-              onClick={() => setIsLogin(prev => !prev)}
-              className="font-semibold text-blue-600 hover:text-blue-700"
-            >
-              {isLogin ? 'Request it here' : 'Sign in'}
-            </button>
+          <p className="text-[11px]">
+            Demo credentials: <span className="font-semibold text-slate-600">{DEMO_EMAIL}</span> /
+            <span className="font-semibold text-slate-600"> {DEMO_PASSWORD}</span>
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+function MicrosoftGlyph() {
+  const colors = ['#F25022', '#7FBA00', '#00A4EF', '#FFB900'];
+
+  return (
+    <span className="inline-flex rounded-md border border-slate-200 p-1 shadow-sm">
+      <span className="grid grid-cols-2 gap-0.5">
+        {colors.map(color => (
+          <span key={color} className="h-3 w-3 rounded-sm" style={{ backgroundColor: color }} />
+        ))}
+      </span>
+    </span>
   );
 }

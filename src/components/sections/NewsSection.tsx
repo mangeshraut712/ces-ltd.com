@@ -40,9 +40,17 @@ export default function NewsSection() {
             )}
           </p>
         </div>
-        <Link href="/news" className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700">
-          {t('news.cta', 'Explore innovation stories →')}
-        </Link>
+        <div className="flex flex-col gap-3 text-sm font-semibold text-blue-600 sm:flex-row sm:items-center">
+          <Link href="/news" className="inline-flex items-center hover:text-blue-700">
+            {t('news.cta', 'Explore innovation stories →')}
+          </Link>
+          <a
+            href="mailto:media@ces-ltd.com?subject=CES%20Media%20Briefings"
+            className="inline-flex items-center text-blue-500 hover:text-blue-700"
+          >
+            {t('news.subscribe', 'Get press briefings →')}
+          </a>
+        </div>
       </div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">

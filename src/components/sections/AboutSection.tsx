@@ -5,6 +5,20 @@ import { useAppTranslation } from '@/hooks/useAppTranslation';
 
 export default function AboutSection() {
   const { t } = useAppTranslation();
+  const impactStats = [
+    {
+      label: t('about.metrics.clients', '400+ Clients'),
+      detail: t('about.metrics.clientsDetail', 'Across wholesale, retail, and emerging tech programs'),
+    },
+    {
+      label: t('about.metrics.markets', '30+ Markets & ISOs'),
+      detail: t('about.metrics.marketsDetail', 'PJM, ERCOT, IESO, CAISO, SPP, WEMM, WEIM, and beyond'),
+    },
+    {
+      label: t('about.metrics.ops', '24/7 Ops Centers'),
+      detail: t('about.metrics.opsDetail', 'Philadelphia · Pune · Tokyo · Ho Chi Minh City'),
+    },
+  ];
 
   return (
     <section id="about" className="mt-20">
@@ -63,6 +77,15 @@ export default function AboutSection() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="grid gap-3 rounded-2xl border border-blue-100 bg-blue-50/70 p-5 text-sm text-slate-800">
+            {impactStats.map(stat => (
+              <div key={stat.label} className="rounded-xl border border-white/60 bg-white/70 p-4 shadow-sm">
+                <p className="text-base font-semibold text-slate-900">{stat.label}</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.3em] text-blue-500">{stat.detail}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

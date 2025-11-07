@@ -6,34 +6,41 @@ import { useAppTranslation } from '@/hooks/useAppTranslation';
 
 export const heroHighlights = [
   {
-    title: 'Market Intelligence & Analytics',
-    description: 'Real-time energy market data, regulatory tracking, and predictive analytics for informed decision-making.',
+    icon: '📊',
+    title: 'Expertise & Market Intelligence',
+    description:
+      'Cross-market ISO/RTO intelligence, regulatory monitoring, and advisory depth spanning wholesale, retail, and emerging technologies.',
   },
   {
-    title: 'Energy Storage & Microgrids',
-    description: 'Advanced battery storage solutions, microgrid design, and distributed energy resource management.',
+    icon: '🖥️',
+    title: 'Hosted Software Solutions',
+    description:
+      'Performance-guaranteed platforms such as CES | GOLD and CES | BLUE covering forecasting, billing, settlements, and analytics.',
   },
   {
-    title: 'Demand Response & Load Management',
-    description: 'Automated demand response programs, load forecasting, and grid flexibility optimization.',
+    icon: '🛰️',
+    title: 'Operational Reliability',
+    description:
+      '24/7 Market Operations Centers, CES | SecureNet communications, and continuum-of-operations runbooks for mission-critical assets.',
   },
   {
-    title: 'Renewable Energy Integration',
-    description: 'Solar, wind, and hybrid renewable project development with grid interconnection expertise.',
+    icon: '⚙️',
+    title: 'Innovation & Emerging Tech',
+    description:
+      'Acceleration of storage, EV, hydrogen, and smart-grid deployments with interconnection, dispatch, and monetization expertise.',
   },
   {
-    title: 'Regulatory Compliance & Advocacy',
-    description: 'FERC, NERC, and international regulatory compliance with policy development and stakeholder advocacy.',
-  },
-  {
-    title: 'Emerging Technologies',
-    description: 'Hydrogen, e-mobility, blockchain for energy trading, and next-generation smart grid solutions.',
+    icon: '🤝',
+    title: 'Client Empowerment & Service',
+    description:
+      'Transparent engagements, knowledge transfer, and cost-optimization strategies that prioritize client goals and stakeholder alignment.',
   },
 ];
 
 export default function HeroSection() {
   const { t } = useAppTranslation();
   const businessHighlights = businessLines.filter(line => line.adoptionRate).slice(0, 3);
+  const utilityPillars = ['Safety', 'Quality', 'Efficiency'];
 
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 px-6 py-16 text-white shadow-xl sm:px-10 lg:px-16">
@@ -74,12 +81,21 @@ export default function HeroSection() {
               'CES delivers comprehensive energy solutions through market intelligence, regulatory expertise, and emerging technologies.',
             )}
           </p>
+          <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-blue-200">
+            {utilityPillars.map(pillar => (
+              <span key={pillar} className="rounded-full border border-white/20 px-3 py-1 text-blue-50">
+                {t(`hero.utilityPillars.${pillar.toLowerCase()}`, pillar)}
+              </span>
+            ))}
+          </div>
           <ul className="mt-6 space-y-4 text-sm text-blue-50">
-            {heroHighlights.slice(0, 3).map((highlight, index) => (
-              <li key={highlight.title} className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-blue-300" />
+            {heroHighlights.map((highlight, index) => (
+              <li key={highlight.title} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/10 p-4">
+                <span className="text-2xl" aria-hidden>
+                  {t(`hero.highlights.${index}.icon`, highlight.icon)}
+                </span>
                 <div>
-                  <p className="font-semibold text-white">
+                  <p className="text-base font-semibold text-white">
                     {t(`hero.highlights.${index}.title`, highlight.title)}
                   </p>
                   <p className="mt-1 text-blue-100">
@@ -92,20 +108,47 @@ export default function HeroSection() {
         </div>
       </div>
       {businessHighlights.length > 0 && (
-        <div className="mt-12 grid gap-6 rounded-2xl bg-black/20 p-6 sm:grid-cols-2 lg:grid-cols-3">
-          {businessHighlights.map(highlight => (
-            <div key={highlight.id} className="rounded-xl border border-white/10 bg-white/5 p-5">
-              <p className="text-sm uppercase tracking-[0.3em] text-blue-200">
-                {t(`hero.business.${highlight.id}.category`, highlight.category)}
-              </p>
-              <p className="mt-3 text-3xl font-semibold text-white">
-                {highlight.adoptionRate ? `${highlight.adoptionRate}%` : '2025'}
-              </p>
-              <p className="mt-2 text-sm text-blue-100">
-                {t(`hero.business.${highlight.id}.description`, highlight.description)}
-              </p>
-            </div>
-          ))}
+        <div className="mt-12 rounded-3xl border border-white/10 bg-black/30 p-6">
+          <div className="flex flex-col gap-2 text-blue-100 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-200">
+              {t('hero.business.title', 'Operational Impact')}
+            </p>
+            <p className="text-sm text-blue-100">
+              {t('hero.business.subtitle', 'Measured adoption across demand, renewable, and market intelligence programs.')}
+            </p>
+          </div>
+          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {businessHighlights.map(highlight => {
+              const adoptionRate = highlight.adoptionRate ?? 0;
+              const progressWidth = Math.min(adoptionRate, 120);
+              const normalizedWidth = `${(progressWidth / 120) * 100}%`;
+
+              return (
+                <div key={highlight.id} className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-inner">
+                  <p className="text-sm uppercase tracking-[0.3em] text-blue-200">
+                    {t(`hero.business.${highlight.id}.category`, highlight.category)}
+                  </p>
+                  <div className="mt-3 flex items-baseline gap-2 text-white">
+                    <p className="text-3xl font-semibold">{highlight.adoptionRate ? `${highlight.adoptionRate}%` : '2025'}</p>
+                    <span className="text-xs uppercase tracking-[0.3em] text-blue-200">
+                      {t('hero.business.metricLabel', 'Adoption')}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-blue-100">
+                    {t(`hero.business.${highlight.id}.description`, highlight.description)}
+                  </p>
+                  {highlight.adoptionRate && (
+                    <div className="mt-4 h-2 w-full rounded-full bg-white/10">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-300"
+                        style={{ width: normalizedWidth }}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </section>

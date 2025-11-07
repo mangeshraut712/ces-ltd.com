@@ -12,6 +12,29 @@ const solutionTranslationKeys: Record<string, string> = {
   comets: 'emerging',
 };
 
+const solutionOutcomeMap: Record<string, string[]> = {
+  gold: [
+    'ISO registration + onboarding in under 30 days',
+    'Automated telemetry, outage coordination, and settlement QA',
+    'Hosted market operations staff augmentation when needed',
+  ],
+  blue: [
+    'Integrated load forecasting, hedging, billing, and CRM workflows',
+    'State-by-state compliance tracking and EDI automation',
+    'Customer acquisition playbooks with embedded analytics',
+  ],
+  green: [
+    'DER enrollment + telemetry packages purpose-built for aggregators',
+    'Notifications, curtailment, and measurement & verification portal',
+    'Performance dashboards for C&I portfolios and community programs',
+  ],
+  comets: [
+    'Storage, EV, and microgrid models with stacked revenue forecasts',
+    'Project finance-ready reporting with degradation and warranty insights',
+    'Secure APIs to sync operational data with investor tools',
+  ],
+};
+
 export default function SolutionsSection() {
   const { t } = useAppTranslation();
   const [selectedSolutionId, setSelectedSolutionId] = useState<string | null>(solutionCatalog[0]?.id ?? null);
@@ -113,6 +136,21 @@ export default function SolutionsSection() {
                   })}
                 </ul>
               </div>
+              {solutionOutcomeMap[selectedSolution.id]?.length > 0 && (
+                <div className="mt-5">
+                  <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-500">
+                    {t('solutions.outcomes', 'Outcomes our teams deliver')}
+                  </h4>
+                  <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                    {solutionOutcomeMap[selectedSolution.id].map((outcome, index) => (
+                      <li key={outcome} className="flex items-start gap-2">
+                        <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                        <span>{t(`solutions.detail.${selectedSolution.id}.outcomes.${index}`, outcome)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {selectedSolution.link && (
                 <a
                   href={selectedSolution.link}

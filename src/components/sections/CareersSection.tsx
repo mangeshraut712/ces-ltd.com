@@ -24,6 +24,11 @@ const careerHighlights = [
 
 export default function CareersSection() {
   const { t } = useAppTranslation();
+  const benefits = [
+    t('careers.benefits.learning', 'Global mentorship & learning stipends'),
+    t('careers.benefits.flex', 'Flexible work + travel opportunities'),
+    t('careers.benefits.impact', 'Direct impact on decarbonization programs'),
+  ];
 
   return (
     <section id="careers" className="mt-24">
@@ -42,6 +47,14 @@ export default function CareersSection() {
         <Link href="/careers" className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700">
           {t('careers.cta', 'View all openings →')}
         </Link>
+      </div>
+
+      <div className="mt-6 grid gap-3 rounded-2xl border border-blue-100 bg-blue-50/70 p-5 text-sm text-blue-900 sm:grid-cols-3">
+        {benefits.map(benefit => (
+          <div key={benefit} className="rounded-xl border border-white/70 bg-white/70 p-4 shadow-sm">
+            <p className="font-semibold text-slate-900">{benefit}</p>
+          </div>
+        ))}
       </div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">

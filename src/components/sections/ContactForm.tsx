@@ -185,6 +185,9 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
               ? t('contact.form.status.success', 'Submitted')
               : t('contact.form.submit', 'Send message')}
         </button>
+        <p className="text-xs text-slate-500">
+          {t('contact.form.responseSla', 'Global market strategists typically respond within one business day.')}
+        </p>
 
         {contactStatus === 'success' && (
           <p className="text-sm text-green-600">
