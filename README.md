@@ -1,8 +1,8 @@
 # CES LTD Prototype
 
-High-fidelity **Next.js 16** experience for *Customized Energy Solutions (CES)* blending AI, IoT telemetry, immersive visualizations, multilingual UX, and Web3 proofs. Everything is optimized for OpenRouter-powered insights, Turbopack builds, and Vercel edge delivery.
+Modern **Next.js 16** experience for *Customized Energy Solutions (CES)* showcasing AI-driven dashboards, multilingual UX, and operations content tailored to real CES offerings. Powered by React 19, Turbopack, OpenRouter Gemini models, and comprehensive component ecosystem.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black?style=flat-square&logo=nextdotjs)](#tech-stack) [![React](https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&logo=react)](#tech-stack) [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat-square&logo=typescript)](#tech-stack) [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38bdf8?style=flat-square&logo=tailwind-css)](#tech-stack) [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=flat-square&logo=vercel)](#deployment)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black?style=flat-square&logo=nextdotjs)](#3-tech-stack) [![React](https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&logo=react)](#3-tech-stack) [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat-square&logo=typescript)](#3-tech-stack) [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38bdf8?style=flat-square&logo=tailwind-css)](#3-tech-stack) [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=flat-square&logo=vercel)](#10-deployment-vercel)
 
 - **Live:** https://ces-ltd-com.vercel.app/  
 - **Repo:** https://github.com/mangeshraut712/ces-ltd.com  
@@ -14,11 +14,14 @@ High-fidelity **Next.js 16** experience for *Customized Energy Solutions (CES)* 
 
 | Area | Key Deliverables |
 | --- | --- |
-| **Storytelling** | Hero + Solutions with GOLD / BLUE / GREEN / EMERGE toggles, industry showcase, expert spotlight, news & careers, global offices. |
-| **Innovation Modules** | AI Dashboard, IoT Dashboard, Global Project Map, VR Project Showcase, Sustainability Command, Market Intelligence, Web3 NFTs, AI Personalization – each backed by OpenRouter. |
-| **AI & Translation** | `/api/chat`, `/api/personalize`, `/api/innovation`, `/api/translate` built on Gemini models with retries, caching, JSON-salvage fallback. |
+| **Storytelling** | Hero + Solutions with CES GOLD / BLUE / GREEN / EMERGE toggles, industries grid, expert spotlight, news and careers, global offices. |
+| **Innovation Modules** | AI Dashboard, IoT Dashboard, Global Project Map, Project Showcase (3D), Sustainability Command, Market Intelligence, Web3 NFTs (analytics), AI Personalization, VR Preview – all backed by OpenRouter. |
+| **AI & Translation** | `/api/chat`, `/api/personalize`, `/api/innovation`, `/api/translate` use Gemini models with retries, caching, JSON-salvage fallback. |
 | **Localization UX** | Dynamic translation registry, server + Redis caches for key/text combos, Google fallback, navbar spacing tuned for long locales (Tiếng Việt, العربية, etc.). |
-| **Contact & Ops** | Intelligent contact form (region-aware office card), social brand icons, response SLA, plus centralized office data w/ flag assets. |
+| **Contact & Ops** | Contact form with region-aware office card, social brand icons, response SLA, centralized office + social data. |
+| **Admin Features** | Admin panel for content management, user authentication, and system configuration. |
+
+> No VR/AR claims: Project Showcase renders as a Three.js interactive scene, not an immersive headset experience.
 
 ---
 
@@ -26,14 +29,14 @@ High-fidelity **Next.js 16** experience for *Customized Energy Solutions (CES)* 
 
 | Page / Section | Highlights | Verification Steps |
 | --- | --- | --- |
-| **Home – Hero** | AI-first messaging, CTA pair, innovation chips. | Run `npm run dev`, open `/`, confirm hero renders with innovation badges. |
-| **Solutions** | Interactive CES GOLD/BLUE/GREEN/EMERGE cards + sidebar capabilities/outcomes. | Click each tile → sidebar updates, “Explore solution details” routes to `/solutions/*`. |
-| **Industries** | Four industry cards (IPP, Retail, DR, Emerging Tech) with highlight bullets + operations metrics. | Scroll to “Industries We Empower” and verify bullet list + metric chips. |
-| **Innovation Showcase** | 8 tiles launching React modules; each fetches OpenRouter insights with source badges (Live/Fallback). | Tap each tile → watch `/api/innovation` calls in devtools. |
-| **Experts** | President spotlight, CTA buttons, leadership stats (offices, SMEs, languages). | Check after hero; stat card is below spotlight. |
-| **News & Media** | Three AI-curated cards + “Press briefings” email CTA. | Scroll to News; ensure both CTAs visible. |
-| **Careers & Growth** | Benefit chips + featured roles. | Verify blue benefit bar above role cards. |
-| **Contact** | Enhanced form, social links with brand icons, office data and response SLA. | Submit form to hit `/api/contact` (mock success). |
+| **Home – Hero** | AI-forward messaging, CTA pair, innovation chips. | `npm run dev` → `/` → confirm hero renders with highlight chips. |
+| **Solutions** | Interactive solution cards (GOLD/BLUE/GREEN/EMERGE) + sidebar capabilities/outcomes. | Click each tile → sidebar updates; “Explore solution details” routes to `/solutions/*`. |
+| **Industries** | Four industry cards (IPP, Retail, Demand Response, Emerging Tech) with highlight bullets + operations metrics. | Scroll to “Industries We Empower” → verify bullet lists + metric bar. |
+| **Innovation Showcase** | 9 tiles launching React modules, each fetching OpenRouter insights (source badges show Live/Fallback). | Tap tiles → watch `/api/innovation` calls. |
+| **Experts** | President spotlight with CTAs; leadership stats below. | Confirm the counter card (global offices, SMEs, languages). |
+| **News & Careers** | AI-curated news cards + press CTA; benefit strip + featured roles. | Scroll to sections and confirm CTAs. |
+| **Contact** | Intelligent form, social brand icons, office data, response SLA text. | Submit form (mock success) → see `/api/contact`. |
+| **Admin Panel** | Content management interface with authentication. | Navigate to `/admin` → login and manage content. |
 
 ---
 
@@ -43,8 +46,8 @@ High-fidelity **Next.js 16** experience for *Customized Energy Solutions (CES)* 
 | --- | --- |
 | **Framework** | Next.js 16 App Router, React 19 concurrent features, Turbopack builds. |
 | **Styling & Motion** | Tailwind CSS 4 preset, Framer Motion 12, CSS gradients, utility-first layouts. |
-| **3D / Maps** | Three.js + React Three Fiber (VR preview, project showcase), React Leaflet 5 for geospatial dashboards. |
-| **AI Platform** | OpenRouter (Gemini 2.0 Flash default, 2.5 fallback) via `src/lib/openrouter.ts`, structured response parsing, safe JSON salvage, exponential backoff, optional Redis caching. |
+| **3D / Maps** | Three.js + React Three Fiber (VR preview, project showcase, rotating turbines, interactive buildings), React Leaflet 5 for geospatial dashboards. |
+| **AI Platform** | OpenRouter (Gemini 2.0 Flash default, 2.5 fallback) + OpenAI integration via `src/lib/openrouter.ts`, structured response parsing, safe JSON salvage, exponential backoff, optional Redis caching. |
 | **Localization** | i18next + dynamic registry (`src/i18n/*`), `/api/translate` dedupe by key + text, Google fallback. |
 | **Tooling** | TypeScript strict, ESLint 9 flat config, npm scripts (no Husky), Vercel for hosting. |
 
@@ -66,7 +69,7 @@ src/
 │  └─ page.tsx                  # Home
 ├─ components/
 │  ├─ sections/                 # Hero, Solutions, Industries, Experts, News, Careers, Contact, etc.
-│  ├─ VRPreview / ProjectShowcase / dashboards
+│  ├─ VRPreview / ProjectShowcase / dashboards / AdminPanel / HomePage
 │  └─ layout/                   # PrimaryNavigation, SiteFooter, LanguageSwitcher
 ├─ i18n/                        # i18next config + dynamic translation registry
 ├─ lib/
@@ -152,9 +155,10 @@ All requests flow through `src/lib/openrouter.ts`, which adds metadata, sets cac
 | --- | --- | --- | --- |
 | Conversational assistant | `/` → “Ask CES” button (`AIChatbot.tsx`) | `POST /api/chat` | Run `npm run dev`, open chat, ask CES-specific question; observe streaming response and source badge. |
 | AI Personalization | Homepage “AI Personalization” section (`AIPersonalization.tsx`) | `POST /api/personalize` | Change Location + Focus → click “Refresh Guidance”; check Network tab for JSON and UI update. |
-| Innovation modules | `/innovation` grid (`InnovationSection.tsx`) | `POST /api/innovation` | Click each tile; confirm module content + source chips (Live/Fallback) and new API response per module. |
+| Innovation modules | `/innovation` grid (`InnovationSection.tsx`) | `POST /api/innovation` | Click each tile (9 total); confirm module content + source chips (Live/Fallback) and new API response per module. |
 | Translation service | Language switcher (`PrimaryNavigation` + `LanguageSwitcher.tsx`) | `POST /api/translate` | Switch languages repeatedly; first call logs salvage/dedupe, subsequent calls served from cache. |
 | AI Dashboard / IoT / Market Intel / Sustainability | Embedded components | `POST /api/innovation` (per module) | Within the drawer, verify “Insights” and “Recommendation” cards reflect API payload; logs show module ID. |
+| Project Showcase + Web3 NFTs + VR Preview | Innovation drawer modules | `POST /api/innovation` (+ local interactions) | Launch Project Showcase to view Three.js scene & camera controls; open Web3 NFT card to inspect mint analytics (mock data); VR Preview shows rotating turbines and interactive buildings. |
 
 ---
 
@@ -172,8 +176,10 @@ All requests flow through `src/lib/openrouter.ts`, which adds metadata, sets cac
    - In AI Personalization, change Location + Focus and click “Refresh Guidance”; `/api/personalize` should respond with summary/actions/persona. Use the floating chatbot (“Ask CES”) to hit `/api/chat`.
 6. **Translation Endpoint**  
    - Run `curl -X POST http://localhost:3000/api/translate -H "Content-Type: application/json" -d '{"targetLanguage":"es","entries":[{"key":"cta","text":"Talk to an expert"}]}'` and observe dedupe/caching logs. Safe JSON parsing will salvage malformed OpenRouter responses if necessary.
-7. **Contact & Offices**  
-   - Select different regions; office card updates flag, address, phone, focus tags from `cesData`. Submit the form to hit `/api/contact` (mock). Social list renders brand icons (Mail, X, Facebook, LinkedIn, Instagram, YouTube).
+7. **Contact & Offices**
+    - Select different regions; office card updates flag, address, phone, focus tags from `cesData`. Submit the form to hit `/api/contact` (mock). Social list renders brand icons (Mail, X, Facebook, LinkedIn, Instagram, YouTube).
+8. **Admin Panel**
+    - Navigate to `/admin` and login with credentials. Manage content items, update status, add new content, and edit existing entries through the comprehensive admin interface.
 
 ---
 
