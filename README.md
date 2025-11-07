@@ -11,7 +11,7 @@
 
 **Next-Generation Energy Intelligence Platform**
 
-*AI-Powered • IoT-Connected • VR-Enhanced • Web3-Integrated • Multi-Regional*
+*AI-Powered • IoT-Connected • Web3-Integrated • Multi-Regional*
 
 [🌐 Live Demo](https://ces-ltd-com.vercel.app/) • [📖 Documentation](#-documentation) • [🚀 Quick Start](#-installation)
 
@@ -21,7 +21,7 @@
 
 ## 🎯 Overview
 
-CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestrating cutting-edge technologies to transform how energy markets operate globally. This advanced platform integrates AI-driven intelligence, real-time IoT monitoring, immersive VR experiences, and Web3 blockchain capabilities to deliver unprecedented operational excellence.
+CES Ltd represents the pinnacle of energy industry innovation, orchestrating cutting-edge technologies to transform how energy markets operate globally. This advanced platform integrates AI-driven intelligence, real-time IoT monitoring, and Web3 blockchain capabilities to deliver unprecedented operational excellence.
 
 ### 🏆 Key Achievements
 
@@ -38,7 +38,7 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 ### 🤖 **AI-Driven Personalization Engine**
 - **Adaptive Experiences**: Real-time user behavior analysis and content personalization
 - **Predictive Analytics**: Machine learning models for energy market forecasting
-- **Smart Recommendations**: Context-aware suggestions powered by OpenAI GPT integration
+- **Smart Recommendations**: Context-aware suggestions powered by OpenRouter Gemini integration
 - **Automated Decision Support**: Edge analytics for next-best-action recommendations
 
 ### 📊 **IoT Telemetry & Real-Time Monitoring**
@@ -46,12 +46,6 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **Live Dashboards**: Three.js-powered 3D visualizations of energy systems
 - **Predictive Maintenance**: 60-day advance failure prediction using ML algorithms
 - **Edge Computing**: Distributed analytics for reduced latency and bandwidth
-
-### 🥽 **Immersive VR/AR Experiences**
-- **3D Project Walkthroughs**: Interactive virtual tours of energy infrastructure
-- **WebXR Integration**: Cross-platform VR/AR support for mobile and desktop
-- **Collaborative Design**: Multi-user virtual environments for distributed teams
-- **Hardware Lab Integration**: Direct connection to physical prototyping facilities
 
 ### ⛓️ **Web3 & Blockchain Innovation**
 - **NFT Certification**: Blockchain-secured project milestones and compliance attestations
@@ -83,29 +77,25 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 
 ### **AI & Machine Learning**
 - **OpenRouter (Gemini) Integration** - Conversational and insight generation APIs
-- **OpenAI Integration** - Advanced AI capabilities for chat and personalization
 - **TensorFlow.js** - Client-side machine learning
-- **Scikit-learn Models** - Predictive analytics pipelines
 - **Custom ML Algorithms** - Energy-specific forecasting models
 
-### **3D Graphics & VR/AR**
+### **3D Graphics**
 - **Three.js R163** - Advanced 3D graphics engine
 - **React Three Fiber** - Declarative 3D rendering
 - **React Three Drei** - Production-ready 3D components
-- **React Three XR** - WebXR VR/AR integration
 - **GLTF/GLB Support** - Industry-standard 3D model formats
 
 ### **Web3 & Blockchain**
 - **Wagmi v2** - Type-safe Ethereum interactions
 - **Viem v2.17.0** - Lightweight Ethereum client
 - **Ethers.js v6.15.0** - Comprehensive Ethereum utilities
-- **IPFS Integration** - Decentralized file storage
 - **MetaMask & WalletConnect** - Multi-wallet support
 
 ### **Real-Time Systems**
 - **WebSocket Connections** - Live IoT data streaming
 - **Server-Sent Events** - Push notifications for critical alerts
-- **WebRTC** - Peer-to-peer communication for VR collaboration
+- **WebRTC** - Peer-to-peer communication for collaborative sessions
 - **Service Workers** - Offline-capable progressive web app
 
 ### **Maps & Geospatial**
@@ -126,8 +116,6 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **ESLint 9** - Advanced linting with Next.js configuration
 - **TypeScript 5.0** - Strict type checking and advanced features
 - **Prettier** - Code formatting consistency
-- **Husky + Lint-staged** - Pre-commit quality gates
-- **Vitest** - Modern testing framework
 - **Axios v1.13.2** - HTTP client for API requests
 
 ---
@@ -139,7 +127,6 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **Market Intelligence**: Real-time pricing and trend analysis
 - **Risk Assessment**: Automated compliance and regulatory monitoring
 - **Performance Metrics**: KPI tracking with automated alerting
-- **Regional Analysis**: Location-specific insights and recommendations
 
 ### **IoT Command Center**
 - **Sensor Management**: 50,000+ connected devices across global infrastructure
@@ -147,29 +134,17 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **Anomaly Detection**: ML-powered fault identification and prediction
 - **Energy Optimization**: Automated load balancing and efficiency improvements
 
-### **VR Project Studio**
-- **3D Model Viewer**: Interactive exploration of energy infrastructure
-- **Collaborative Sessions**: Multi-user virtual meetings and design reviews
-- **AR Overlays**: Mobile AR for field technician assistance
-- **Training Modules**: Immersive learning experiences for complex systems
-- **Rotating Turbines**: Dynamic 3D turbine animations
-- **Interactive Buildings**: Clickable 3D building models
-
 ### **Web3 Asset Manager**
 - **NFT Minting**: Blockchain certification of project deliverables
 - **Smart Contracts**: Automated energy trading and settlement
 - **Digital Wallets**: Secure management of energy assets and credits
 - **Decentralized Exchange**: Peer-to-peer energy trading platform
-- **Certificate Management**: Energy project certification system
-- **Mint Distribution Analytics**: NFT minting statistics and charts
 
 ### **Global Operations Hub**
 - **Multi-Region Dashboard**: Unified view across all global operations
 - **Localized Frameworks**: Market-specific solutions for USA, Japan, India
 - **Cross-Border Programs**: International energy project orchestration
 - **Regulatory Compliance**: Automated reporting and audit trails
-- **Project Mapping**: Interactive global project visualization
-- **Country Profiles**: Detailed operational insights by country
 
 ---
 
@@ -204,7 +179,7 @@ npm run dev
 # AI & APIs
 OPENROUTER_API_KEY=your_openrouter_key
 OPENROUTER_SITE_URL=https://your-domain.com
-OPENROUTER_APP_NAME=CES Platform 3.0
+OPENROUTER_APP_NAME=CES Ltd
 OPENROUTER_DEFAULT_MODEL=google/gemini-2.0-flash-exp:free
 OPENROUTER_FALLBACK_MODELS=google/gemini-2.5-flash
 OPENROUTER_TIMEOUT_MS=20000
@@ -265,7 +240,6 @@ UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token
 - `src/app/api/translate/route.ts` + `src/components/layout/LanguageSwitcher.tsx`: Dynamic localisation with OpenRouter primary responses and Google fallback.
 - `src/components/MarketIntelligenceCockpit.tsx`, `SustainabilityCommandCenter.tsx`, `GlobalProjectMap.tsx`: Each module consumes the innovation insights API to render live AI narratives.
 - `src/components/AdminPanel.tsx`: Administrative interface for content management and system configuration.
-- `src/components/HomePage.tsx`: Main landing page component with integrated dashboard settings.
 - `src/context/DashboardSettingsContext.tsx`: Global dashboard configuration and settings management.
 - `src/hooks/useInnovationInsights.ts`: Custom hook for AI innovation data fetching and caching.
 
@@ -279,23 +253,24 @@ npm run preview      # Preview production build
 
 # Quality Assurance
 npm run lint         # ESLint checking
-npm run type-check   # TypeScript validation
+npm run type-check   # TypeScript type checking
 npm run test         # Run test suite
 npm run test:watch   # Watch mode testing
+npm run test:coverage # Test coverage reporting
 npm run test:openrouter # Smoke-test OpenRouter connectivity and model selection
+npm run analyze        # Bundle analysis and optimization
 
 # Database & Content
 npm run db:migrate   # Database migrations
 npm run content:sync # Content management sync
+npm run type-check   # TypeScript type checking
+npm run format       # Code formatting with Prettier
 ```
 
 ### **Additional Scripts**
 ```bash
 # Server Management
 ./START_SERVER.sh   # Quick server startup script
-
-# Migration Scripts
-node scripts/migrate/importLegacyData.ts  # Legacy data import utility
 ```
 
 ---
@@ -329,6 +304,7 @@ ces-pro/
 │   └── 📁 fonts/                 # Custom fonts
 ├── 📁 docs/                      # Documentation
 ├── 📁 scripts/                   # Build & migration scripts
+│   └── 📄 test-openrouter.mjs    # OpenRouter connectivity testing
 └── 📁 config/                    # Configuration files
 ```
 
@@ -358,7 +334,7 @@ GET  /api/blockchain/status # Blockchain network status
 ### **Real-Time Features**
 - **WebSocket Connections** for live IoT data streaming
 - **Server-Sent Events** for push notifications
-- **WebRTC** for peer-to-peer VR collaboration
+- **WebRTC** for peer-to-peer collaborative communication
 
 ---
 
@@ -448,29 +424,6 @@ CMD ["npm", "start"]
 
 ---
 
-## 📈 Roadmap & Future Enhancements
-
-### **Phase 1 (Current) - Core Platform** ✅
-- AI-driven personalization engine
-- IoT telemetry and monitoring
-- VR/AR project experiences
-- Web3 NFT certification
-- Multi-language support
-
-### **Phase 2 (Q1 2025) - Advanced Features**
-- **Quantum Computing Integration** - Optimization algorithms
-- **5G Edge Computing** - Ultra-low latency IoT
-- **Autonomous AI Agents** - Self-managing energy systems
-- **Metaverse Integration** - Full VR ecosystem
-
-### **Phase 3 (Q2 2025) - Global Expansion**
-- **Satellite IoT Networks** - Remote infrastructure monitoring
-- **AI-Powered Policy Making** - Regulatory intelligence
-- **Carbon Credit Marketplace** - Global emissions trading
-- **Interplanetary Energy Systems** - Space-based solar
-
----
-
 ## 📞 Support & Contact
 
 ### **Technical Support**
@@ -501,7 +454,7 @@ This platform represents proprietary technology developed by Customized Energy S
 
 <div align="center">
 
-**CES Platform 3.0** - *Transforming Energy, Empowering Tomorrow*
+**CES Ltd** - *Transforming Energy, Empowering Tomorrow*
 
 *Built with ❤️ by the CES Innovation Team*
 
@@ -512,203 +465,3 @@ This platform represents proprietary technology developed by Customized Energy S
 
 ---
 
-## 1. Overview
-
-| Area | Key Deliverables |
-| --- | --- |
-| **Storytelling** | Hero + Solutions with CES GOLD / BLUE / GREEN / EMERGE toggles, industries grid, expert spotlight, news and careers, global offices. |
-| **Innovation Modules** | AI Dashboard, IoT Dashboard, Global Project Map, Project Showcase (3D), Sustainability Command, Market Intelligence, Web3 NFTs (analytics), AI Personalization, VR Preview – all backed by OpenRouter. |
-| **AI & Translation** | `/api/chat`, `/api/personalize`, `/api/innovation`, `/api/translate` use Gemini models with retries, caching, JSON-salvage fallback. |
-| **Localization UX** | Dynamic translation registry, server + Redis caches for key/text combos, Google fallback, navbar spacing tuned for long locales (Tiếng Việt, العربية, etc.). |
-| **Contact & Ops** | Contact form with region-aware office card, social brand icons, response SLA, centralized office + social data. |
-| **Admin Features** | Admin panel for content management, user authentication, and system configuration. |
-
-> No VR/AR claims: Project Showcase renders as a Three.js interactive scene, not an immersive headset experience.
-
----
-
-## 2. Site Map & Feature Guide
-
-| Page / Section | Highlights | Verification Steps |
-| --- | --- | --- |
-| **Home – Hero** | AI-forward messaging, CTA pair, innovation chips. | `npm run dev` → `/` → confirm hero renders with highlight chips. |
-| **Solutions** | Interactive solution cards (GOLD/BLUE/GREEN/EMERGE) + sidebar capabilities/outcomes. | Click each tile → sidebar updates; “Explore solution details” routes to `/solutions/*`. |
-| **Industries** | Four industry cards (IPP, Retail, Demand Response, Emerging Tech) with highlight bullets + operations metrics. | Scroll to “Industries We Empower” → verify bullet lists + metric bar. |
-| **Innovation Showcase** | 9 tiles launching React modules, each fetching OpenRouter insights (source badges show Live/Fallback). | Tap tiles → watch `/api/innovation` calls. |
-| **Experts** | President spotlight with CTAs; leadership stats below. | Confirm the counter card (global offices, SMEs, languages). |
-| **News & Careers** | AI-curated news cards + press CTA; benefit strip + featured roles. | Scroll to sections and confirm CTAs. |
-| **Contact** | Intelligent form, social brand icons, office data, response SLA text. | Submit form (mock success) → see `/api/contact`. |
-| **Admin Panel** | Content management interface with authentication. | Navigate to `/admin` → login and manage content. |
-
----
-
-## 3. Tech Stack
-
-| Layer | Tools |
-| --- | --- |
-| **Framework** | Next.js 16 App Router, React 19 concurrent features, Turbopack builds. |
-| **Styling & Motion** | Tailwind CSS 4 preset, Framer Motion 12, CSS gradients, utility-first layouts. |
-| **3D / Maps** | Three.js + React Three Fiber (VR preview, project showcase, rotating turbines, interactive buildings), React Leaflet 5 for geospatial dashboards. |
-| **AI Platform** | OpenRouter (Gemini 2.0 Flash default, 2.5 fallback) + OpenAI integration via `src/lib/openrouter.ts`, structured response parsing, safe JSON salvage, exponential backoff, optional Redis caching. |
-| **Localization** | i18next + dynamic registry (`src/i18n/*`), `/api/translate` dedupe by key + text, Google fallback. |
-| **Tooling** | TypeScript strict, ESLint 9 flat config, npm scripts (no Husky), Vercel for hosting. |
-
----
-
-## 4. Architecture Snapshot
-
-```
-src/
-├─ app/
-│  ├─ api/
-│  │  ├─ chat/route.ts          # Conversational AI
-│  │  ├─ personalize/route.ts   # AI personalization
-│  │  ├─ innovation/route.ts    # Innovation module insights
-│  │  ├─ translate/route.ts     # Translation service (OpenRouter + Google)
-│  │  └─ contact/route.ts       # Contact form handler
-│  ├─ innovation/page.tsx       # Innovation showcase
-│  ├─ solutions/*/page.tsx      # Detailed solution pages
-│  └─ page.tsx                  # Home
-├─ components/
-│  ├─ sections/                 # Hero, Solutions, Industries, Experts, News, Careers, Contact, etc.
-│  ├─ VRPreview / ProjectShowcase / dashboards / AdminPanel / HomePage
-│  └─ layout/                   # PrimaryNavigation, SiteFooter, LanguageSwitcher
-├─ i18n/                        # i18next config + dynamic translation registry
-├─ lib/
-│  ├─ cesData.ts                # Data for solutions, industries, offices, social links
-│  ├─ expertProfiles.ts         # Leadership data
-│  ├─ openrouter.ts             # OpenRouter client, caching, metadata
-│  └─ redisClient.ts            # Optional Upstash helpers
-├─ public/                      # Images (flags, photos), downloadable files
-└─ scripts/test-openrouter.mjs  # Connectivity test for AI key
-```
-
----
-
-## 5. Environment & Configuration
-
-Create `.env.local` (values shown as placeholders):
-
-```env
-# OpenRouter / AI
-OPENROUTER_API_KEY=sk-or-...
-OPENROUTER_SITE_URL=https://ces-ltd-com.vercel.app
-OPENROUTER_APP_NAME=ces-ltd-prototype
-OPENROUTER_DEFAULT_MODEL=google/gemini-2.0-flash-exp:free
-OPENROUTER_FALLBACK_MODELS=google/gemini-2.5-flash
-CHAT_CACHE_TTL_MS=600000
-
-# Translation service
-TRANSLATION_CACHE_TTL_MS=43200000
-UPSTASH_REDIS_REST_URL=...
-UPSTASH_REDIS_REST_TOKEN=...
-
-# Weather + personalization
-WEATHER_API_KEY=...
-```
-
-> Redis variables are optional; without them, the app falls back to in-memory caches per server instance.
-
----
-
-## 6. Getting Started
-
-```bash
-git clone https://github.com/mangeshraut712/ces-ltd.com.git
-cd ces-ltd-prototype
-npm install
-cp .env.local.example .env.local   # or create manually
-npm run dev
-```
-
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Next.js dev server (Turbopack). |
-| `npm run build` | Production build (used by Vercel). |
-| `npm run start` | Run the built app locally. |
-| `npm run lint` | ESLint (Next.js config). |
-| `npm run test:openrouter` | Pings OpenRouter model to verify credentials. |
-
----
-
-## 7. OpenRouter AI Integrations
-
-| Endpoint | Used By | Notes |
-| --- | --- | --- |
-| `POST /api/chat` | `AIChatbot` floating assistant | Streams answers via OpenRouter Gemini; caches responses (memory + optional Redis) and retries on 429 with exponential backoff. |
-| `POST /api/personalize` | AI Personalization cards | Combines OpenRouter guidance with live weather context; 2-minute cache keyed by location + focus. |
-| `POST /api/innovation` | Innovation Showcase modules | Single endpoint driving all eight tiles; structured JSON payload (status, highlights, guidance). |
-| `POST /api/translate` | Locale switcher | De-dupes entries by key + text, uses OpenRouter first, salvages malformed JSON, falls back to Google Translate, stores in Redis/text cache. |
-
-**Model defaults**
-
-```
-OPENROUTER_DEFAULT_MODEL=google/gemini-2.0-flash-exp:free
-OPENROUTER_FALLBACK_MODELS=google/gemini-2.5-flash
-```
-
-All requests flow through `src/lib/openrouter.ts`, which adds metadata, sets cache keys, and exposes `callOpenRouterChat`.
-
----
-
-## 8. AI Feature Overview & Manual Testing
-
-| Feature | UI Location | API Route | How to Test |
-| --- | --- | --- | --- |
-| Conversational assistant | `/` → “Ask CES” button (`AIChatbot.tsx`) | `POST /api/chat` | Run `npm run dev`, open chat, ask CES-specific question; observe streaming response and source badge. |
-| AI Personalization | Homepage “AI Personalization” section (`AIPersonalization.tsx`) | `POST /api/personalize` | Change Location + Focus → click “Refresh Guidance”; check Network tab for JSON and UI update. |
-| Innovation modules | `/innovation` grid (`InnovationSection.tsx`) | `POST /api/innovation` | Click each tile (9 total); confirm module content + source chips (Live/Fallback) and new API response per module. |
-| Translation service | Language switcher (`PrimaryNavigation` + `LanguageSwitcher.tsx`) | `POST /api/translate` | Switch languages repeatedly; first call logs salvage/dedupe, subsequent calls served from cache. |
-| AI Dashboard / IoT / Market Intel / Sustainability | Embedded components | `POST /api/innovation` (per module) | Within the drawer, verify “Insights” and “Recommendation” cards reflect API payload; logs show module ID. |
-| Project Showcase + Web3 NFTs + VR Preview | Innovation drawer modules | `POST /api/innovation` (+ local interactions) | Launch Project Showcase to view Three.js scene & camera controls; open Web3 NFT card to inspect mint analytics (mock data); VR Preview shows rotating turbines and interactive buildings. |
-
----
-
-## 9. Feature Testing Checklist
-
-1. **Language & Navigation**  
-   - Switch among EN / JA / HI / AR / ES / VI via the navbar. Confirm translations appear within ~50ms after first load (cache hit) and the Login button stays aligned (locale-aware spacing).
-2. **Hero & Solutions**  
-   - Click each solution tile; sidebar should update capabilities and “Outcomes our teams deliver” bullets (via `solutionOutcomeMap`). Links go to `/solutions/*`.
-3. **Industries & Experts**  
-   - Scroll down to “Industries We Empower” and confirm highlight bullets + metric tiles. Leadership stats (offices, SMEs, languages) appear under the president spotlight.
-4. **Innovation Showcase**  
-   - Tap every tile to render the respective React module (AI Dashboard, IoT Dashboard, Project Map, Project Showcase, Sustainability Command, Market Intelligence, Web3 NFTs, AI Personalization). Watch the network panel for `/api/innovation` responses and ensure the “Active module” badge displays.
-5. **AI Personalization & Chatbot**  
-   - In AI Personalization, change Location + Focus and click “Refresh Guidance”; `/api/personalize` should respond with summary/actions/persona. Use the floating chatbot (“Ask CES”) to hit `/api/chat`.
-6. **Translation Endpoint**  
-   - Run `curl -X POST http://localhost:3000/api/translate -H "Content-Type: application/json" -d '{"targetLanguage":"es","entries":[{"key":"cta","text":"Talk to an expert"}]}'` and observe dedupe/caching logs. Safe JSON parsing will salvage malformed OpenRouter responses if necessary.
-7. **Contact & Offices**
-    - Select different regions; office card updates flag, address, phone, focus tags from `cesData`. Submit the form to hit `/api/contact` (mock). Social list renders brand icons (Mail, X, Facebook, LinkedIn, Instagram, YouTube).
-8. **Admin Panel**
-    - Navigate to `/admin` and login with credentials. Manage content items, update status, add new content, and edit existing entries through the comprehensive admin interface.
-
----
-
-## 10. Deployment (Vercel)
-
-1. **Node.js 20.x** – Project Settings → General → Node.js Version. Remove any production overrides that pin Node 18.  
-2. **Environment variables** – Mirror `.env.local` values in Vercel (Production + Preview).  
-3. **Optional Redis** – If using Upstash, add `UPSTASH_REDIS_REST_URL` / `TOKEN`.  
-4. **CI Recommendation** – Add GitHub Action on PRs running `npm ci`, `npm run lint`, `npm run build`.  
-5. **Secret sync** – Run `vercel env pull .env.production.local` locally to mirror remote secrets.
-
-> Vercel warning “Production override differs” typically means the last deployment used a different Node version; redeploy after updating Project Settings.
-
----
-
-## 11. Roadmap & Ideas
-
-- Add Playwright/Vitest tests for key flows (translation API, AI personalization, innovation modules).
-- Pre-warm translations post-deploy via Vercel Cron hitting `/api/translate` with common language packs.
-- Enable `ANALYZE=true npm run build` occasionally to check client bundle size.
-- Explore streaming responses for `/api/innovation` to render skeletons while AI processes.
-
----
-
-### Maintainer
-
-- **Mangesh Raut** – [GitHub](https://github.com/mangeshraut712)
-- Contributions welcome! Fork → branch → PR. Please run `npm run lint` + `npm run build` before pushing.
-
-Enjoy building with CES ✨
