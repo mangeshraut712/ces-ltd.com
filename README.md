@@ -6,7 +6,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Three.js](https://img.shields.io/badge/Three.js-R163-black?style=for-the-badge&logo=three.js&logoColor=white)
+![Three.js](https://img.shields.io/badge/Three.js-R181-black?style=for-the-badge&logo=three.js&logoColor=white)
 ![Web3](https://img.shields.io/badge/Web3-Enabled-7B3FE4?style=for-the-badge&logo=ethereum&logoColor=white)
 
 **Customized Energy Solutions for a Transparent, Efficient Future**
@@ -83,6 +83,7 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 
 ### **AI & Machine Learning**
 - **OpenRouter (Gemini) Integration** - Conversational and insight generation APIs
+- **OpenAI Integration** - Advanced AI capabilities for chat and personalization
 - **TensorFlow.js** - Client-side machine learning
 - **Scikit-learn Models** - Predictive analytics pipelines
 - **Custom ML Algorithms** - Energy-specific forecasting models
@@ -96,8 +97,8 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 
 ### **Web3 & Blockchain**
 - **Wagmi v2** - Type-safe Ethereum interactions
-- **Viem** - Lightweight Ethereum client
-- **Ethers.js v6** - Comprehensive Ethereum utilities
+- **Viem v2.17.0** - Lightweight Ethereum client
+- **Ethers.js v6.15.0** - Comprehensive Ethereum utilities
 - **IPFS Integration** - Decentralized file storage
 - **MetaMask & WalletConnect** - Multi-wallet support
 
@@ -108,15 +109,16 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **Service Workers** - Offline-capable progressive web app
 
 ### **Maps & Geospatial**
-- **Leaflet** - Interactive mapping library
-- **React Leaflet** - React components for maps
+- **Leaflet v1.9.4** - Interactive mapping library
+- **React Leaflet v5.0.0** - React components for maps
 - **Mapbox Integration** - High-resolution satellite imagery
 - **Geospatial Analytics** - Location-based energy infrastructure analysis
 
 ### **UI/UX Excellence**
 - **Tailwind CSS v4** - Utility-first styling with CSS-in-JS capabilities
-- **Framer Motion** - Production-ready animations and transitions
+- **Framer Motion v12.23.24** - Production-ready animations and transitions
 - **Radix UI** - Accessible component primitives
+- **React Icons v5.3.0** - Comprehensive icon library
 - **Geist Font Family** - Modern typography from Vercel
 - **Dark/Light Mode** - System preference detection
 
@@ -126,6 +128,7 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **Prettier** - Code formatting consistency
 - **Husky + Lint-staged** - Pre-commit quality gates
 - **Vitest** - Modern testing framework
+- **Axios v1.13.2** - HTTP client for API requests
 
 ---
 
@@ -136,6 +139,7 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **Market Intelligence**: Real-time pricing and trend analysis
 - **Risk Assessment**: Automated compliance and regulatory monitoring
 - **Performance Metrics**: KPI tracking with automated alerting
+- **Regional Analysis**: Location-specific insights and recommendations
 
 ### **IoT Command Center**
 - **Sensor Management**: 50,000+ connected devices across global infrastructure
@@ -148,18 +152,24 @@ CES Platform 3.0 represents the pinnacle of energy industry innovation, orchestr
 - **Collaborative Sessions**: Multi-user virtual meetings and design reviews
 - **AR Overlays**: Mobile AR for field technician assistance
 - **Training Modules**: Immersive learning experiences for complex systems
+- **Rotating Turbines**: Dynamic 3D turbine animations
+- **Interactive Buildings**: Clickable 3D building models
 
 ### **Web3 Asset Manager**
 - **NFT Minting**: Blockchain certification of project deliverables
 - **Smart Contracts**: Automated energy trading and settlement
 - **Digital Wallets**: Secure management of energy assets and credits
 - **Decentralized Exchange**: Peer-to-peer energy trading platform
+- **Certificate Management**: Energy project certification system
+- **Mint Distribution Analytics**: NFT minting statistics and charts
 
 ### **Global Operations Hub**
 - **Multi-Region Dashboard**: Unified view across all global operations
 - **Localized Frameworks**: Market-specific solutions for USA, Japan, India
 - **Cross-Border Programs**: International energy project orchestration
 - **Regulatory Compliance**: Automated reporting and audit trails
+- **Project Mapping**: Interactive global project visualization
+- **Country Profiles**: Detailed operational insights by country
 
 ---
 
@@ -254,6 +264,10 @@ UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token
 - `src/app/api/innovation/route.ts` + innovation modules (`AIDashboard`, `IoTDashboard`, `ProjectShowcase`, etc.): Narrative summaries for each showcase tile.
 - `src/app/api/translate/route.ts` + `src/components/layout/LanguageSwitcher.tsx`: Dynamic localisation with OpenRouter primary responses and Google fallback.
 - `src/components/MarketIntelligenceCockpit.tsx`, `SustainabilityCommandCenter.tsx`, `GlobalProjectMap.tsx`: Each module consumes the innovation insights API to render live AI narratives.
+- `src/components/AdminPanel.tsx`: Administrative interface for content management and system configuration.
+- `src/components/HomePage.tsx`: Main landing page component with integrated dashboard settings.
+- `src/context/DashboardSettingsContext.tsx`: Global dashboard configuration and settings management.
+- `src/hooks/useInnovationInsights.ts`: Custom hook for AI innovation data fetching and caching.
 
 ### **Development Commands**
 ```bash
@@ -273,6 +287,15 @@ npm run test:openrouter # Smoke-test OpenRouter connectivity and model selection
 # Database & Content
 npm run db:migrate   # Database migrations
 npm run content:sync # Content management sync
+```
+
+### **Additional Scripts**
+```bash
+# Server Management
+./START_SERVER.sh   # Quick server startup script
+
+# Migration Scripts
+node scripts/migrate/importLegacyData.ts  # Legacy data import utility
 ```
 
 ---
@@ -297,15 +320,27 @@ ces-pro/
 │   │   ├── 📁 settings/          # Configuration panels
 │   │   └── 📄 *                  # Feature components
 │   ├── 📁 context/               # React context providers
+│   │   ├── 📄 DashboardSettingsContext.tsx # Global dashboard configuration
+│   │   └── 📄 TranslationProvider.tsx      # Internationalization provider
 │   ├── 📁 hooks/                 # Data hooks & caches
+│   │   ├── 📄 useAppTranslation.ts        # Translation hook
+│   │   └── 📄 useInnovationInsights.ts    # AI innovation data hook
 │   ├── 📁 lib/                   # Utility libraries
+│   │   ├── 📄 cesData.ts         # Core CES data structures
+│   │   ├── 📄 expertProfiles.ts  # Expert profile data
+│   │   ├── 📄 flags.ts           # Country flag utilities
+│   │   ├── 📄 openrouter.ts      # OpenRouter API client
+│   │   └── 📄 redisClient.ts     # Redis caching client
 │   └── 📁 types/                 # TypeScript definitions
+│       └── 📄 innovation.ts      # Innovation-related types
 ├── 📁 public/                    # Static assets
 │   ├── 📁 images/                # Optimized images
 │   ├── 📁 files/                 # Downloadable assets
 │   └── 📁 fonts/                 # Custom fonts
 ├── 📁 docs/                      # Documentation
 ├── 📁 scripts/                   # Build & migration scripts
+│   ├── 📄 test-openrouter.mjs    # OpenRouter connectivity testing
+│   └── 📁 migrate/               # Data migration utilities
 └── 📁 config/                    # Configuration files
 ```
 
