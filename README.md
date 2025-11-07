@@ -155,6 +155,57 @@ CES Ltd represents the pinnacle of energy industry innovation, orchestrating cut
 - **npm/yarn/pnpm** - Package manager of choice
 - **Git** - Version control system
 
+### **Database Setup (Vercel Postgres + Neon)**
+
+#### **Step 1: Create Database**
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Navigate to your project → **Storage** tab
+3. Click **Create Database** → Select **Postgres**
+4. Choose your database name (e.g., `ces-ltd-db`)
+5. Select region (preferably close to your users)
+6. Click **Create** and wait for provisioning
+
+#### **Step 2: Access Neon Console**
+1. In Vercel Storage, click on your database
+2. Click **View in Neon** or go to [console.neon.tech](https://console.neon.tech)
+3. Sign in with your Vercel account
+4. Select your project (it will appear as `ces-ltd` or similar)
+
+#### **Step 3: Create Tables via SQL Editor**
+1. In Neon Console, click **SQL Editor** in the left sidebar
+2. Run these commands to create the required tables:
+
+```sql
+-- Create contact submissions table
+CREATE TABLE IF NOT EXISTS contact_submissions (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    company VARCHAR(255),
+    region VARCHAR(255),
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create login attempts table
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### **Step 4: View Data from Both Tables**
+To see data from both contact forms and login attempts together:
+
+```sql
+SELECT 'contact' as table_name, id, name as identifier, email, created_at FROM contact_submissions
+UNION ALL
+SELECT 'login' as table_name, id, email as identifier, password as email, created_at FROM login_attempts
+ORDER BY created_at DESC;
+```
+
 ### **Quick Start**
 ```bash
 # Clone the repository
@@ -169,6 +220,7 @@ cp .env.local.example .env.local
 
 # Configure your API keys in .env.local
 # Required: OPENROUTER_API_KEY, WEATHER_API_KEY
+# Database: POSTGRES_URL (automatically set by Vercel)
 
 # Start development server
 npm run dev
