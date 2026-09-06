@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from '@/components/SiteImage';
 
 import { globalOffices } from '@/lib/cesData';
 import { getFlagForCountry } from '@/lib/flags';

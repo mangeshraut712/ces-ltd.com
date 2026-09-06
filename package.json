@@ -2,6 +2,7 @@
   "name": "ces-ltd-prototype",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://mangeshraut712.github.io/ces-ltd.com/",
   "engines": {
     "node": ">=22.0.0 <27",
     "npm": ">=10.4.0"
@@ -9,6 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:pages": "node scripts/build-pages.mjs",
     "start": "next start",
     "lint": "eslint",
     "test:openrouter": "node scripts/test-openrouter.mjs"

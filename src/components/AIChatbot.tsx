@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useAppTranslation } from '@/hooks/useAppTranslation';
+import { withBasePath } from '@/lib/basePath';
 
 interface Message {
   id: string;
@@ -59,7 +60,7 @@ export default function AIChatbot() {
     const updatedMessages = [...messages, userMessage];
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch(withBasePath('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

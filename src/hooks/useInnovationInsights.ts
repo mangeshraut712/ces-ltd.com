@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { withBasePath } from '@/lib/basePath';
 import type {
   InnovationInsightContext,
   InnovationInsightResponse,
@@ -53,7 +54,7 @@ export function useInnovationInsights(
     setError(null);
 
     try {
-      const response = await fetch('/api/innovation', {
+      const response = await fetch(withBasePath('/api/innovation'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ module, context: contextPayload }),

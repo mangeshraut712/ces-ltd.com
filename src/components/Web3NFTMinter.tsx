@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 // import { ethers } from 'ethers'; // Commented out for demo purposes
 import { useInnovationInsights } from '@/hooks/useInnovationInsights';
+import { withBasePath } from '@/lib/basePath';
 
 interface Certificate {
   id: string;
@@ -30,7 +31,7 @@ const sampleCertificates: Certificate[] = [
     issuedDate: '2024-06-30',
     expiryDate: '2029-06-30',
     description: 'Carbon credit certificate for sustainable solar energy production',
-    image: '/api/placeholder/300/200',
+    image: withBasePath('/api/placeholder/300/200'),
   },
   {
     id: '2',
@@ -42,7 +43,7 @@ const sampleCertificates: Certificate[] = [
     issuedDate: '2024-08-15',
     expiryDate: '2034-08-15',
     description: 'LEED Platinum certification for energy-efficient construction',
-    image: '/api/placeholder/300/200',
+    image: withBasePath('/api/placeholder/300/200'),
   },
 ];
 

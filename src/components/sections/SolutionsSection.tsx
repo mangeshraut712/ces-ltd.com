@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 
+import Link from 'next/link';
+
 import { solutions as solutionCatalog } from '@/lib/cesData';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 
@@ -152,12 +154,12 @@ export default function SolutionsSection() {
                 </div>
               )}
               {selectedSolution.link && (
-                <a
+                <Link
                   href={selectedSolution.link}
                   className="mt-4 inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700"
                 >
                   {t('solutions.exploreDetails', 'Explore solution details →')}
-                </a>
+                </Link>
               )}
             </>
           ) : (

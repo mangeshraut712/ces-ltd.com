@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
 import { useDashboardSettings } from '@/context/DashboardSettingsContext';
 import DashboardSettingsControls from '@/components/settings/DashboardSettingsControls';
+import { withBasePath } from '@/lib/basePath';
 
 interface PredictionData {
   time: string;
@@ -354,7 +355,7 @@ export default function AIDashboard() {
       setAnalysisSummary(null);
       setPersonaBriefing(null);
 
-      const response = await fetch('/api/personalize', {
+      const response = await fetch(withBasePath('/api/personalize'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

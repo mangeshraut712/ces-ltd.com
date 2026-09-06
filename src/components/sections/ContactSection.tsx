@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 
 import { globalOffices } from '@/lib/cesData';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
+import { withBasePath } from '@/lib/basePath';
 import ContactForm from './ContactForm';
 import GlobalOffices from './GlobalOffices';
 
@@ -31,7 +32,7 @@ export default function ContactSection() {
     setContactStatus('submitting');
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(withBasePath('/api/contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '@/components/SiteImage';
 import { companyInfo, solutions } from '@/lib/cesData';
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
