@@ -9,13 +9,23 @@
 ![Three.js](https://img.shields.io/badge/Three.js-R181-black?style=for-the-badge&logo=three.js&logoColor=white)
 ![Web3](https://img.shields.io/badge/Web3-Enabled-7B3FE4?style=for-the-badge&logo=ethereum&logoColor=white)
 
-**Next-Generation Energy Intelligence Platform**
-
-*AI-Powered • IoT-Connected • Web3-Integrated • Multi-Regional*
+**Energy intelligence for operators, retailers, and innovators** — hosted CES | GOLD / CES | BLUE software, ISO/RTO market ops, and AI + IoT dashboards since 1998.
 
 [🌐 Live Demo](https://mangeshraut712.github.io/ces-ltd.com/) • [📖 Documentation](#-documentation) • [🚀 Quick Start](#-installation)
 
 </div>
+
+### Product screenshots
+
+Captured from the live GitHub Pages demo ([mangeshraut712.github.io/ces-ltd.com](https://mangeshraut712.github.io/ces-ltd.com/)).
+
+![CES Ltd home hero](docs/screenshots/01-home.png)
+
+*Home — hero, nav, and Innovation Pillars.*
+
+![CES Ltd Innovation Showcase — AI Dashboard](docs/screenshots/02-feature.png)
+
+*Innovation Showcase — AI Dashboard module (predictive analytics by region).*
 
 ---
 
@@ -498,7 +508,7 @@ CMD ["npm", "start"]
 
 ## 📄 License & Legal
 
-**© 2025 CES Ltd. All rights reserved.**
+**© 2026 CES Ltd. All rights reserved.**
 
 This platform represents proprietary technology developed by Customized Energy Solutions Ltd. Unauthorized use, reproduction, or distribution is strictly prohibited.
 
