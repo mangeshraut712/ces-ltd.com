@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from '@/components/SiteImage';
 import Link from 'next/link';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';

@@ -13,7 +13,7 @@
 
 *AI-Powered • IoT-Connected • Web3-Integrated • Multi-Regional*
 
-[🌐 Live Demo](https://ces-ltd-com.vercel.app/) • [📖 Documentation](#-documentation) • [🚀 Quick Start](#-installation)
+[🌐 Live Demo](https://mangeshraut712.github.io/ces-ltd.com/) • [📖 Documentation](#-documentation) • [🚀 Quick Start](#-installation)
 
 </div>
 
@@ -392,11 +392,11 @@ GET  /api/blockchain/status # Blockchain network status
 
 ## 🚀 Deployment & Production
 
-### **Vercel (Recommended)**
+### **GitHub Pages**
 ```bash
-# Automatic deployment on push
-# Environment variables configured in Vercel dashboard
-# Edge runtime for global performance
+# Static export via GitHub Actions (workflow build_type)
+# Live site: https://mangeshraut712.github.io/ces-ltd.com/
+# API routes are omitted from the static export (chat, contact, translation stay local/Vercel-only)
 ```
 
 ### **Docker Deployment**

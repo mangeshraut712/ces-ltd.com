@@ -6,6 +6,7 @@ import { addLanguageResources, changeLanguage, getI18nInstance, supportedLanguag
 import { getCachedTranslationsForLang, hydrateCacheFromStorage, setCachedTranslations } from '@/i18n/cache';
 import { getRegisteredTranslationEntries } from '@/i18n/registry';
 import { useAppTranslation } from '@/hooks/useAppTranslation';
+import { withBasePath } from '@/lib/basePath';
 
 export default function LanguageSwitcher() {
   const { i18n } = useAppTranslation();
@@ -44,7 +45,7 @@ export default function LanguageSwitcher() {
 
       if (pending.length > 0) {
         try {
-          const response = await fetch('/api/translate', {
+          const response = await fetch(withBasePath('/api/translate'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

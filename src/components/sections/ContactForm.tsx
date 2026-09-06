@@ -4,6 +4,7 @@ import { type ChangeEvent, type FormEvent } from 'react';
 
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { companyInfo, globalOffices } from '@/lib/cesData';
+import { withBasePath } from '@/lib/basePath';
 import type { IconType } from 'react-icons';
 import {
   FaEnvelope,
@@ -60,7 +61,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(withBasePath('/api/contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

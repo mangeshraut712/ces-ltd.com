@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from '@/components/SiteImage';
 import Link from 'next/link';
 
 const HERO_CAPABILITIES = ['Customer management', 'Load forecasting', 'Risk management', 'Billing & settlements'];
