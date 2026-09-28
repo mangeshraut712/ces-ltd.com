@@ -436,13 +436,18 @@ export default function AIDashboard() {
         return mockPredictions.map(p => ({ time: p.time, value: p.carbonEmission, label: 'Carbon Emission (tons)' }));
       case 'efficiency':
         return mockPredictions.map(p => ({ time: p.time, value: p.efficiency, label: 'Efficiency (%)' }));
-      default:
-        return [];
+      default: {
+        const exhaustive: never = selectedMetric;
+        return exhaustive;
+      }
     }
   };
 
   return (
-    <div className="w-full bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 rounded-lg overflow-hidden">
+    <div
+      className="w-full bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 rounded-lg overflow-hidden"
+      data-testid="ai-dashboard"
+    >
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <div>

@@ -814,7 +814,10 @@ export default function IoTDashboard() {
   }, []);
 
   return (
-    <div className="w-full bg-gradient-to-b from-slate-800 to-slate-900 rounded-lg overflow-hidden">
+    <div
+      className="w-full bg-gradient-to-b from-slate-800 to-slate-900 rounded-lg overflow-hidden"
+      data-testid="iot-dashboard"
+    >
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <div>
