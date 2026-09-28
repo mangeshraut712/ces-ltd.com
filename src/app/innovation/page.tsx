@@ -2,16 +2,47 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
-import AIDashboard from '@/components/AIDashboard';
-import IoTDashboard from '@/components/IoTDashboard';
-import GlobalProjectMap from '@/components/GlobalProjectMap';
-import ProjectShowcase from '@/components/ProjectShowcase';
-import SustainabilityCommandCenter from '@/components/SustainabilityCommandCenter';
-import MarketIntelligenceCockpit from '@/components/MarketIntelligenceCockpit';
-import Web3NFTMinter from '@/components/Web3NFTMinter';
-import VRPreview from '@/components/VRPreview';
-import AIPersonalization from '@/components/AIPersonalization';
+import ModuleErrorBoundary from '@/components/ModuleErrorBoundary';
+import ModuleLoadingState from '@/components/ModuleLoadingState';
+
+const AIDashboard = dynamic(() => import('@/components/AIDashboard'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const IoTDashboard = dynamic(() => import('@/components/IoTDashboard'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const GlobalProjectMap = dynamic(() => import('@/components/GlobalProjectMap'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const ProjectShowcase = dynamic(() => import('@/components/ProjectShowcase'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const SustainabilityCommandCenter = dynamic(() => import('@/components/SustainabilityCommandCenter'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const MarketIntelligenceCockpit = dynamic(() => import('@/components/MarketIntelligenceCockpit'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const Web3NFTMinter = dynamic(() => import('@/components/Web3NFTMinter'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const VRPreview = dynamic(() => import('@/components/VRPreview'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
+const AIPersonalization = dynamic(() => import('@/components/AIPersonalization'), {
+  ssr: false,
+  loading: () => <ModuleLoadingState />,
+});
 
 const innovationStories = [
   {
@@ -217,7 +248,11 @@ export default function InnovationPage() {
                     </span>
                     <span className="text-xs text-slate-500">Interactive</span>
                   </div>
-                  <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                  <button
+                    type="button"
+                    data-testid={`launch-module-${module.id}`}
+                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  >
                     Launch Module →
                   </button>
                 </div>
@@ -234,7 +269,7 @@ export default function InnovationPage() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="mb-12"
               >
-                <div className="bg-slate-100 rounded-lg p-6">
+                <div className="bg-slate-100 rounded-lg p-6" data-testid="active-module">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-2xl font-bold text-slate-900">
@@ -245,13 +280,20 @@ export default function InnovationPage() {
                       </p>
                     </div>
                     <button
+                      type="button"
+                      data-testid="close-module"
                       onClick={() => setActiveModule(null)}
                       className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors"
                     >
                       Close Module
                     </button>
                   </div>
-                  <ActiveComponent />
+                  <ModuleErrorBoundary
+                    key={activeModule}
+                    moduleTitle={interactiveModules.find(m => m.id === activeModule)?.title}
+                  >
+                    <ActiveComponent />
+                  </ModuleErrorBoundary>
                 </div>
               </motion.div>
             )}

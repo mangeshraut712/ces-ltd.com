@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import TranslationProvider from "@/context/TranslationProvider";
+import { DashboardSettingsProvider } from "@/context/DashboardSettingsContext";
 import { withBasePath } from "@/lib/basePath";
 import "./globals.css";
 
@@ -41,7 +42,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}>
-        <TranslationProvider>{children}</TranslationProvider>
+        <TranslationProvider>
+          <DashboardSettingsProvider>{children}</DashboardSettingsProvider>
+        </TranslationProvider>
         {process.env.GITHUB_PAGES === 'true' ? null : <Analytics />}
       </body>
     </html>

@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { useAppTranslation } from '@/hooks/useAppTranslation';
+import ModuleErrorBoundary from '@/components/ModuleErrorBoundary';
 
 const AIDashboard = dynamic(() => import('../AIDashboard'), { ssr: false });
 const IoTDashboard = dynamic(() => import('../IoTDashboard'), { ssr: false });
@@ -129,7 +130,14 @@ export default function InnovationSection() {
                 )}
               </span>
             </div>
-            {ActiveComponent && <ActiveComponent />}
+            {ActiveComponent && (
+              <ModuleErrorBoundary
+                key={activeComponent}
+                moduleTitle={capabilities.find(item => item.id === activeComponent)?.name}
+              >
+                <ActiveComponent />
+              </ModuleErrorBoundary>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
