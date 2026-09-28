@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const apiDir = path.join(repoRoot, 'src/app/api');
 const stashDir = path.join(repoRoot, '.api-routes-stash');
+const nextDir = path.join(repoRoot, '.next');
 const pagesBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/ces-ltd.com';
 
 function run(command, args) {
@@ -52,8 +53,19 @@ async function restoreApiRoutes() {
   await rename(stashDir, apiDir);
 }
 
+async function clearNextCache() {
+  // Typecheck/dev leave `.next/dev/types/validator.ts` with imports for
+  // `src/app/api/*/route.js`. Static export cannot include those routes, so
+  // they are stashed first; a leftover validator then fails `next build`.
+  if (!existsSync(nextDir)) {
+    return;
+  }
+  await rm(nextDir, { recursive: true, force: true });
+}
+
 const stashed = await stashApiRoutes();
 try {
+  await clearNextCache();
   await run('npx', ['next', 'build']);
 } finally {
   if (stashed) {
