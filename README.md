@@ -15,17 +15,21 @@
 
 </div>
 
-### Product screenshots
+## Screenshots
 
-Captured from the live GitHub Pages demo ([mangeshraut712.github.io/ces-ltd.com](https://mangeshraut712.github.io/ces-ltd.com/)).
+Framed captures of the live app (current UI).
 
-![CES Ltd home hero](docs/screenshots/01-home.png)
+<div align="center">
 
-*Home — hero, nav, and Innovation Pillars.*
+<img src="docs/screenshots/01-home.webp" alt="Home: energy markets made clear" width="720" />
 
-![CES Ltd Innovation Showcase — AI Dashboard](docs/screenshots/02-feature.png)
+<img src="docs/screenshots/02-solutions.webp" alt="Solutions: hosted tools for operators" width="720" />
 
-*Innovation Showcase — AI Dashboard module (predictive analytics by region).*
+<img src="docs/screenshots/03-innovation.webp" alt="Innovation Showcase in the browser" width="720" />
+
+<img src="docs/screenshots/04-retail.webp" alt="CES BLUE for retailers" width="720" />
+
+</div>
 
 ---
 
