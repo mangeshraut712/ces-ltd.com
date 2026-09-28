@@ -232,8 +232,17 @@ export default function InnovationPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-slate-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-blue-300"
+                role="button"
+                tabIndex={0}
+                data-testid={`launch-module-${module.id}`}
                 onClick={() => setActiveModule(module.id)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setActiveModule(module.id);
+                  }
+                }}
+                className="bg-slate-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-blue-300"
               >
                 <div className="h-32 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                   <div className="text-white text-center">
@@ -248,13 +257,9 @@ export default function InnovationPage() {
                     </span>
                     <span className="text-xs text-slate-500">Interactive</span>
                   </div>
-                  <button
-                    type="button"
-                    data-testid={`launch-module-${module.id}`}
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                  >
+                  <span className="block w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold text-center hover:bg-blue-700 transition-colors">
                     Launch Module →
-                  </button>
+                  </span>
                 </div>
               </motion.div>
             ))}

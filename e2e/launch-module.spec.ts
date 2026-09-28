@@ -28,11 +28,12 @@ test.describe('Innovation Launch Module', () => {
 
     for (const moduleId of moduleIds) {
       await page.goto('/innovation');
+      await page.getByRole('heading', { name: 'Innovation Showcase' }).waitFor();
       await page.getByTestId(`launch-module-${moduleId}`).click();
 
       await expect(page.getByTestId('active-module')).toBeVisible();
       await expect(page.getByTestId('close-module')).toBeVisible();
-      await expect(page.locator('body')).not.toHaveText(errorPagePattern);
+      await expect(page.getByText(errorPagePattern)).toHaveCount(0);
       expect(providerErrors, `client exception launching ${moduleId}`).toEqual([]);
 
       if (moduleId === 'ai-dashboard') {
