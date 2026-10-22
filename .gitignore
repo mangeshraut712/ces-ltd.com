@@ -46,3 +46,6 @@ next-env.d.ts
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
+# Local agent tooling
+.agents/
+skills-lock.json
