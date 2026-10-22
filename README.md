@@ -1,3 +1,5 @@
+> **Redesign concept.** This is an independent, unofficial redesign of the CES (ces-ltd.com) website, built as a portfolio project. It is not the official CES site and is not affiliated with or endorsed by CES.
+
 # 🚀 CES Pro - Advanced Energy Intelligence Platform
 
 <div align="center">
