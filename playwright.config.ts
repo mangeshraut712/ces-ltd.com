@@ -5,6 +5,8 @@ const systemChrome = ['/usr/local/bin/google-chrome', '/usr/bin/google-chrome'].
   existsSync(path),
 );
 const chromeExecutable = process.env.PLAYWRIGHT_CHROME || systemChrome;
+const testPort = Number(process.env.PLAYWRIGHT_PORT || '3000');
+const baseURL = `http://127.0.0.1:${testPort}`;
 
 export default defineConfig({
   testDir: './e2e',
@@ -15,7 +17,7 @@ export default defineConfig({
   reporter: 'list',
   use: {
     ...devices['Desktop Chrome'],
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL,
     trace: 'on-first-retry',
     launchOptions: {
       ...(chromeExecutable ? { executablePath: chromeExecutable } : {}),
@@ -23,9 +25,9 @@ export default defineConfig({
     },
   },
   webServer: {
-    command: 'npm run dev -- --hostname 127.0.0.1 --port 3000',
-    url: 'http://127.0.0.1:3000',
-    reuseExistingServer: !process.env.CI,
+    command: `npm run dev -- --hostname 127.0.0.1 --port ${testPort}`,
+    url: baseURL,
+    reuseExistingServer: !process.env.CI && !process.env.PLAYWRIGHT_PORT,
     timeout: 120_000,
   },
 });

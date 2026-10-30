@@ -16,6 +16,8 @@ interface ContactFormState {
   message: string;
 }
 
+type ContactStatus = 'idle' | 'submitting' | 'success' | 'error';
+
 export default function ContactSection() {
   const { t } = useAppTranslation();
   const [contactForm, setContactForm] = useState<ContactFormState>({
@@ -25,11 +27,13 @@ export default function ContactSection() {
     region: globalOffices[0]?.country ?? 'USA',
     message: '',
   });
-  const [contactStatus, setContactStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [contactStatus, setContactStatus] = useState<ContactStatus>('idle');
+  const [contactError, setContactError] = useState<string | null>(null);
 
   const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setContactStatus('submitting');
+    setContactError(null);
 
     try {
       const response = await fetch(withBasePath('/api/contact'), {
@@ -39,8 +43,6 @@ export default function ContactSection() {
         },
         body: JSON.stringify(contactForm),
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         setContactStatus('success');
@@ -54,13 +56,22 @@ export default function ContactSection() {
 
         setTimeout(() => setContactStatus('idle'), 4000);
       } else {
-        setContactStatus('idle');
-        // You could add error state handling here if needed
-        alert(t('contact.form.submitError', 'Failed to submit form: {{error}}', { error: data.error ?? 'Unknown error' }));
+        setContactStatus('error');
+        setContactError(
+          t(
+            'contact.form.submitError',
+            'We could not send your message. Please try again later.',
+          ),
+        );
       }
     } catch {
-      setContactStatus('idle');
-      alert(t('contact.form.submitCatch', 'Failed to submit form. Please try again.'));
+      setContactStatus('error');
+      setContactError(
+        t(
+          'contact.form.submitCatch',
+          'We could not send your message. Please try again later.',
+        ),
+      );
     }
   };
 
@@ -72,6 +83,7 @@ export default function ContactSection() {
             contactForm={contactForm}
             setContactForm={setContactForm}
             contactStatus={contactStatus}
+            contactError={contactError}
             onSubmit={handleContactSubmit}
           />
         </div>
