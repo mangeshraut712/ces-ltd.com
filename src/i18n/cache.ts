@@ -26,7 +26,7 @@ export function setCachedTranslations(lang: string, entries: Record<string, stri
   if (isBrowser) {
     try {
       const serialized = JSON.stringify(Object.fromEntries(languageCache.entries()));
-      window.localStorage.setItem(`${STORAGE_PREFIX}${lang}`, serialized);
+      localStorage.setItem(`${STORAGE_PREFIX}${lang}`, serialized);
     } catch (error) {
       console.warn('Failed to persist translation cache', error);
     }
@@ -41,7 +41,7 @@ export function hydrateCacheFromStorage(lang: string) {
   if (!isBrowser) {
     return;
   }
-  const serialized = window.localStorage.getItem(`${STORAGE_PREFIX}${lang}`);
+  const serialized = localStorage.getItem(`${STORAGE_PREFIX}${lang}`);
   if (!serialized) {
     return;
   }
@@ -56,6 +56,6 @@ export function hydrateCacheFromStorage(lang: string) {
 export function clearLanguageCache(lang: string) {
   cache.delete(lang);
   if (isBrowser) {
-    window.localStorage.removeItem(`${STORAGE_PREFIX}${lang}`);
+    localStorage.removeItem(`${STORAGE_PREFIX}${lang}`);
   }
 }

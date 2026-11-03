@@ -32,7 +32,7 @@ export default function AdminPage() {
     event.preventDefault();
     setIsSubmitting(true);
 
-    window.setTimeout(() => {
+    setTimeout(() => {
       setIsSubmitting(false);
       if (formData.email === DEMO_EMAIL && formData.password === DEMO_PASSWORD) {
         setIsAuthenticated(true);
