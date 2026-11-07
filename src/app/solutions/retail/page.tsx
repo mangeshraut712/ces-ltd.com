@@ -293,7 +293,7 @@ function RetailCallToAction() {
       </p>
       <div className="flex flex-col justify-center gap-4 sm:flex-row">
         <Link
-          href="/contact"
+          href="/#contact"
           className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
         >
           Contact Our Team
