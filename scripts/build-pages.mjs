@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { rename, rm } from 'node:fs/promises';
+import { mkdir, rename, rm } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,6 +8,8 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const apiDir = path.join(repoRoot, 'src/app/api');
 const stashDir = path.join(repoRoot, '.api-routes-stash');
 const nextDir = path.join(repoRoot, '.next');
+const upgradeRetryDir = path.join(nextDir, 'cache', 'next-agentic-upgrade-retries');
+const upgradeRetryStashDir = path.join(repoRoot, '.next-upgrade-retries-stash');
 const pagesBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/ces-ltd.com';
 
 function run(command, args) {
@@ -60,7 +62,26 @@ async function clearNextCache() {
   if (!existsSync(nextDir)) {
     return;
   }
-  await rm(nextDir, { recursive: true, force: true });
+
+  // Next writes its one-time upgrade-notice retry receipt under `.next/cache`.
+  // Keeping it lets the command continue when an agent retries after the
+  // required acknowledgement, while the rest of the cache is still cleared.
+  const hasUpgradeRetry = existsSync(upgradeRetryDir);
+  if (hasUpgradeRetry) {
+    if (existsSync(upgradeRetryStashDir)) {
+      await rm(upgradeRetryStashDir, { recursive: true, force: true });
+    }
+    await rename(upgradeRetryDir, upgradeRetryStashDir);
+  }
+
+  try {
+    await rm(nextDir, { recursive: true, force: true });
+  } finally {
+    if (hasUpgradeRetry) {
+      await mkdir(path.dirname(upgradeRetryDir), { recursive: true });
+      await rename(upgradeRetryStashDir, upgradeRetryDir);
+    }
+  }
 }
 
 const stashed = await stashApiRoutes();

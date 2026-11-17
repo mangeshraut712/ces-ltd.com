@@ -12,6 +12,6 @@ function resolveSrc(src: ImageProps['src']): ImageProps['src'] {
 }
 
 /** next/image with `unoptimized` skips basePath; prefix public assets for GitHub Pages. */
-export default function SiteImage({ src, ...props }: SiteImageProps) {
-  return <Image src={resolveSrc(src)} {...props} />;
+export default function SiteImage({ src, alt, ...props }: SiteImageProps) {
+  return <Image src={resolveSrc(src)} alt={alt} {...props} />;
 }

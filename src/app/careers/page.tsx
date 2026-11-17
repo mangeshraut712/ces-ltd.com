@@ -427,7 +427,7 @@ function RemoteWorkSection() {
           Many of our positions offer flexible remote work arrangements
         </p>
         <Link
-          href="#contact"
+          href="/#contact"
           className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-blue-600 bg-white hover:bg-blue-50 transition-colors"
         >
           Contact Us About Opportunities

@@ -4,7 +4,6 @@ import { type ChangeEvent, type FormEvent } from 'react';
 
 import { useAppTranslation } from '@/hooks/useAppTranslation';
 import { companyInfo, globalOffices } from '@/lib/cesData';
-import { withBasePath } from '@/lib/basePath';
 import type { IconType } from 'react-icons';
 import {
   FaEnvelope,
@@ -27,7 +26,8 @@ interface ContactFormState {
 interface ContactFormProps {
   contactForm: ContactFormState;
   setContactForm: React.Dispatch<React.SetStateAction<ContactFormState>>;
-  contactStatus: 'idle' | 'submitting' | 'success';
+  contactStatus: 'idle' | 'submitting' | 'success' | 'error';
+  contactError: string | null;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
@@ -47,7 +47,7 @@ const socialIconMap: Record<string, SocialIconConfig> = {
   youtube: { icon: FaYoutube, className: 'text-[#FF0000]' },
 };
 
-export default function ContactForm({ contactForm, setContactForm, contactStatus, onSubmit }: ContactFormProps) {
+export default function ContactForm({ contactForm, setContactForm, contactStatus, contactError, onSubmit }: ContactFormProps) {
   const { t } = useAppTranslation();
 
   const handleContactChange = (field: keyof ContactFormState) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -55,28 +55,6 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
       ...prev,
       [field]: event.target.value,
     }));
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch(withBasePath('/api/contact'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(contactForm),
-      });
-
-      if (response.ok) {
-        onSubmit(e);
-      } else {
-        console.error('Failed to submit form');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
   };
 
   return (
@@ -96,7 +74,7 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={onSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-slate-700">
@@ -186,6 +164,11 @@ export default function ContactForm({ contactForm, setContactForm, contactStatus
               ? t('contact.form.status.success', 'Submitted')
               : t('contact.form.submit', 'Send message')}
         </button>
+        {contactStatus === 'error' && contactError ? (
+          <p role="alert" className="text-sm text-red-600">
+            {contactError}
+          </p>
+        ) : null}
         <p className="text-xs text-slate-500">
           {t('contact.form.responseSla', 'Global market strategists typically respond within one business day.')}
         </p>
