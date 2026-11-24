@@ -28,7 +28,7 @@ export function getI18nInstance() {
       },
       keySeparator: false,
       returnNull: false,
-      initImmediate: false,
+      initAsync: false,
       resources: {
         en: {
           [defaultNamespace]: {},
