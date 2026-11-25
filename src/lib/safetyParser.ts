@@ -7,6 +7,34 @@ export type SafetyResult = {
 
 const FENCED_JSON_PATTERN = /^```[a-zA-Z]*\s*([\s\S]*?)\s*```$/;
 
+/** Every balanced top-level {...} span, skipping braces inside JSON strings. */
+function balancedObjects(text: string): string[] {
+  const spans: string[] = [];
+  let depth = 0;
+  let start = -1;
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') {
+      if (depth > 0) inString = true;
+    } else if (ch === '{') {
+      if (depth === 0) start = i;
+      depth += 1;
+    } else if (ch === '}' && depth > 0) {
+      depth -= 1;
+      if (depth === 0) spans.push(text.slice(start, i + 1));
+    }
+  }
+  return spans;
+}
+
 function collectJsonCandidates(raw: string): string[] {
   const trimmed = raw.trim();
   const candidates = [trimmed];
@@ -16,11 +44,9 @@ function collectJsonCandidates(raw: string): string[] {
     candidates.push(fenced[1].trim());
   }
 
-  const start = trimmed.indexOf('{');
-  const end = trimmed.lastIndexOf('}');
-  if (start !== -1 && end > start) {
-    candidates.push(trimmed.slice(start, end + 1));
-  }
+  // Each object separately, so a restated schema or trailing braces around a
+  // verdict can't turn the whole span into invalid JSON.
+  candidates.push(...balancedObjects(trimmed));
 
   return candidates;
 }
@@ -35,20 +61,24 @@ function collectJsonCandidates(raw: string): string[] {
  * extraction runs first.
  */
 export function parseSafetyClassifierResponse(raw: string): SafetyResult {
+  let allowed: SafetyResult | null = null;
   for (const candidate of collectJsonCandidates(raw)) {
+    let parsed: Partial<SafetyResult> | null;
     try {
-      const parsed = JSON.parse(candidate) as Partial<SafetyResult> | null;
-      if (parsed && typeof parsed.allowed === 'boolean') {
-        const result: SafetyResult = { allowed: parsed.allowed };
-        if (typeof parsed.reason === 'string' && parsed.reason.trim().length > 0) {
-          result.reason = parsed.reason;
-        }
-        return result;
-      }
+      parsed = JSON.parse(candidate) as Partial<SafetyResult> | null;
     } catch {
-      // Try the next extraction candidate.
+      continue; // Try the next extraction candidate.
     }
+    if (!parsed || typeof parsed.allowed !== 'boolean') continue;
+    const result: SafetyResult = { allowed: parsed.allowed };
+    if (typeof parsed.reason === 'string' && parsed.reason.trim().length > 0) {
+      result.reason = parsed.reason;
+    }
+    // Any explicit rejection wins over an allow found elsewhere in the output.
+    if (!result.allowed) return result;
+    allowed ??= result;
   }
+  if (allowed) return allowed;
 
   console.warn('Safety classifier returned no usable verdict; failing open.');
   return { allowed: true };

@@ -39,6 +39,20 @@ test.describe('chat safety classifier response parsing', () => {
     });
   });
 
+  test('recovers a rejection surrounded by other braces', () => {
+    const raw =
+      'Schema: {"allowed": boolean, "reason": string}\n{"allowed": false, "reason": "weapons {details}"}\nNotes: {none}';
+    expect(parseSafetyClassifierResponse(raw)).toEqual({
+      allowed: false,
+      reason: 'weapons {details}',
+    });
+  });
+
+  test('prefers a rejection when the output contains more than one verdict', () => {
+    const raw = '{"allowed": true}\nOn reflection: {"allowed": false, "reason": "self-harm"}';
+    expect(parseSafetyClassifierResponse(raw)).toEqual({ allowed: false, reason: 'self-harm' });
+  });
+
   test('fails open when the classifier output is not JSON at all', () => {
     expect(parseSafetyClassifierResponse('I cannot classify this message.')).toEqual({
       allowed: true,
