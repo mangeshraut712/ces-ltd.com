@@ -52,6 +52,7 @@ jobs:
         run: |
           npm run lint
           npm run typecheck
+          npm run test:unit
           PLAYWRIGHT_CHROME= npm test
 
       - name: Build static export

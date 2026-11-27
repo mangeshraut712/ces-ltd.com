@@ -78,7 +78,11 @@ export function useInnovationInsights(
       const message = err instanceof Error ? err.message : 'Unable to load innovation insights';
       setError(message);
     } finally {
-      setLoading(false);
+      // A superseded request (aborted because a newer fetchInsights call took
+      // over) must not clear the loading flag owned by the newer request.
+      if (abortRef.current === controller) {
+        setLoading(false);
+      }
     }
   }, [contextPayload, module]);
 
