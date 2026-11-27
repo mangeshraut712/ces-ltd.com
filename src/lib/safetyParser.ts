@@ -12,6 +12,10 @@ function balancedObjects(text: string): string[] {
   const spans: string[] = [];
   let depth = 0;
   let start = -1;
+  // String state is tracked at every depth, not only inside an object: a
+  // quote in the prose around a verdict ("the "{" brace") must still hide the
+  // brace that follows it, or that brace opens a phantom object whose close
+  // is stolen from the real one and the verdict is dropped.
   let inString = false;
   let escaped = false;
   for (let i = 0; i < text.length; i += 1) {
@@ -23,7 +27,7 @@ function balancedObjects(text: string): string[] {
       continue;
     }
     if (ch === '"') {
-      if (depth > 0) inString = true;
+      inString = true;
     } else if (ch === '{') {
       if (depth === 0) start = i;
       depth += 1;

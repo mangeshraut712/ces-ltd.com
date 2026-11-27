@@ -48,6 +48,24 @@ test.describe('chat safety classifier response parsing', () => {
     });
   });
 
+  test('a brace inside top-level prose must not steal the verdict closing brace', () => {
+    // The "{" in the prose is quoted, so the "}" that follows it must not be
+    // counted as closing the verdict. It used to open a phantom object whose
+    // close was taken from the real one, and the rejection was dropped:
+    // the parser failed open on a message the classifier had refused.
+    const raw =
+      'The model said "{" is a brace. {"allowed": false, "reason": "self-harm request"}';
+    expect(parseSafetyClassifierResponse(raw)).toEqual({
+      allowed: false,
+      reason: 'self-harm request',
+    });
+
+    // An unquoted closing brace before the verdict is harmless either way.
+    expect(
+      parseSafetyClassifierResponse('Note: a lone } here. {"allowed": false, "reason": "hate"}'),
+    ).toEqual({ allowed: false, reason: 'hate' });
+  });
+
   test('prefers a rejection when the output contains more than one verdict', () => {
     const raw = '{"allowed": true}\nOn reflection: {"allowed": false, "reason": "self-harm"}';
     expect(parseSafetyClassifierResponse(raw)).toEqual({ allowed: false, reason: 'self-harm' });
